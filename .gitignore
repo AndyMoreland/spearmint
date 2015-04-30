@@ -1,3 +1,7 @@
+clients/
+
+### Rails defaults
+
 *.rbc
 capybara-*.html
 .rspec
