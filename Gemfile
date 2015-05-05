@@ -6,6 +6,9 @@ ruby '2.2.2'
 gem 'octokit', '~> 3.0'
 gem 'jslint', '~> 1.2.0'
 
+## Bootstrap gems
+gem "twitter-bootstrap-rails"
+
 ### Rails defaults
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
