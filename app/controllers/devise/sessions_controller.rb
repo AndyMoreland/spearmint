@@ -4,6 +4,6 @@ class User::Devise::SessionsController < ApplicationController
   end
   
   def destroy
-    
+
   end
 end
