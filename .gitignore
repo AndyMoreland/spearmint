@@ -38,3 +38,11 @@ bower.json
 # Ignore pow environment settings
 .powenv
 \#*
+
+# VIM work files
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
