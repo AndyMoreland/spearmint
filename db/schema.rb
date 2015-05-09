@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150509031509) do
+ActiveRecord::Schema.define(version: 20150509033013) do
 
   create_table "builds", force: :cascade do |t|
     t.string   "title"
@@ -25,10 +25,11 @@ ActiveRecord::Schema.define(version: 20150509031509) do
   add_index "builds", ["project_id"], name: "index_builds_on_project_id"
 
   create_table "projects", force: :cascade do |t|
-    t.string   "title"
+    t.string   "name"
     t.string   "github_token"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.string   "full_name"
   end
 
   create_table "projects_users", force: :cascade do |t|
