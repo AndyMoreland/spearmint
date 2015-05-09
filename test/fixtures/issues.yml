@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  build: 
+  line: 1
+  character: 1
+  message: MyString
+  type: 
+  fatal: false
+
+two:
+  build: 
+  line: 1
+  character: 1
+  message: MyString
+  type: 
+  fatal: false

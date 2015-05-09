@@ -1,18 +1,18 @@
 module TestRunner
   class Job
+
+    attr_writer :issues
     
     def execute!(sources)
       raise 'abstract'      
     end
 
     def issues
-      raise 'Job not yet run' unless @issues
-      @issues
+      @issues or raise 'Job not yet run'
     end
 
     def success?
-      raise 'Job not yet run' unless @issues
-      @issues.none? { |issue| issue.fatal? }
+      issues.none? { |issue| issue.fatal? }
     end
   end
 end

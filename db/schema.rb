@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150509033013) do
+ActiveRecord::Schema.define(version: 20150509055952) do
 
   create_table "builds", force: :cascade do |t|
     t.string   "title"
@@ -23,6 +23,20 @@ ActiveRecord::Schema.define(version: 20150509033013) do
   end
 
   add_index "builds", ["project_id"], name: "index_builds_on_project_id"
+
+  create_table "issues", force: :cascade do |t|
+    t.string   "file"
+    t.integer  "line"
+    t.integer  "character"
+    t.string   "message"
+    t.boolean  "fatal"
+    t.integer  "build_id"
+    t.string   "type",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "issues", ["build_id"], name: "index_issues_on_build_id"
 
   create_table "projects", force: :cascade do |t|
     t.string   "name"

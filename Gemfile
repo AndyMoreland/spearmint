@@ -4,7 +4,6 @@ ruby '2.2.2'
 ## Test runner gems
 
 gem 'octokit', '~> 3.0'
-gem 'jslint', '~> 1.2.0'
 
 ## Bootstrap gems
 gem "twitter-bootstrap-rails"

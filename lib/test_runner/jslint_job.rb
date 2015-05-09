@@ -1,13 +1,13 @@
 require_relative 'job'
-require_relative 'issue'
 
 module TestRunner
   class JSLintJob < Job
-    def execute!(sources)
-      @issues = []
+    def execute!(build, sources)
+      self.issues = []
       sources.each do |src|
-        result = `jslint #{src}`
-        @issues.push Issue.new(file: src, message: result, fatal: false)
+        result = `jslint --json #{src}`
+        file, issues = JSON.parse(result)
+        self.issues.concat(issues.map { |issue| Issue.fromJSLint(build, file, issue) })
       end
     end
   end
