@@ -2,9 +2,17 @@
   <table class="table table-striped">
     <% @repos.each do |r| %>
       <tr>
-        <td>
-          <h4><a href="#"><%= r.name %></a></h4>
-          <a href="<%= r.svn_url %>">GitHub</a></h4>
+        <td class="<%= 'watched' if @user_watchlist.include? r.full_name %>">
+            <h4><a href="#"><%= r.name %></a></h4>
+            <%= link_to "GitHub", r.svn_url %> ||
+
+            <% unless @user_watchlist.include? r.full_name %>
+                <%= form_for Project.new do |f| %>
+                    <%= f.hidden_field :name, value: r.name %>
+                    <%= f.hidden_field :full_name, value: r.full_name %>
+                    <%= f.submit "Watch Project" %>
+                <% end %>
+            <% end %>
         </td>
       </tr>
     <% end %>

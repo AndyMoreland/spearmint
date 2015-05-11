@@ -1,12 +1,8 @@
 class PagesController < ApplicationController
   def index
-
     if user_signed_in?
-      client = Octokit::Client.new(:access_token => current_user.client_token)
-      user = client.user
-      user.login
-      @repos = user.rels[:repos].get.data
+      @repos = github_user.rels[:repos].get.data
+      @user_watchlist = Set.new(current_user.projects.map { |p| p.full_name })
     end
-    
   end
 end

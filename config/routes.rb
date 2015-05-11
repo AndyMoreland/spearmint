@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
   root 'pages#index'
 
-  resources :builds
-  resources :projects
-  resources :parser
-
+  resources :projects do
+    resources :builds
+  end
+  
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
   devise_scope :user do
