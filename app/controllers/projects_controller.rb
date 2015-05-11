@@ -7,7 +7,6 @@ class ProjectsController < ApplicationController
   
   def create
     @project = Project.new(params[:project].permit(:name, :full_name))
-    @project[:github_token] = current_user.client_token
 
     render error: "Failed to add project to watchlist." unless @project.save
     current_user.projects << @project
