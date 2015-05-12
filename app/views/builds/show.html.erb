@@ -1,1 +1,11 @@
-Showing build <%= @build.id %>
+<!-- TODO: is it optimal to assign project to variable... -->
+
+<h1><%= @build.project.name %> - build #<%= @build.id %></h1>
+
+<% if @build.issues.any? %>
+  <% @build.issues.each do |i| %>
+    <%= i.inspect %>
+  <% end %>
+<% else %>
+  <p>No issues found! Have a great day!</p>
+<% end %>

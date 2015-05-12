@@ -5,7 +5,15 @@
                 <h4><a href="#"><%= project.name %></a></h4>
                 <%= link_to "GitHub", project.github_url %>
                 <%= form_for [project, Build.new] do |f| %>
-                    <%= f.submit %>
+                    <%= f.submit 'Create New Build', :class => 'btn' %>
+                <% end %>
+            </td>
+            <td>
+                <% project.builds.each do |b| %>
+                    <!-- TODO: looks like if we define build_path we can use
+                    link_to to make linking not stupid?  -->
+                    
+                    <a href="/projects/<%= project.id %>/builds/<%= b.id %>">Build #<%= b.id %> - <%= b.updated_at %></a><br>
                 <% end %>
             </td>
         </tr>
