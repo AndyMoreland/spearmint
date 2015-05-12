@@ -1,5 +1,7 @@
 class Issue < ActiveRecord::Base
 
+  belongs_to :build
+
   class Error < Issue
   end
   

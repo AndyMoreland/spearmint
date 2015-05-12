@@ -1,0 +1,13 @@
+<table class="table table-striped">
+    <% @projects.each do |project| %>
+        <tr>
+            <td>
+                <h4><a href="#"><%= project.name %></a></h4>
+                <%= link_to "GitHub", project.github_url %>
+                <%= form_for [project, Build.new] do |f| %>
+                    <%= f.submit %>
+                <% end %>
+            </td>
+        </tr>
+    <% end %>
+</table>
