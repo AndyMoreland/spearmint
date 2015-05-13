@@ -9,7 +9,7 @@
                 <% end %>
             </td>
             <td>
-                <% project.builds.each do |b| %>
+                <% project.builds.reverse.each do |b| %>
                     <!-- TODO: looks like if we define build_path we can use
                     link_to to make linking not stupid?  -->
                     

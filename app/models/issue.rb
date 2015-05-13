@@ -17,12 +17,20 @@ class Issue < ActiveRecord::Base
   end
 
   def self.fromJSLint(build, file, params)
-    rawtype = params['id'].gsub(/[()]/, '')
-    case rawtype
-    when 'error'
-      issue = Error.new
-    when 'warning'
-      issue = Warning.new
+    if !params
+      return nil
+    end
+
+    if params and params.has_key?('id')
+      rawtype = params['id'].gsub(/[()]/, '')
+      case rawtype
+      when 'error'
+        issue = Error.new
+      when 'warning'
+        issue = Warning.new
+      else
+        issue = Issue.new
+      end
     else
       issue = Issue.new
     end
