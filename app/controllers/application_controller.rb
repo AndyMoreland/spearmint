@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   end
 
   def github_client
-    @client ||= Octokit::Client.new(:access_token => current_user.client_token)
+    @client ||= current_user.github_client
   end
 
   def github_user

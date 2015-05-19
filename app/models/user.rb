@@ -13,4 +13,8 @@ class User < ActiveRecord::Base
       user.client_secret = auth[:credentials][:secret]
     end
   end
+
+  def github_client
+    Octokit::Client.new(:access_token => self.client_token)
+  end
 end
