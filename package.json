@@ -1,0 +1,8 @@
+{
+    "name": "spearmint",
+    "description": "Spearmint code quality tool",
+    "version": "0.1.0",
+    "dependencies": {
+	"jslint": "*"
+    }
+}
