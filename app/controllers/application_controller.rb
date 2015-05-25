@@ -9,13 +9,15 @@ class ApplicationController < ActionController::Base
 
   def github_client
     @client ||= current_user.github_client
+    @client.login
+    
+    @client
   end
 
   def github_user
     return @github_user if @github_user
     
     @github_user = github_client.user
-    @github_user.login
 
     @github_user
   end
