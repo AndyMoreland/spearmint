@@ -1,16 +1,16 @@
 <% if user_signed_in? %>
-  <table class="table table-striped">
+  <table class="table table-hover">
     <% @repos.each do |r| %>
       <tr>
         <td class="<%= 'watched' if @user_watchlist.include? r.full_name %>">
-            <h4><a href="#"><%= r.name %></a></h4>
-            <%= link_to "GitHub", r.svn_url %> ||
-
+            <h4><%= r.name %></h4>
+        </td>
+        <td>
             <% unless @user_watchlist.include? r.full_name %>
                 <%= form_for Project.new do |f| %>
                     <%= f.hidden_field :name, value: r.name %>
                     <%= f.hidden_field :full_name, value: r.full_name %>
-                    <%= f.submit "Watch Project" %>
+                    <%= f.submit "Watch Project", :class => 'btn' %>
                 <% end %>
             <% end %>
         </td>
