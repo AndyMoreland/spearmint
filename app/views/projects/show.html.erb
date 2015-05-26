@@ -1,1 +1,33 @@
-test
+<div class="row">
+  <div class="col-md-8"><h1><%= @project.name %></h1></div>
+  <div class="col-md-1 col-md-offset-3">
+  <%= form_for [@project, Build.new], :html => {:class => 'run-btn form-inline pull-right'} do |f| %>
+    <%= f.submit 'Run Tests', :class => 'btn' %>
+  <% end %>
+  </div>
+</div>
+
+
+<table class="table table-striped">
+  <tr>
+    <th>Build</th>
+    <th>Revision</th>
+    <th>Branch</th>
+    <th>Author</th>
+    <th>Log</th>
+    <th>Started</th>
+    <th>Status</th>
+  </tr>
+
+  <% @project.builds.reverse.each do |b| %>
+    <tr>
+      <td><%= b.id %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><%= link_to localize(b.updated_at, format: :long), project_build_path(@project, b) %></td>
+      <td><%= b.status %></td>
+    </tr>
+  <% end %>
+</table>

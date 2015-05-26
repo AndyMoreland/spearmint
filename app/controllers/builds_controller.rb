@@ -13,7 +13,7 @@ class BuildsController < ApplicationController
     end
     
     flash[:notice] = "Created build."
-    redirect_to([@project, @build])
+    redirect_to(@project)
   end
 
   def show
