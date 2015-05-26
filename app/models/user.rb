@@ -15,6 +15,6 @@ class User < ActiveRecord::Base
   end
 
   def github_client
-    Octokit::Client.new(:access_token => self.client_token)
+    c = Octokit::Client.new(:access_token => self.client_token)
   end
 end

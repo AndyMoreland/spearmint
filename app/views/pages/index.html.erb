@@ -1,16 +1,19 @@
 <% if user_signed_in? %>
-  <table class="table table-striped">
+  <table class="table table-hover">
     <% @repos.each do |r| %>
       <tr>
-        <td class="<%= 'watched' if @user_watchlist.include? r.full_name %>">
-            <h4><a href="#"><%= r.name %></a></h4>
-            <%= link_to "GitHub", r.svn_url %> ||
-
-            <% unless @user_watchlist.include? r.full_name %>
+        <td class="<%= 'watched' if is_watching(r) %>">
+            <h4><%= link_to_if is_watching(r), r.name, Project.find_by_github_id(r.id) %></h4>
+        </td>
+        <td class="watch-row">
+            <% if is_watching(r) %>
+                <button class="watch-btn btn btn-danger" disabled='disabled'>Stop Watching</button>
+            <% else %>
                 <%= form_for Project.new do |f| %>
                     <%= f.hidden_field :name, value: r.name %>
                     <%= f.hidden_field :full_name, value: r.full_name %>
-                    <%= f.submit "Watch Project" %>
+                    <%= f.hidden_field :github_id, value: r.id %>
+                    <%= f.submit "Watch", :class => ['watch-btn', 'btn', 'btn-success'] %>
                 <% end %>
             <% end %>
         </td>
