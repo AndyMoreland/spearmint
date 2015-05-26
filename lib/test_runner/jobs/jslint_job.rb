@@ -5,9 +5,12 @@ module TestRunner
       self.issues = []
       sources(build.project, build.commit, 'js').each do |src|
         result = `node #{Rails.root.join('node_modules', 'jslint', 'bin', 'jslint.js')} --json #{src}`
+        next if result.empty?
+        
         file, raw_issues = JSON.parse(result)
         contents = File.readlines file
-        parsed_issues = raw_issues.reject { |i| i.nil? }.map { |issue| parse_issue(build, file, contents, issue) }
+        filename = Job.relative_filename(build, file)
+        parsed_issues = raw_issues.reject { |i| i.nil? }.map { |issue| parse_issue(build, filename, contents, issue) }
         
         self.issues.concat parsed_issues
       end
@@ -33,10 +36,8 @@ module TestRunner
         end
       end
 
-      # Chop code dir, user dir, project dir, commit dir
-      file_relative = filename.sub(/#{Rails.root.join('clients', build.project.full_name, "#{build.commit}/")}/, '')
       issue.build_id = build.id
-      issue.file = file_relative
+      issue.file = filename
       issue.line = params['line']
       issue.line_contents = contents[issue.line - 1] # lol indexing
       issue.character = params['character']
