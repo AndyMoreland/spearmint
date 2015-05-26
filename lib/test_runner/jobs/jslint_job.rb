@@ -6,13 +6,14 @@ module TestRunner
       sources(build.project, build.commit, 'js').each do |src|
         result = `node #{Rails.root.join('node_modules', 'jslint', 'bin', 'jslint.js')} --json #{src}`
         file, raw_issues = JSON.parse(result)
-        parsed_issues = raw_issues.reject { |i| i.nil? }.map { |issue| parse_issue(build, file, issue) }
+        contents = File.readlines file
+        parsed_issues = raw_issues.reject { |i| i.nil? }.map { |issue| parse_issue(build, file, contents, issue) }
         
         self.issues.concat parsed_issues
       end
     end
 
-    def parse_issue(build, file, params)
+    def parse_issue(build, filename, contents, params)
       id = params['id']
       reason = params['reason']
 
@@ -33,10 +34,11 @@ module TestRunner
       end
 
       # Chop code dir, user dir, project dir, commit dir
-      file_relative = file.sub(/#{Rails.root.join('clients', build.project.full_name, "#{build.commit}/")}/, '')
+      file_relative = filename.sub(/#{Rails.root.join('clients', build.project.full_name, "#{build.commit}/")}/, '')
       issue.build_id = build.id
       issue.file = file_relative
       issue.line = params['line']
+      issue.line_contents = contents[issue.line - 1] # lol indexing
       issue.character = params['character']
       issue.message = params['reason']
       

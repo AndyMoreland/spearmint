@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150525055931) do
+ActiveRecord::Schema.define(version: 20150526080552) do
 
   create_table "builds", force: :cascade do |t|
     t.string   "title"
@@ -31,9 +31,10 @@ ActiveRecord::Schema.define(version: 20150525055931) do
     t.string   "message"
     t.boolean  "fatal"
     t.integer  "build_id"
-    t.string   "type",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "type",          null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.string   "line_contents"
   end
 
   add_index "issues", ["build_id"], name: "index_issues_on_build_id"
