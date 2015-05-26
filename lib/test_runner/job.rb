@@ -1,7 +1,11 @@
 module TestRunner
   class Job
-
+    
     attr_writer :issues
+
+    def sources
+      raise 'abstract'
+    end
     
     def execute!(sources)
       raise 'abstract'      

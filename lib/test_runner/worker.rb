@@ -1,4 +1,4 @@
-require_relative 'jslint_job'
+require_relative 'job_default'
 
 module TestRunner
   class Worker
@@ -8,7 +8,12 @@ module TestRunner
         break if build == :shutdown
         puts 'Build starting.'
         build.fetch!
-        build.execute! [ JSLintJob.new ] # TODO allow changing job list
+
+        if false
+          # TODO check for and execute custom jobs
+        else
+          build.execute! Job::Default.jobs
+        end
 
         if build.success?
           build.status = :passed
