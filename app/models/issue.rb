@@ -1,69 +1,32 @@
 class Issue < ActiveRecord::Base
 
+  def self.define_with_default_fatal(klass, default)
+    Issue.const_set(klass.to_s.titleize, Class.new(Issue) {
+                      define_method :initialize do
+                        super()
+                        self.fatal = default
+                      end
+                    })
+  end
+
+  def self.def_fatal(k) define_with_default_fatal(k, true) end
+  def self.def_info(k) define_with_default_fatal(k, false) end
+
+  private_class_method :define_with_default_fatal, :def_fatal, :def_info
+
+  
   belongs_to :build
+  
+  def_fatal :Abort
+  def_fatal :Error
+  def_info :Warning
+  def_info :Convention
+  def_info :Refactor
 
-  class Warning < Issue
-    def initialize
-      super
-      self.fatal = false
+  ObjectSpace.each_object(Issue.singleton_class).reject { |k| k == Issue }.each do |klass|
+    klass.define_singleton_method(klass.name.demodulize.pluralize.to_sym) do
+      where(type: klass)
     end
-  end
-
-  class Error < Issue
-    def initialize
-      super
-      self.fatal = true
-    end
-  end
-
-  class Abort < Issue
-    def initialize
-      super
-      self.fatal = true
-    end
-  end
-
-  def self.errors
-    where(type: Error)
-  end
-
-  def self.warnings
-    where(type: Warning)
-  end
-
-  def self.aborts
-    where(type: Abort)
-  end
-
-  def self.fromJSLint(build, file, params)
-    id = params['id']
-    reason = params['reason']
-
-    raise '[Issue::fromJSLint] malformed input, no issue id or reason' unless id or reason
-    
-    if reason && reason.match(/^Stopping/)
-      issue = Abort.new
-    elsif id
-      rawtype = id.gsub(/[()]/, '')
-      case rawtype
-      when 'error'
-        issue = Error.new
-      when 'warning'
-        issue = Warning.new
-      else
-        raise '[Issue::fromJSlint] unknown issue type'
-      end
-    end
-
-    # Chop code dir, user dir, project dir, commit dir
-    file_relative = file.sub(/#{Rails.root.join('clients', build.project.full_name, "#{build.commit}/")}/, '')
-    issue.build_id = build.id
-    issue.file = file_relative
-    issue.line = params['line']
-    issue.character = params['character']
-    issue.message = params['reason']
-    
-    issue
   end
 
   def add_to_github(client, repo, pull_id, commit_sha)
