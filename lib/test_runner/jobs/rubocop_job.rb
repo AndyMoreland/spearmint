@@ -24,6 +24,7 @@ module TestRunner
             raise '[RubyCopJob] unknown severity level'
           end
 
+          issue.source = 'RuboCop'
           issue.build_id = build.id
           issue.file = filename
           issue.line = offense['location']['line']

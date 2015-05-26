@@ -36,6 +36,7 @@ module TestRunner
         end
       end
 
+      issue.source = 'JSLint'
       issue.build_id = build.id
       issue.file = filename
       issue.line = params['line']
