@@ -57,11 +57,10 @@
                 <li><%= link_to 'Projects', projects_path %></li>
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                    <%= current_user.email %>
+                    <%= github_username %>
                     <span class="caret"></span>
                   </a>
                   <ul class="dropdown-menu" role="menu">
-                    <li><a>Settings</a></li>
                     <li class="divider"></li>
                     <li>
                     <%= link_to('Logout', destroy_user_session_path, :method => :delete) %>
@@ -104,9 +103,8 @@
         <% end %>
       </div>
     </div><!-- /row -->
-    <footer>
-      <p>&copy; Spearmint 2015</p>
-    </footer>
+    <hr>
+    <p class='text-center'>&copy; Spearmint 2015</p>
   </div> <!-- /container -->
 
   </body>

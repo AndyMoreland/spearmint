@@ -1,3 +1,5 @@
+require 'pp'
+
 class BuildsController < ApplicationController
   before_filter :load_project
   skip_before_action :verify_authenticity_token
@@ -18,7 +20,12 @@ class BuildsController < ApplicationController
   end
 
   def show
+    @project_name = @project.name
     @build = @project.builds.find(params[:id])
+
+    @all_issues = @build.issues.group_by(&:source).map { |source| 
+      { source[0] => source[1].group_by(&:file) }
+    }
   end
 
   protected

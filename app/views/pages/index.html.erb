@@ -7,7 +7,6 @@
               
               <% if is_watching(r) %>
                 <%= link_to r.name, Project.find_by_github_id(r.id) %>
-                (Settings)
               <% else %>
                 <%= r.name %>
               <% end %>

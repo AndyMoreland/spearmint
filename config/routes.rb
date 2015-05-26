@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
   resources :projects do
     resources :builds
+  resources :settings
   end
 
   post '/hooks/:project_id', to: 'builds#create'
