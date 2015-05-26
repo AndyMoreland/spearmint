@@ -1,12 +1,13 @@
 class BuildsController < ApplicationController
   before_filter :load_project
+  skip_before_action :verify_authenticity_token
   
   def new
   end
 
   def create
     @build = @project.builds.build(params[:build].try(:permit, :title, :commit))
-    @build.commit = github_client.repo(@project.full_name).rels[:commits].get.data.first.sha
+    @build.commit = @project.github_client.repo(@project.full_name).rels[:commits].get.data.first.sha
     
     unless @build.save
       render error: "Can't find project with id #{params[:project_id]}"

@@ -25,8 +25,6 @@ module TestRunner
         Thread.new { Worker.new.run(@builds) }
       end
 
-      # Build.create title: "test_build", status: :waiting, project_id: Project.first.id, commit: '2c1d5bcc57b75b9c44bd887e4b026bd48ff509c8'
-
       ['SIGINT', 'SIGTERM'].each do |signal|
         trap signal do
           puts "\nShutdown scheduled."
@@ -47,7 +45,6 @@ module TestRunner
       puts "Now listening for new builds."
       sleep 3
 
-      # TODO loop and add jobs to queue as they appear
       loop do
         todo = Build.where status: :waiting
         todo.each do |build|
@@ -57,7 +54,7 @@ module TestRunner
         sleep N_SECONDS_PER_POLL
       end
       
-      workers.each { |th| th.join } # TODO: on INT/TERM, signal workers to safely shutdown
+      workers.each { |th| th.join }
     end
   end  
 end

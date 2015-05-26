@@ -13,12 +13,8 @@ module TestRunner
       Rails.root.join('clients', project.full_name, "#{commit}.tar")
     end
 
-    def build_js_wildcard_path
-      Rails.root.join('clients', project.full_name, commit, '**', '*.js')
-    end
-    
     def fetch!
-      client = Octokit::Client.new access_token: project.users.sample.client_token # load balancing lol
+      client = project.github_client # load balancing lol
       repo = client.repo(project.full_name)
       url = repo.archive_url.sub('{archive_format}', 'tarball').sub('{/ref}', "/#{commit}")
 
@@ -43,7 +39,7 @@ module TestRunner
     def execute!(jobs)
       raise 'Build not yet fetched' unless @build_ready
       @jobs = jobs
-      @jobs.each { |job| job.execute!(self, Dir[build_js_wildcard_path]) }
+      @jobs.each { |job| job.execute!(self) }
     end
 
     def success?

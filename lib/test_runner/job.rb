@@ -1,7 +1,11 @@
 module TestRunner
   class Job
-
+    
     attr_writer :issues
+
+    def sources
+      raise 'abstract'
+    end
     
     def execute!(sources)
       raise 'abstract'      
@@ -13,6 +17,12 @@ module TestRunner
 
     def success?
       issues.none? { |issue| issue.fatal? }
+    end
+
+    class << self
+      def relative_filename(build, full_filename)
+        full_filename.sub(/#{Rails.root.join('clients', build.project.full_name, "#{build.commit}/")}/, '')
+      end
     end
   end
 end
