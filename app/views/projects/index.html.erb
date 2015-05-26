@@ -2,15 +2,14 @@
     <% @projects.each do |project| %>
         <tr>
             <td>
-                <h4><a href="#"><%= project.name %></a></h4>
-                <%= link_to "GitHub", project.github_url %>
+                <h4><%= link_to project.name, project %></h4>
                 <%= form_for [project, Build.new] do |f| %>
                     <%= f.submit 'Run Tests', :class => 'btn' %>
                 <% end %>
             </td>
             <td>
                 <% project.builds.reverse.each do |b| %>
-                    <%= link_to localize(b.updated_at, format: :long), project_build_path(project, b) %>
+                    <%= link_to localize(b.updated_at, format: :long), project_build_path(project, b) %><br>
                 <% end %>
             </td>
         </tr>

@@ -1,8 +1,15 @@
 class PagesController < ApplicationController
+  helper_method :is_watching
+
   def index
     if user_signed_in?
       @repos = github_client.repos
-      @user_watchlist = Set.new(current_user.projects.map { |p| p.full_name })
     end
+  end
+
+  private
+
+  def is_watching(repo)
+    return current_user.projects.any? {|p| p.github_id == repo.id}
   end
 end
