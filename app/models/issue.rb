@@ -65,6 +65,17 @@ class Issue < ActiveRecord::Base
     
     issue
   end
+
+  def add_to_github(client, repo, pull_id, commit_sha)
+    client.create_pull_request_comment(
+                                       repo.full_name,
+                                       pull_id,
+                                       self.message,
+                                       commit_sha,
+                                       self.file,
+                                       self.line,
+                                      )
+  end
 end
 
 

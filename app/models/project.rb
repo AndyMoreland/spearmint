@@ -14,7 +14,7 @@ class Project < ActiveRecord::Base
   def add_webhook
     github_client.create_hook(self.full_name,
                               'web',
-                              { url: 'foo', content_type: 'json' },
+                              { url: "http://spearmint.ngrok.io/hooks/#{self.id}", content_type: 'json' },
                               {
                                events: ['pull_request'],
                                active: true
