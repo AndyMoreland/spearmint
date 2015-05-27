@@ -3,7 +3,14 @@
     <% @repos.each do |r| %>
       <tr>
         <td class="<%= 'watched' if is_watching(r) %>">
-            <h4><%= link_to_if is_watching(r), r.name, Project.find_by_github_id(r.id) %></h4>
+            <h4>
+              
+              <% if is_watching(r) %>
+                <%= link_to r.name, Project.find_by_github_id(r.id) %>
+              <% else %>
+                <%= r.name %>
+              <% end %>
+            </h4>
         </td>
         <td class="watch-row">
             <% if is_watching(r) %>

@@ -3,12 +3,15 @@ Rails.application.routes.draw do
 
   resources :projects do
     resources :builds
+  resources :settings
   end
+
+  post '/hooks/:project_id', to: 'builds#create'
   
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
   devise_scope :user do
-      get 'sign_in', :to => 'users/devise/sessions#new', :as => :new_user_session
-      delete 'sign_out', :to => 'users/devise/sessions#destroy', :as => :destroy_user_session
+    get 'sign_in', :to => 'users/devise/sessions#new', :as => :new_user_session
+    delete 'sign_out', :to => 'users/devise/sessions#destroy', :as => :destroy_user_session
   end
 end

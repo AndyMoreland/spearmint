@@ -1,5 +1,7 @@
 class ProjectsController < ApplicationController
   before_filter :authenticate_user!
+
+  helper_method :get_commit
   
   def index
     @projects = current_user.projects.all
@@ -17,5 +19,9 @@ class ProjectsController < ApplicationController
 
   def show
     @project = Project.find(params[:id])
+  end
+
+  def get_commit(build)
+    github_client.commit(@project.full_name, build.commit)
   end
 end

@@ -14,7 +14,7 @@ module TestRunner
     end
 
     def fetch!
-      client = Octokit::Client.new access_token: project.users.sample.client_token # load balancing lol
+      client = project.github_client # load balancing lol
       repo = client.repo(project.full_name)
       url = repo.archive_url.sub('{archive_format}', 'tarball').sub('{/ref}', "/#{commit}")
 
