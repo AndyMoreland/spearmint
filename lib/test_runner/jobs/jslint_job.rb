@@ -4,12 +4,12 @@ module TestRunner
     def execute!(build)
       self.issues = []
       sources(build.project, build.commit, 'js').each do |src|
-        result = `node #{Rails.root.join('node_modules', 'jslint', 'bin', 'jslint.js')} --json #{src}`
+        result = Docker.run("node #{Rails.root.join('node_modules', 'jslint', 'bin', 'jslint.js')} --json #{src}", build)
         next if result.empty?
         
-        file, raw_issues = JSON.parse(result)
-        contents = File.readlines file
-        filename = Job.relative_filename(build, file)
+        _, raw_issues = JSON.parse(result)
+        contents = File.readlines src
+        filename = Job.relative_filename(build, src)
         parsed_issues = raw_issues.reject { |i| i.nil? }.map { |issue| parse_issue(build, filename, contents, issue) }
         
         self.issues.concat parsed_issues

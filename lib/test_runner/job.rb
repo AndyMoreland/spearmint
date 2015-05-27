@@ -1,3 +1,5 @@
+require_relative 'docker'
+
 module TestRunner
   class Job
     
