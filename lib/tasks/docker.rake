@@ -14,6 +14,16 @@ namespace :docker do
     `docker build -t spearmint #{Rails.root.join('lib', 'tasks')}`
   end
 
+  desc "Verify docker:init was successful"
+  task verify: :environment do
+    success = ['phusion/passenger-ruby22', 'base', 'spearmint'].map { |i| `docker images | grep #{i}` }.none? { |image| image.empty? }
+    if success
+      puts "You're good to go!"
+    else
+      puts "NOPE it didn't work. Debug manually. Trying :init again probably will not help."
+    end
+  end
+
   # TODO task init: :set_env
 
 end
