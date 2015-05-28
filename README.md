@@ -8,7 +8,7 @@
 - Run `rake docker:verify` to check whether docker got initialized correctly.
 - Run `rake test_runner:server` to run the test server
 - Run `rails s` to run the web server
-- Party
+- Party 🎉
 
 ### Environment
 
