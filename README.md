@@ -1,5 +1,9 @@
 # Spearmint
 
+### Description
+
+Spearmint is a GitHub-integrated code quality service. Coding standards are important, but no one reads style guides--and linters are a pain to configure and easy to forget about. Enter Spearmint: just sign up with GitHub and choose projects to watch. Spearmint will automatically run code quality checks on every pull request inside a secure, private virtual machine and display the results directly on the GitHub pull request page, no interaction needed. For devs looking to go the extra mile, Spearmint also provides a web application that allows users to tweak settings, see more detailed failure reports, and keep an eye on code quality statistics like cyclomatic complexity. Spearmint: freshen up your code!
+
 ### Setup
 
 - Run `bundle install` to install project dependencies
