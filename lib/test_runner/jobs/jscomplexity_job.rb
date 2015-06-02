@@ -11,7 +11,7 @@ module TestRunner
       src = Rails.root.join 'clients', build.project.full_name, build.commit
       result = Docker.run("node #{Rails.root.join('node_modules', 'complexity-report', 'src', 'index.js')} --format json #{src}", build)
 
-      # return if result.empty? # will be empty if file is not valid JS
+      return if result.empty? # will be empty if file is not valid JS
 
       # complexity report is way too verbose at the moment, keep only global averages for now
       stat_report = Stat.new
