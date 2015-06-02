@@ -49,5 +49,9 @@ module TestRunner
     def issues
       @jobs.flat_map { |job| job.issues }
     end
+
+    def stats
+      @jobs.flat_map { |job| job.stats }
+    end
   end
 end

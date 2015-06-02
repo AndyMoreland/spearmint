@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150526175150) do
+ActiveRecord::Schema.define(version: 20150602002903) do
 
   create_table "builds", force: :cascade do |t|
     t.string   "title"
@@ -60,6 +60,17 @@ ActiveRecord::Schema.define(version: 20150526175150) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "stats", force: :cascade do |t|
+    t.string   "source"
+    t.text     "data",       null: false
+    t.integer  "build_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "file"
+  end
+
+  add_index "stats", ["build_id"], name: "index_stats_on_build_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false

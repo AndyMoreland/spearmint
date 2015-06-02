@@ -24,6 +24,7 @@ module TestRunner
         finished = build.transaction do
           build.save!
           build.issues.each { |issue| issue.save! }
+          build.stats.each { |stat| stat.save! }
         end
 
         if finished
@@ -31,7 +32,7 @@ module TestRunner
         else
           puts 'Build error.'
         end
-                
+
         build.cleanup!
       end
     end

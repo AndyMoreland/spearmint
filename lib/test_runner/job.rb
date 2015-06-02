@@ -2,19 +2,24 @@ require_relative 'docker'
 
 module TestRunner
   class Job
-    
+
     attr_writer :issues
+    attr_writer :stats
 
     def sources
       raise 'abstract'
     end
-    
+
     def execute!(sources)
-      raise 'abstract'      
+      raise 'abstract'
     end
 
     def issues
       @issues or raise 'Job not yet run'
+    end
+
+    def stats
+      @stats or raise 'Job not yet run'
     end
 
     def success?
