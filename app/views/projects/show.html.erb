@@ -26,7 +26,7 @@
       <td><%= link_to b.id, project_build_path(@project, b) %></td>
       <td><%= commit.sha[0..7] %></td>
       <td></td>
-      <td><%= commit.author.login %></td>
+      <td><%= if commit.author.nil? then 'none' else commit.author.login end %></td>
       <td><%= commit.commit.message %></td>
       <td><%= localize(b.updated_at, format: :long) %></td>
       <td><%= b.status %></td>
