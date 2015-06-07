@@ -22,7 +22,7 @@ class BuildsController < ApplicationController
     unless @build.save
       render error: "Can't find project with id #{params[:project_id]}"
     end
-    
+
     flash[:notice] = "Created build."
     respond_to do |format|
       format.html { redirect_to(@project) }
@@ -31,10 +31,12 @@ class BuildsController < ApplicationController
   end
 
   def show
+    redirect_to(request.path, params: params, flash: { query: request.query_parameters } ) unless request.query_parameters.empty?
     @project_name = @project.name
     @build = @project.builds.find(params[:id])
+    @should_dedupe_issues = flash[:query] and flash[:query]['dedupe']
 
-    @all_issues = @build.issues.group_by(&:source).map { |source| 
+    @all_issues = @build.issues.group_by(&:source).map { |source|
       { source[0] => source[1].group_by(&:file) }
     }
   end
