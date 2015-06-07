@@ -11,7 +11,7 @@
               <tr>
                 <td class="col-md-10">
                   <%= issue.message %>
-                  <pre style="margin: 10px"><%= issue.line_contents[0..100] %><%= '...' if issue.line_contents.length > 100 %></pre>
+                  <pre style="margin: 10px"><code class="language-javascript"><%= issue.line_contents[0..100] %><%= '...' if issue.line_contents.length > 100 %></code></pre>
                 </td>
                 <td class="col-md-2">
                   line <%= issue.line %>, column <%= issue.character %>
