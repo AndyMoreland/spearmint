@@ -3,6 +3,8 @@ module TestRunner
     
     def execute!(build)
       self.issues = []
+      self.stats = []
+
       sources(build.project, build.commit, 'js').each do |src|
         result = Docker.run("node #{Rails.root.join('node_modules', 'jslint', 'bin', 'jslint.js')} --json #{src}", build)
         next if result.empty?

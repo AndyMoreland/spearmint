@@ -3,6 +3,7 @@ module TestRunner
 
     def execute!(build)
       self.issues = []
+      self.stats = []
       result = Docker.run("bundle exec rubocop --format json #{Rails.root.join('clients', build.project.full_name, build.commit)}", build)
       result = JSON.parse(result)
       result['files'].each do |file|

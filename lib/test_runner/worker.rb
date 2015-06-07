@@ -27,6 +27,7 @@ module TestRunner
           build.save!
           build.issues.each { |issue| issue.save! }
           build.issues.each { |issue| issue.add_to_github(client, project.full_name, build.pull_id, build.commit) } if build.pull_id
+          build.stats.each { |stat| stat.save! }
         end
 
         if finished
@@ -34,7 +35,7 @@ module TestRunner
         else
           puts 'Build error.'
         end
-                
+
         build.cleanup!
       end
     end
