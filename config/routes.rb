@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
+  get 'reports/index'
+
   root 'pages#index'
 
   resources :projects do
     resources :builds
+    resources :reports
   resources :settings
   end
 

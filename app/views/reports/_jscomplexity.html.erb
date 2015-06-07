@@ -1,0 +1,15 @@
+<% @js_stats = @build.stats.where(source: 'JSComplexity').take %>
+<% unless @js_stats.nil? %>
+    <!-- TODO add info about which build/commit this is from -->
+    <div class="row">
+        <h2>JSComplexity</h2>
+        <table class="table">
+            <% @js_stats.data.each do |attr, value| %>
+                <tr>
+                    <td><%= attr %></td>
+                    <td><%= value %></td>
+                </tr>
+            <% end %>
+        </table>
+    </div>
+<% end %>
