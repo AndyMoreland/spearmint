@@ -2,7 +2,7 @@ require 'pp'
 
 class BuildsController < ApplicationController
   before_filter :load_project
-  skip_before_action :verify_authenticity_token
+  skip_before_action :verify_authenticity_token, only: :create
   
   def new
   end
@@ -11,7 +11,7 @@ class BuildsController < ApplicationController
     if params[:pull_request]
       @build = @project.builds.build(
         title: params[:pull_request][:title],
-        commit: params[:pull_request][:merge_commit_sha],
+        commit: params[:pull_request][:head][:sha],
         pull_id: params[:pull_request][:number]
       )
     else
@@ -24,7 +24,10 @@ class BuildsController < ApplicationController
     end
     
     flash[:notice] = "Created build."
-    redirect_to(@project)
+    respond_to do |format|
+      format.html { redirect_to(@project) }
+      format.json { render status: 200, json: @build.to_json }
+    end
   end
 
   def show
