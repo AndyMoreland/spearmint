@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150602002903) do
+ActiveRecord::Schema.define(version: 20150607233621) do
 
   create_table "builds", force: :cascade do |t|
     t.string   "title"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20150602002903) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "commit"
+    t.integer  "pull_id"
   end
 
   add_index "builds", ["project_id"], name: "index_builds_on_project_id"
@@ -57,9 +58,17 @@ ActiveRecord::Schema.define(version: 20150602002903) do
   add_index "projects_users", ["user_id"], name: "index_projects_users_on_user_id"
 
   create_table "settings", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "project_id"
+    t.integer  "user_with_token"
+    t.string   "build_command"
+    t.string   "test_command"
+    t.integer  "concurrent_jobs"
+    t.text     "ignored_files"
   end
+
+  add_index "settings", ["project_id"], name: "index_settings_on_project_id"
 
   create_table "stats", force: :cascade do |t|
     t.string   "source"
