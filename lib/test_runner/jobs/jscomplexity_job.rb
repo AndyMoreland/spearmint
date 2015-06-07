@@ -17,7 +17,13 @@ module TestRunner
       stat_report = Stat.new
       stat_report.source = 'JSComplexity'
       stat_report.build_id = build.id
-      stat_report.data = JSON.parse(result).tap { |raw_stats| raw_stats.delete("reports") }
+      begin
+          stat_report.data = JSON.parse(result).tap { |raw_stats| raw_stats.delete("reports") }
+      rescue JSON::ParserError
+          stat_report.data = {
+              "error" => result
+          }
+      end
       self.stats << stat_report
     end
 

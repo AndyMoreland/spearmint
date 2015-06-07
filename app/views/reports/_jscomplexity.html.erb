@@ -1,60 +1,70 @@
-<% @js_stats = @build.stats.where(source: 'JSComplexity').take %>
+<%
+# FIXME very error prone and nonrobust querie(s)
+# most recent build
+@build = @project.builds.order(:created_at).includes(:stats).last
+@js_stats = @build.stats.where(source: 'JSComplexity').take unless @build.nil?
+%>
 <% unless @js_stats.nil? %>
-    <!-- TODO add info about which build/commit this is from -->
     <div class="row">
         <h2>JSComplexity</h2>
         <h3>Latest Stats</h3>
-        <div class="panel panel-default stat-panel">
-            <div class="panel-heading">
-                cyclomatic complexity
+        <% if @js_stats.data.has_key? 'error' %>
+            <p>JavaScript parsing error on last build:</p>
+            <div class="alert alert-danger"><samp><%= @js_stats.data['error'] %></samp></div>
+        <% else %>
+            <!-- TODO add info about which build/commit this is from -->
+            <div class="panel panel-default stat-panel">
+                <div class="panel-heading">
+                    cyclomatic complexity
+                </div>
+                <div class="panel-body">
+                    <span class="stat"><%= '%.2f' % @js_stats.data['cyclomatic'] %></span>
+                </div>
             </div>
-            <div class="panel-body">
-                <span class="stat"><%= '%.2f' % @js_stats.data['cyclomatic'] %></span>
+            <div class="panel panel-default stat-panel">
+                <div class="panel-heading">
+                    maintainability
+                </div>
+                <div class="panel-body">
+                    <span class="stat"><%= '%.2f' % @js_stats.data['maintainability'] %>
+                    </span>
+                </div>
             </div>
-        </div>
-        <div class="panel panel-default stat-panel">
-            <div class="panel-heading">
-                maintainability
+            <div class="panel panel-default stat-panel">
+                <div class="panel-heading">
+                    mean parameter count
+                </div>
+                <div class="panel-body">
+                    <span class="stat"><%= '%.2f' % @js_stats.data['params'] %>
+                    </span>
+                </div>
             </div>
-            <div class="panel-body">
-                <span class="stat"><%= '%.2f' % @js_stats.data['maintainability'] %>
-                </span>
+            <div class="panel panel-default stat-panel">
+                <div class="panel-heading">
+                    mean per-function LOC
+                </div>
+                <div class="panel-body">
+                    <span class="stat"><%= '%.2f' % @js_stats.data['loc'] %>
+                    </span>
+                </div>
             </div>
-        </div>
-        <div class="panel panel-default stat-panel">
-            <div class="panel-heading">
-                mean parameter count
+            <div class="panel panel-default stat-panel">
+                <div class="panel-heading">
+                    Halstead effort <small>[<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">?</a>]</small>
+                </div>
+                <div class="panel-body">
+                    <span class="stat"><%= '%.2f' % @js_stats.data['effort'] %>
+                    </span>
+                </div>
             </div>
-            <div class="panel-body">
-                <span class="stat"><%= '%.2f' % @js_stats.data['params'] %>
-                </span>
-            </div>
-        </div>
-        <div class="panel panel-default stat-panel">
-            <div class="panel-heading">
-                mean per-function LOC
-            </div>
-            <div class="panel-body">
-                <span class="stat"><%= '%.2f' % @js_stats.data['loc'] %>
-                </span>
-            </div>
-        </div>
-        <div class="panel panel-default stat-panel">
-            <div class="panel-heading">
-                Halstead effort <small>[<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">?</a>]</small>
-            </div>
-            <div class="panel-body">
-                <span class="stat"><%= '%.2f' % @js_stats.data['effort'] %>
-                </span>
-            </div>
-        </div>
-        <table class="table">
-            <% @js_stats.data.each do |attr, value| %>
-                <tr>
-                    <td><%= attr %></td>
-                    <td><%= value %></td>
-                </tr>
-            <% end %>
-        </table>
+            <table class="table">
+                <% @js_stats.data.each do |attr, value| %>
+                    <tr>
+                        <td><%= attr %></td>
+                        <td><%= value %></td>
+                    </tr>
+                <% end %>
+            </table>
+        <% end %>
     </div>
 <% end %>
