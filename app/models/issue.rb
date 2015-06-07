@@ -29,15 +29,14 @@ class Issue < ActiveRecord::Base
     end
   end
 
-  def add_to_github(client, repo, pull_id, commit_sha)
-    client.create_pull_request_comment(
-                                       repo.full_name,
+  def add_to_github!(client, full_name, pull_id, commit_sha)
+    puts "[info] Attempting to sync comment: #{full_name}, #{pull_id}, #{self.message}, #{commit_sha}, #{self.file}, #{self.line}"
+    client.create_pull_request_comment(full_name,
                                        pull_id,
                                        self.message,
                                        commit_sha,
                                        self.file,
-                                       self.line,
-                                      )
+                                       self.line)
   end
 end
 
