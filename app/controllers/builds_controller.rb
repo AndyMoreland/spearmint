@@ -8,8 +8,16 @@ class BuildsController < ApplicationController
   end
 
   def create
-    @build = @project.builds.build(params[:build].try(:permit, :title, :commit))
-    @build.commit = @project.github_client.repo(@project.full_name).rels[:commits].get.data.first.sha
+    if params[:pull_request]
+      @build = @project.builds.build(
+        title: params[:pull_request][:title],
+        commit: params[:pull_request][:merge_commit_sha],
+        pull_id: params[:pull_request][:number]
+      )
+    else
+      @build = @project.builds.build(params[:build].try(:permit, :title, :commit))
+      @build.commit = @project.github_client.repo(@project.full_name).rels[:commits].get.data.first.sha
+    end
     
     unless @build.save
       render error: "Can't find project with id #{params[:project_id]}"
