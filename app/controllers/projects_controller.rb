@@ -8,7 +8,12 @@ class ProjectsController < ApplicationController
   end
 
   def create
-    @project = Project.new params[:project].permit(:name, :full_name, :github_id).merge({ users: [current_user] })
+    @project = Project.find_by_full_name params[:project][:full_name]
+    if @project
+      @project.users << current_user
+    else
+      @project = Project.new params[:project].permit(:name, :full_name, :github_id).merge({ users: [current_user] })
+    end
 
     render error: "Failed to add project to watchlist." unless @project.save
 
