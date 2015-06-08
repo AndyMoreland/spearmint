@@ -47,7 +47,7 @@ div.collapsible > span {
     position: relative;
 }
 
-div.collapsible > span:hover {
+div.collapsible:hover > span {
     -moz-box-shadow: 1px 2px 3px rgba(0,0,0,.5);
     -webkit-box-shadow: 1px 2px 3px rgba(0,0,0,.5);
     box-shadow: 1px 2px 3px rgba(0,0,0,.5);
