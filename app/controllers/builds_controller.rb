@@ -38,13 +38,14 @@ class BuildsController < ApplicationController
 
     # example format
     # --------------
-    #  { 'jslint' => 
-    #      { 'file.js' => [{ 1 => [issue1, issue2] },
-    #                      { 8 => [issue3, issue4] }].
-    #        'otherfile.js' => [{ 3 => [issue5, issue6] }] },
-    #    'rubocop' => 
-    #      { 'file.rb' => [{ 1 => [issue7] }] } 
-    #  }
+    # { 
+    #   'jslint' =>
+    #     { 'file.js' => [{ 1 => [issue1, issue2] },
+    #                     { 8 => [issue3, issue4] }].
+    #       'otherfile.js' => [{ 3 => [issue5, issue6] }] },
+    #   'rubocop' => 
+    #     { 'file.rb' => [{ 1 => [issue7] }] } 
+    # }
     @all_issues = @build.issues.group_by(&:source).map do |test_name, issues| 
       { test_name => issues.group_by(&:file).map { |file_name, issues|
          { file_name => issues.group_by(&:line) } }.reduce(:merge)

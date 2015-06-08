@@ -7,6 +7,10 @@ class PagesController < ApplicationController
     end
   end
 
+  def stop_watching_project
+
+  end
+
   private
 
   def is_watching(repo)
