@@ -14,7 +14,7 @@ module TestRunner
     end
 
     def build_image_name
-      "#{project.full_name.gsub('/','-')}-#{commit}"
+      "#{project.full_name.downcase.gsub('/','-')}-#{commit}"
     end
 
     def fetch!

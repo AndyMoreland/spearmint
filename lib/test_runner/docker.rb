@@ -15,20 +15,26 @@ module TestRunner
       end
 
       def image(cmd, build, base: :spearmint, verbose: false)
-        name = build.build_image_name
-        dir = build.build_directory_path
+        if ENV['SPEARMINT_DISABLE_DOCKER']
+          puts "Docker is DISABLED. Running command locally..."
+          out = `#{cmd}`
+          retcode = $?.to_i
+        else
+          name = build.build_image_name
+          dir = build.build_directory_path
 
-        out = `docker run -v #{dir}:#{mount_paths dir} --name #{name}-container #{base} /bin/bash -c "#{mount_paths cmd}"`
-        retcode = $?.to_i
-        `docker commit #{name}-container #{name}`
-        `docker rm -f #{name}-container`
+          out = `docker run -v #{dir}:#{mount_paths dir} --name #{name}-container #{base} /bin/bash -c "#{mount_paths cmd}"`
+          retcode = $?.to_i
+          `docker commit #{name}-container #{name}`
+          `docker rm -f #{name}-container`
+        end
 
         return { error: retcode, output: out } if verbose
         out
       end
 
       def cleanup(build)
-        `docker rmi -f #{build.build_image_name}`
+        `docker rmi -f #{build.build_image_name}` unless ENV['SPEARMINT_DISABLE_DOCKER']
       end
 
       def mount_paths(abs_path)
