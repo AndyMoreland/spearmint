@@ -11,7 +11,7 @@ class Project < ActiveRecord::Base
 
   # TOOD? (andymo) do we need to login this client?
   def github_client
-    Octokit::Client.new access_token: self.setting.client_token
+    Octokit::Client.new access_token: self.setting.user_with_token.client_token
   end
 
   def add_webhook
