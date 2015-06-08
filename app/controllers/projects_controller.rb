@@ -23,4 +23,11 @@ class ProjectsController < ApplicationController
   def get_commit(build)
     github_client.commit(@project.full_name, build.commit)
   end
+
+  def destroy
+    project = Project.find(params[:id])
+    project.destroy
+    flash[:notice] = "Stopped watching #{project.name}"
+    redirect_to controller: :pages, action: :index
+  end
 end
