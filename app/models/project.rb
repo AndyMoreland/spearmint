@@ -1,6 +1,9 @@
 class Project < ActiveRecord::Base
   has_and_belongs_to_many :users
   has_many :builds
+  has_one :setting
+
+  after_create :create_settings
 
   def github_url
     "https://github.com/#{full_name}"
@@ -8,7 +11,7 @@ class Project < ActiveRecord::Base
 
   # TOOD? (andymo) do we need to login this client?
   def github_client
-    Octokit::Client.new access_token: self.users.sample.client_token
+    Octokit::Client.new access_token: self.setting.user_with_token.client_token
   end
 
   def add_webhook
@@ -19,5 +22,11 @@ class Project < ActiveRecord::Base
                                events: ['pull_request'],
                                active: true
                               })
+  end
+
+  private
+
+  def create_settings
+    Setting.create(project_id: self.id, user_with_token: self.users.last)
   end
 end
