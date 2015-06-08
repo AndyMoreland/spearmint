@@ -1,3 +1,4 @@
+
 namespace :docker do
 
   desc "Set environment variables needed by docker"
@@ -30,6 +31,13 @@ namespace :docker do
     else
       puts "NOPE it didn't work. Debug manually. Trying :init again probably will not help."
     end
+  end
+
+  desc "Remove all unnecessary docker images and containers"
+  task cleanup: :environment do
+    puts `docker ps -a | sed '1d' | awk '{ print $1 }' | xargs docker rm -f` # delete all containers
+    puts `docker images | grep -e "\-.*\-[a-f0-9]* " | awk '{ print $3 }' | xargs docker rmi -f` # delete all client build images
+    puts `docker images | grep -e "<none> " | awk '{ print $3 }' | xargs docker rmi -f` # delete all intermediate/aborted images
   end
 
   # TODO task init: :set_env
