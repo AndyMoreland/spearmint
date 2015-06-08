@@ -10,4 +10,7 @@
                 factor = $(this).parent().width() / $(this).width()
                 $(this).css
                     "font-size": factor * 100 + "%"
+
+        # Sometimes sortable tables plugin doesn't activate by itself...
+        Sortable.init()
 ) jQuery
