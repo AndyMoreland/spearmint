@@ -10,7 +10,7 @@ class Build < ActiveRecord::Base
     client = self.project.github_client
     client.pull_request_files(self.project.full_name, self.pull_id).map(&:filename)
   end
-  
+
   def sync_status_to_github!
     puts "[info] Synchronizing status to github, #{self.project.full_name}, #{self.commit}, #{self.get_github_status}, #{self.get_status_description}, #{self.status}"
     client = self.project.github_client
@@ -30,13 +30,14 @@ class Build < ActiveRecord::Base
     when "shutdown" then :error
     when "passed" then :success
     when "failed" then :failure
+    when "build_script_failed" then :failure
     else :error end
   end
 
   def get_status_description
     return "Spearmint tests failed. Check details for more information."
   end
-  
+
   def set_waiting
     self.status = :waiting
   end
