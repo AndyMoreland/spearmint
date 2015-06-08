@@ -17,25 +17,34 @@ module TestRunner
           build.execute! Job::Default.jobs
         end
 
+        aborted = (build.status == :build_script_failed)
+
         if build.success?
           build.status = :passed
         else
-          build.status = :failed
+          build.status = :failed unless aborted
         end
 
         finished = build.transaction do
           build.save!
-          build.issues.each { |issue| issue.save! }
-          build.stats.each { |stat| stat.save! }
-          
+          unless aborted
+            build.issues.each { |issue| issue.save! }
+            build.stats.each { |stat| stat.save! }
+          end
+
           # For builds that come from pull requests, synchronize status/comments
           if build.pull_id
-            changed_files = build.get_changed_files!
+            changed_files = build.get_changed_filenames!
+            changed_lines_by_file = build.get_changed_lines_by_file!
 
-            build.issues.select { |i| changed_files.include? i.file }.each do |issue|
-              issue.add_to_github!(client, project.full_name, build.pull_id, build.commit)
+            unless aborted
+              build.issues
+                .select { |i| i.changed_in_build?(changed_files, changed_lines_by_file) }
+                .each do |issue|
+                issue.add_to_github!(client, project.full_name, build.pull_id, build.commit)
+              end
             end
-            
+
             build.sync_status_to_github!
           end
         end

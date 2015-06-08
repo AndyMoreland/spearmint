@@ -11,16 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150607235731) do
+ActiveRecord::Schema.define(version: 20150608032038) do
 
   create_table "builds", force: :cascade do |t|
     t.string   "title"
     t.string   "status"
     t.integer  "project_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
     t.string   "commit"
     t.integer  "pull_id"
+    t.text     "build_script_output"
+    t.text     "unit_tests_output"
+    t.boolean  "unit_tests_failed"
   end
 
   add_index "builds", ["project_id"], name: "index_builds_on_project_id"

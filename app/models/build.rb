@@ -6,11 +6,24 @@ class Build < ActiveRecord::Base
 
   ## self.status is in {:waiting, :shutdown, :passed, :failed }
 
+  # Only works on builds associated with pull requests
   def get_changed_files!
     client = self.project.github_client
-    client.pull_request_files(self.project.full_name, self.pull_id).map(&:filename)
+    client.pull_request_files(self.project.full_name, self.pull_id)
   end
-  
+
+  # Only works on builds associated with pull requests
+  def get_changed_filenames!
+    get_changed_filesnames!.map(&:filename)
+  end
+
+  # Only works on builds associated with pull requests
+  def get_changed_lines_by_file!
+    get_changed_files!.reduce({}) do |files, file|
+      files[file.filename] = GitDiffParser::Patch.new(file.patch).changed_lines.map(&:number); files
+    end
+  end
+
   def sync_status_to_github!
     puts "[info] Synchronizing status to github, #{self.project.full_name}, #{self.commit}, #{self.get_github_status}, #{self.get_status_description}, #{self.status}"
     client = self.project.github_client
@@ -30,13 +43,14 @@ class Build < ActiveRecord::Base
     when "shutdown" then :error
     when "passed" then :success
     when "failed" then :failure
+    when "build_script_failed" then :failure
     else :error end
   end
 
   def get_status_description
     return "Spearmint tests failed. Check details for more information."
   end
-  
+
   def set_waiting
     self.status = :waiting
   end
