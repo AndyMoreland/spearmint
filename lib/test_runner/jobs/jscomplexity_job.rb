@@ -29,6 +29,7 @@ module TestRunner
                         report.delete 'dependencies'
                         report['path'] = report['path'][rel_path_offset..-1]
                     end
+                    raw_stats['num_files'] = raw_stats['reports'].length
                     raw_stats.delete 'visibilityMatrix'
                     raw_stats.delete 'adjacencyMatrix'
                 }
