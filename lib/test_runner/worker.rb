@@ -34,10 +34,13 @@ module TestRunner
 
           # For builds that come from pull requests, synchronize status/comments
           if build.pull_id
-            changed_files = build.get_changed_files!
+            changed_files = build.get_changed_filenames!
+            changed_lines_by_file = build.get_changed_lines_by_file!
 
             unless aborted
-              build.issues.select { |i| changed_files.include? i.file }.each do |issue|
+              build.issues
+                .select { |i| i.changed_in_build?(changed_files, changed_lines_by_file) }
+                .each do |issue|
                 issue.add_to_github!(client, project.full_name, build.pull_id, build.commit)
               end
             end

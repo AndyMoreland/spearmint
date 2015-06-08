@@ -6,9 +6,22 @@ class Build < ActiveRecord::Base
 
   ## self.status is in {:waiting, :shutdown, :passed, :failed }
 
+  # Only works on builds associated with pull requests
   def get_changed_files!
     client = self.project.github_client
-    client.pull_request_files(self.project.full_name, self.pull_id).map(&:filename)
+    client.pull_request_files(self.project.full_name, self.pull_id)
+  end
+
+  # Only works on builds associated with pull requests
+  def get_changed_filenames!
+    get_changed_filesnames!.map(&:filename)
+  end
+
+  # Only works on builds associated with pull requests
+  def get_changed_lines_by_file!
+    get_changed_files!.reduce({}) do |files, file|
+      files[file.filename] = GitDiffParser::Patch.new(file.patch).changed_lines.map(&:number); files
+    end
   end
 
   def sync_status_to_github!
