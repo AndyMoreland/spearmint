@@ -8,7 +8,7 @@ module TestRunner
       sources(build.project, build.commit, 'js').each do |src|
         result = Docker.run("node #{Rails.root.join('node_modules', 'jslint', 'bin', 'jslint.js')} --json #{src}", build)
         next if result.empty?
-        
+
         _, raw_issues = JSON.parse(result)
         contents = File.readlines src
         filename = Job.relative_filename(build, src)
@@ -24,7 +24,7 @@ module TestRunner
 
       raise '[JSLintJob::parse_issue] malformed input, no issue id or reason' unless id or reason
       
-      if reason && reason.match(/^Stopping/)
+      if reason && (reason.match(/^Stopping/) || reason.match(/^Too many errors/))
         issue = Issue::Abort.new
       elsif id
         rawtype = id.gsub(/[()]/, '')
@@ -36,6 +36,8 @@ module TestRunner
         else
           raise '[JSLintJob::parse_issue] unknown issue type'
         end
+      else
+        raise '[JSLintJob::parse_issue] unknown issue type'
       end
 
       issue.source = 'JSLint'
