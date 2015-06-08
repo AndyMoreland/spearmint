@@ -85,7 +85,7 @@
                         <tbody>
                             <% @js_stats.data['reports'].each do |report| %>
                                 <tr>
-                                    <td><%= truncate(report['path'], length: 40) %></td>
+                                    <td><div class="collapsible"><span><%= report['path'] %></span></div></td>
                                     <td><%= report['maintainability'].round(2) %></td>
                                     <td><%= report['cyclomatic'].round(2) %></td>
                                     <td><%= report['params'].round(2) %></td>

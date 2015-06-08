@@ -29,3 +29,26 @@
 span.stat {
     vertical-align: middle;
 }
+
+div.collapsible {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 15em;
+}
+
+div.collapsible:hover {
+    overflow: visible;
+    text-overflow: inherit;
+}
+
+div.collapsible > span {
+    background-color: white;
+    position: relative;
+}
+
+div.collapsible > span:hover {
+    -moz-box-shadow: 1px 2px 3px rgba(0,0,0,.5);
+    -webkit-box-shadow: 1px 2px 3px rgba(0,0,0,.5);
+    box-shadow: 1px 2px 3px rgba(0,0,0,.5);
+}
