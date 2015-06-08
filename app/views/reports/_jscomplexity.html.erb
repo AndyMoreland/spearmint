@@ -14,18 +14,30 @@
         <% else %>
             <div class="row">
                 <div class="col-md-8">
-                    <h4>Pinpoint</h4>
+                    <!-- <h4>Pinpoint</h4> -->
                     <table class="sortable-theme-bootstrap" data-sortable>
-                        <tr>
-                            <th>File</th>
-                            <th>Maintanability</th>
-                        </tr>
-                        <% @js_stats.data['reports'].each do |report| %>
+                        <thead>
                             <tr>
-                                <td><%= report['path'] %></td>
-                                <td><%= report['maintainability'].round(2) %></td>
+                                <th>File</th>
+                                <th>Maintainability</th>
+                                <th>Cyclomatic Complexity</th>
+                                <th>Parameter Count</th>
+                                <th>Logical LOC</th>
+                                <th>Halstead Effort</th>
                             </tr>
-                        <% end %>
+                        </thead>
+                        <tbody>
+                            <% @js_stats.data['reports'].each do |report| %>
+                                <tr>
+                                    <td><%= truncate(report['path'], length: 40) %></td>
+                                    <td><%= report['maintainability'].round(2) %></td>
+                                    <td><%= report['cyclomatic'].round(2) %></td>
+                                    <td><%= report['params'].round(2) %></td>
+                                    <td><%= report['loc'].round(2) %></td>
+                                    <td><%= report['effort'].round(2) %></td>
+                                </tr>
+                            <% end %>
+                        </tbody>
                     </table>
                 </div>
                 <div class="col-md-4">
@@ -59,7 +71,7 @@
                     </div>
                     <div class="panel panel-default stat-panel">
                         <div class="panel-heading">
-                            lines of code per function
+                            logical lines of code per function
                         </div>
                         <div class="panel-body">
                             <span class="stat"><%= '%.2f' % @js_stats.data['loc'] %>
