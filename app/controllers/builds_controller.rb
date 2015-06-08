@@ -20,12 +20,23 @@ class BuildsController < ApplicationController
   end
 
   def show
-    @project_name = @project.name
     @build = @project.builds.find(params[:id])
 
-    @all_issues = @build.issues.group_by(&:source).map { |source| 
-      { source[0] => source[1].group_by(&:file) }
-    }
+    # example format
+    # --------------
+    #  { 'jslint' => 
+    #      { 'file.js' => [{ 1 => [issue1, issue2] },
+    #                      { 8 => [issue3, issue4] }].
+    #        'otherfile.js' => [{ 3 => [issue5, issue6] }] },
+    #    'rubocop' => 
+    #      { 'file.rb' => [{ 1 => [issue7] }] } 
+    #  }
+    @all_issues = @build.issues.group_by(&:source).map do |test_name, issues| 
+      { test_name => issues.group_by(&:file).map { |file_name, issues|
+         { file_name => issues.group_by(&:line) } }.reduce(:merge)
+      }
+    end
+    @all_issues = @all_issues.reduce :merge
   end
 
   protected

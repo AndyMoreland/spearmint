@@ -1,27 +1,29 @@
 <h1><%= @build.project.name %> - build #<%= @build.id %></h1>
 
 <% if @build.issues.any? %>
-  <% @all_issues.each do |tests| %>
-    <% tests.each do |test_name, files| %>
-      <% files.each do |file_name, issues| %>
-        <% if issues.any? %> <!-- don't display unless file had issues -->
-          <h4><code><span><%= file_name %></span></code></h4> 
-          <table class="table table-hover">
-            <% issues.each do |issue| %>
-              <tr>
-                <td class="col-md-10">
-                  <%= issue.message %>
-                  <pre style="margin: 10px"><code class="language-javascript"><%= issue.line_contents[0..100] %><%= '...' if issue.line_contents.length > 100 %></code></pre>
-                </td>
-                <td class="col-md-2">
-                  line <%= issue.line %>, column <%= issue.character %>
-                </td>
-              </tr>
-            <% end %> <!-- issues -->
-          </table>
-        <% end %> <!-- if file had issues -->
-      <% end %> <!-- files -->
-    <% end %> <!-- test -->
+  <% @all_issues.each do |tests, files| %>
+    <% files.each do |file_name, issues_by_line| %>
+      <% if issues_by_line.any? %>
+        <h4><code><span><%= file_name %></span></code></h4> 
+        <table class="table table-hover">
+          <% issues_by_line.each do |line_number, issues| %>
+            <tr>
+              <td class="col-md-10">
+                <ul class="list-unstyled">
+                  <% issues.each do |issue| %>
+                    <li><%= issue.message %> <span class="text-danger">(<%= issue.character %>)</span></li>
+                  <% end %>
+                </ul>
+              <pre style="margin: 10px"><code class="language-javascript"><%= issues[0].line_contents[0..100] %><%= '...' if issues[0].line_contents.length > 100 %></code></pre>
+              </td>
+              <td class="col-md-2">
+                line <%= line_number %>
+              </td>
+            </tr>
+          <% end %> <!-- issues -->
+        </table>
+      <% end %> <!-- issues_by_line.any? -->
+    <% end %> <!-- files -->
   <% end %> <!-- all issues -->
 <% elsif @build.status == 'waiting' || @build.status == 'queued' %>
   <p class='text-warning'>Build is in progress!</p>
