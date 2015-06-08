@@ -1,3 +1,31 @@
 // Place all the styles related to the reports controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.stat-panel {
+    background-color: #EFEFEF;
+    width: 170px;
+    height: 170px;
+    text-align: center;
+    display: inline-block;
+    margin: 5px;
+}
+
+.stat-panel > .panel-heading {
+    background-color: inherit;
+    border: none;
+    font-weight: bold;
+    padding-top: 20px;
+    height: 30%;
+}
+
+.stat-panel > .panel-body {
+    font-size: 50px;
+    //padding-top: 0px;
+    //padding-bottom: 0px;
+    height: 70%;
+}
+
+span.stat {
+    vertical-align: middle;
+}
