@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150607233621) do
+ActiveRecord::Schema.define(version: 20150607235731) do
 
   create_table "builds", force: :cascade do |t|
     t.string   "title"
@@ -58,13 +58,13 @@ ActiveRecord::Schema.define(version: 20150607233621) do
   add_index "projects_users", ["user_id"], name: "index_projects_users_on_user_id"
 
   create_table "settings", force: :cascade do |t|
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.integer  "project_id"
-    t.integer  "user_with_token"
+    t.integer  "user_with_token",             null: false
     t.string   "build_command"
     t.string   "test_command"
-    t.integer  "concurrent_jobs"
+    t.integer  "concurrent_jobs", default: 2, null: false
     t.text     "ignored_files"
   end
 
