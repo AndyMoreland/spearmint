@@ -38,6 +38,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'omniauth'
 gem 'omniauth-github'
 
+# Parses github patch format
+gem 'git_diff_parser'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

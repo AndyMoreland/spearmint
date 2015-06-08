@@ -38,6 +38,10 @@ class Issue < ActiveRecord::Base
                                        self.file,
                                        self.line)
   end
+
+  def changed_in_build?(changed_files, changed_lines_by_file)
+    changed_files.include?(self.file) && changed_lines_by_file[self.file].include?(self.line)
+  end
 end
 
 
