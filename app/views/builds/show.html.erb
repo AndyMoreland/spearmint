@@ -32,8 +32,8 @@
         <% end %>
     </div>
 
-    <% if @project.setting.test_command && !@project.setting.test_command.empty? %>
-        <div class='row col-lg-12'>
+    <div class='row col-lg-12'>
+        <% if @project.setting.test_command && !@project.setting.test_command.empty? %>
             <a class='collapse-link' data-toggle="collapse" href="#unitTestCollapse" aria-expanded="false" aria-controls="unitTestCollapse">Unit Tests
                 <% if @build.unit_tests_failed %>
                     <span class='text-success'>(passed)</span>
@@ -49,10 +49,10 @@
                 <textarea class='form-control' rows='5' readonly><%= @build.unit_tests_output %></textarea>
 
             </div>
-    <% else %>
+        <% else %>
             <strong>No unit tests configured.</strong>
-    <% end %>
-        </div>
+        <% end %>
+    </div>
 <% end %>
 
 <% if @build.issues.any? %>
