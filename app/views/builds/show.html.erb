@@ -8,7 +8,8 @@
 
 <% issues_seen = {} %>
 <% if @build.issues.any? %>
-  <% @all_issues.each do |tests, files| %>
+  <% @all_issues.each do |test_name, files| %>
+    <h3><%= test_name %></h3>
     <% files.each do |file_name, issues_by_line| %>
       <% if issues_by_line.any? %>
         <h4><code><span><%= file_name %></span></code></h4>

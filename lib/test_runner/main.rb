@@ -6,7 +6,7 @@ module TestRunner
 
   class Main
 
-    N_WORKERS = 1
+    N_WORKERS = 4
     N_SECONDS_PER_POLL = 5
 
     attr_accessor :builds

@@ -3,16 +3,12 @@ require 'fileutils'
 module TestRunner
   module Runnable
 
-    def project_directory_path(*args)
-      Rails.root.join('clients', project.full_name, *args)
-    end
-
     def build_directory_path(*args)
-      Rails.root.join('clients', project.full_name, commit, *args)
+      Rails.root.join('clients', project.full_name, number.to_s, commit, *args)
     end
 
     def build_tarball_path
-      Rails.root.join('clients', project.full_name, "#{commit}.tar")
+      Rails.root.join('clients', project.full_name, number.to_s, "#{commit}.tar")
     end
 
     def build_image_name
@@ -52,7 +48,7 @@ module TestRunner
       globals = ignored - relatives
 
       ignore_globs = (globals.map { |p| "./**/#{p}" }.concat relatives.map { |p| ".#{p}" }).map do |glob|
-        Rails.root.join 'clients', project.full_name, commit, glob
+        build_directory_path(glob)
       end
 
       ignored_files = ignore_globs.flat_map { |g| Dir[g] }.join ' '
