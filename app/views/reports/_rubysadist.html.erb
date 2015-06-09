@@ -42,12 +42,12 @@
     </div>
     <div class="row">
         <h3>Flog Rankings</h3>
-        <table class="sortable-theme-bootstrap" data-sortable>
+        <table class="sortable-theme-bootstrap reports-table" data-sortable>
             <thead>
                 <tr>
                     <th>Location</th>
                     <th>Method</th>
-                    <th data-sorted="true" data-sorted-direction="descending">Flog Score</th>
+                    <th data-sorted="true" data-sorted-direction="descending" style="width: 10%">Flog Score</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,12 +63,12 @@
     </div>
     <div class="row">
         <h3>Flay Matches</h3>
-        <table class="sortable-theme-bootstrap" data-sortable>
+        <table class="sortable-theme-bootstrap reports-tab;e" data-sortable>
             <thead>
                 <tr>
                     <th>Locations</th>
-                    <th data-sorted="true" data-sorted-direction="descending">Code Mass</th>
-                    <th>Match Type</th>
+                    <th data-sorted="true" data-sorted-direction="descending" style="width: 10%">Code Mass</th>
+                    <th style="width: 10%">Match Type</th>
                 </tr>
             </thead>
             <tbody>
@@ -76,7 +76,7 @@
                     <tr>
                         <td>
                             <div class="collapsible"><span><%= "#{entry['first']['path']}: #{entry['first']['line']}" %></span></div>
-                            <div class="collapsible"><span><%= "#{entry['second']['path']}: #{entry['second']['line']}" %></span></div>
+                            <div class="collapsible""><span><%= "#{entry['second']['path']}: #{entry['second']['line']}" %></span></div>
                         </td>
                         <td><%= entry['mass'] %></td>
                         <td><%= entry['match_type'] %></td>
