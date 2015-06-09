@@ -14,13 +14,14 @@ module TestRunner
     def initialize
       @builds = Queue.new
     end
-    
+
     def run
       puts "TestRunner::Main starting up..."
+      puts "Docker is DISABLED. Running all commands locally..." if ENV['SPEARMINT_DISABLE_DOCKER']
 
       Thread.abort_on_exception = true # who thought silently swallowing errors was a good idea
       Build.instance_eval { include TestRunner::Runnable }
-                        
+
       workers = N_WORKERS.times.map do
         Thread.new { Worker.new.run(@builds) }
       end
@@ -53,8 +54,8 @@ module TestRunner
         end
         sleep N_SECONDS_PER_POLL
       end
-      
+
       workers.each { |th| th.join }
     end
-  end  
+  end
 end

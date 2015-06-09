@@ -5,6 +5,8 @@ ruby '2.2.0'
 
 gem 'octokit', '~> 3.0'
 gem 'rubocop'
+gem 'flog'
+gem 'flay'
 
 ## Bootstrap gems
 gem "twitter-bootstrap-rails"

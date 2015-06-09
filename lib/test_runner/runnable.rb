@@ -1,3 +1,5 @@
+require 'fileutils'
+
 module TestRunner
   module Runnable
 
@@ -35,6 +37,26 @@ module TestRunner
 
       Docker.image(cmd, self)
       @build_ready = true
+    end
+
+    def rm_ignored!
+      begin
+        ignored = JSON.parse(project.setting.ignored_files || "[]").reject { |p| p.empty? }
+      rescue JSON::ParserError
+        ignored = []
+      else
+        ignored = [] unless ignored.is_a? Array
+      end
+
+      relatives = ignored.select { |p| p[0] == '/' }
+      globals = ignored - relatives
+
+      ignore_globs = (globals.map { |p| "./**/#{p}" }.concat relatives.map { |p| ".#{p}" }).map do |glob|
+        Rails.root.join 'clients', project.full_name, commit, glob
+      end
+
+      ignored_files = ignore_globs.flat_map { |g| Dir[g] }.join ' '
+      Docker.image("rm -rf #{ignored_files}", self)
     end
 
     def cleanup!
