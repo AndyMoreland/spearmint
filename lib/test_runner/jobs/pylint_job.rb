@@ -6,7 +6,7 @@ module TestRunner
       self.stats = []
 
       sources(build, 'py').each do |src|
-        result = Docker.run("pylint --output-format=json #{src}", build)
+        result = Docker.run("pylint --output-format=json --rcfile=#{Rails.root.join('pylintrc')} #{src}", build)
         next if result.empty?
 
         raw_issues = JSON.parse(result)

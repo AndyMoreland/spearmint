@@ -4,7 +4,9 @@ module TestRunner
     def execute!(build)
       self.issues = []
       self.stats = []
-      result = Docker.run("bundle exec rubocop --format json #{build.build_directory_path}", build)
+      result = Docker.run("bundle exec rubocop --format json --config #{
+                            Rails.root.join('rubocop.yml')} #{build.build_directory_path
+                          }", build)
       result = JSON.parse(result)
       result['files'].each do |file|
         contents = File.readlines file['path']
