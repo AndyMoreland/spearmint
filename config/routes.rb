@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :projects do
     resources :builds, param: :number
     resources :reports
-  resources :settings
+    resources :settings
   end
 
   post '/hooks/:project_id', to: 'builds#create'
