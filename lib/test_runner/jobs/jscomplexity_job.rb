@@ -5,9 +5,8 @@ module TestRunner
             self.issues = []
             self.stats = []
 
-            # Keeping this framework but complexity-report is actually capable
-            # of recursively searching for files in the project directory, as
-            # well as handling CoffeeScript files, etc.
+            # complexity-report actually capable of handling CoffeeScript files, etc.
+            # given more time we would let settings configure all of these options
             project_dir = Rails.root.join 'clients', build.project.full_name, build.commit
             result = Docker.run("node #{Rails.root.join('node_modules', 'complexity-report', 'src', 'index.js')} --ignoreerrors --format json #{project_dir}", build)
 
@@ -20,7 +19,6 @@ module TestRunner
             stat_report.build_id = build.id
             begin
                 # get rid of extra shit
-                # TODO clean up path names
                 stat_report.data = JSON.parse(result).tap {
                     |raw_stats|
                     raw_stats['reports'].each do |report|
