@@ -21,7 +21,7 @@ class BuildsController < ApplicationController
       @build = @project.builds.build(params[:build].try(:permit, :title, :commit, :author, :message))
       commit = @project.github_client.commits(@project.full_name).first
       @build.commit ||= commit.sha
-      @build.author ||= commit.author.login
+      @build.author ||= commit.author.try :login
       @build.message ||= commit.commit.message
     end
 
