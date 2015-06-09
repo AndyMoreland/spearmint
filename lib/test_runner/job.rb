@@ -28,7 +28,7 @@ module TestRunner
 
     class << self
       def relative_filename(build, full_filename)
-        overlap = longest_overlap Rails.root.join('clients', build.project.full_name, "#{build.commit}/").to_s, full_filename
+        overlap = longest_overlap(build.build_directory_path.to_s + '/', full_filename)
         full_filename.sub(overlap, '')
       end
 

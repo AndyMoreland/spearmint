@@ -48,12 +48,12 @@ namespace :docker do
 
   desc "Disable docker!"
   task disable: :environment do
-    `export SPEARMINT_DISABLE_DOCKER=1`
+    echo "run this: export SPEARMINT_DISABLE_DOCKER=1"
   end
 
   desc "Enable docker!"
   task enable: :environment do
-    `unset SPEARMINT_DISABLE_DOCKER`
+    echo "run this: unset SPEARMINT_DISABLE_DOCKER"
   end
 
   desc "Check if docker enabled"

@@ -7,8 +7,8 @@ module TestRunner
 
             # complexity-report actually capable of handling CoffeeScript files, etc.
             # given more time we would let settings configure all of these options
-            project_dir = Rails.root.join 'clients', build.project.full_name, build.commit
-            result = Docker.run("node #{Rails.root.join('node_modules', 'complexity-report', 'src', 'index.js')} --ignoreerrors --format json #{project_dir}", build)
+            project_dir = build.build_directory_path
+            result = Docker.run("node #{Rails.root.join('node_modules', 'complexity-report', 'src', 'index.js')} --ignoreerrors --coffeescript --format json #{project_dir}", build)
 
             return if result.empty? # will be empty if file is not valid JS
 
