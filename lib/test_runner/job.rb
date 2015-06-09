@@ -28,8 +28,22 @@ module TestRunner
 
     class << self
       def relative_filename(build, full_filename)
-        full_filename.sub(/#{Rails.root.join('clients', build.project.full_name, "#{build.commit}/")}/, '')
+        overlap = longest_overlap Rails.root.join('clients', build.project.full_name, "#{build.commit}/").to_s, full_filename
+        full_filename.sub(overlap, '')
       end
+
+      protected
+      def longest_overlap(left, right)
+        overlap = ''
+        for i in (0...left.length).to_a.reverse do
+          suffix = left[i..-1]
+          if right.match(/^#{suffix}/)
+            overlap = suffix
+          end
+        end
+        overlap
+      end
+
     end
   end
 end
