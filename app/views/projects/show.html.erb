@@ -38,5 +38,10 @@
       <td><%= b.status %></td>
       <td><%= link_to "Details", project_build_path(@project, b) %>
     </tr>
+    <% if b.in_progress? %>
+      <script>
+       window.startPollingForFinishedBuild(<%= b.project.id %>, <%= b.id %>, window.reloadPage);
+      </script>
+    <% end %>
   <% end %>
 </table>
