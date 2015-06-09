@@ -1,7 +1,7 @@
 module ProjectsHelper
   def link_to_revision(project, build)
     if build.pull_id
-      link_to_pull_request(build.commit[0..7], project, build.pull_id)
+      link_to_pull_request_or_branch(build.commit[0..7], project, build)
     else
       link_to build.commit[0..7], "https://www.github.com/#{project.full_name}/commit/#{build.commit}"
     end
