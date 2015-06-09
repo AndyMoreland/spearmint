@@ -8,7 +8,6 @@
   </div>
 </div>
 
-
 <table class="table table-striped">
   <tr>
     <th>Build</th>
@@ -21,14 +20,20 @@
   </tr>
 
   <% @project.builds.reverse.each do |b| %>
-    <tr>
+      <% if b.status == 'passed' %>
+        <tr class='success'>
+      <% elsif b.status == 'waiting' || b.status == 'queued' %>
+        <tr class='active'>
+      <% else %>
+        <tr class='danger'>
+      <% end %>
       <td><%= link_to b.number, project_build_path(@project, b) %></td>
       <td><%= b.commit[0..7] %></td>
       <td><%= b.branch %></td>
       <td><%= b.author %></td>
       <td><%= b.message %></td>
       <td><%= localize(b.updated_at, format: :long) %></td>
-      <td><%= b.status == 'success' ? '&check;' : 'test' %></td>
+      <td><%= b.status %></td>
     </tr>
   <% end %>
 </table>
