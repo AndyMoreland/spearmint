@@ -5,10 +5,10 @@ module TestRunner
     def run(queue)
       loop do
         build = queue.pop
-        project = build.project
-        client = project.github_client
         break if build == :shutdown
         puts 'Build starting.'
+        project = build.project
+        client = project.github_client
         build.fetch!
 
         if false
