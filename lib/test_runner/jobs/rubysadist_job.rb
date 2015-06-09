@@ -6,11 +6,9 @@ module TestRunner
             self.stats = []
 
             # given more time we would allow user to configure options here
-            project_dir = Rails.root.join 'clients', build.project.full_name, build.commit
+            project_dir = build.build_directory_path
             flog_result = Docker.run("find #{project_dir} -name \\*.rb | xargs bundle exec flog --all --continue --quiet --methods-only", build)
             flay_result = Docker.run("find #{project_dir} -name \\*.rb | xargs bundle exec flay -\\#", build)
-            puts "find #{project_dir} -name \\*.rb | xargs bundle exec flay -\\#"
-            puts flay_result
 
             # TODO fix paths
             rel_path_offset = Docker.mount_paths(project_dir).length + 1

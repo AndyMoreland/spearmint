@@ -5,8 +5,8 @@ module TestRunner
   class Job
     class Default < Job
 
-      def sources(project, commit, extension)
-        Dir[Rails.root.join 'clients', project.full_name, commit, '**', "*.#{extension}"]
+      def sources(build, extension)
+        Dir[build.build_directory_path('**', "*.#{extension}")]
       end
 
       class << self

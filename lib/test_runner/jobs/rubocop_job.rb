@@ -4,12 +4,12 @@ module TestRunner
     def execute!(build)
       self.issues = []
       self.stats = []
-      result = Docker.run("bundle exec rubocop --format json #{Rails.root.join('clients', build.project.full_name, build.commit)}", build)
+      result = Docker.run("bundle exec rubocop --format json #{build.build_directory_path}", build)
       result = JSON.parse(result)
       result['files'].each do |file|
         contents = File.readlines file['path']
         filename = Job.relative_filename(build, file['path'])
-        file['offenses'].each do |offense|          
+        file['offenses'].each do |offense|
           case offense['severity']
           when 'refactor'
             issue = Issue::Refactor.new

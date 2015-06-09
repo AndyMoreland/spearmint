@@ -5,7 +5,7 @@ module TestRunner
       self.issues = []
       self.stats = []
 
-      sources(build.project, build.commit, 'py').each do |src|
+      sources(build, 'py').each do |src|
         result = Docker.run("pylint --output-format=json #{src}", build)
         next if result.empty?
 
