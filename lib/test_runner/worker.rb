@@ -9,22 +9,27 @@ module TestRunner
         break if build == :shutdown
         puts 'Build starting.'
         project = build.project
-        client = project.github_client
-        build.fetch!
-        build.rm_ignored!
 
-        if false
-        # TODO check for and execute custom jobs
-        else
-          build.execute! Job::Default.jobs
-        end
+        build.fetch!
+        build.build! # unfortunate naming, sorry
 
         aborted = (build.status == :build_script_failed)
 
-        if build.success?
-          build.status = :passed
-        else
-          build.status = :failed unless aborted
+        unless aborted
+          build.test!
+          build.rm_ignored!
+
+          if false
+            # TODO check for and execute custom jobs
+          else
+            build.execute! Job::Default.jobs
+          end
+
+          if build.success?
+            build.status = :passed
+          else
+            build.status = :failed
+          end
         end
 
         begin
@@ -42,6 +47,7 @@ module TestRunner
               changed_lines_by_file = build.get_changed_lines_by_file!
 
               unless aborted
+                client = project.github_client
                 build.issues
                   .select { |i| i.changed_in_build?(changed_files, changed_lines_by_file) }
                   .each { |issue| issue.add_to_github!(client, project.full_name, build.pull_id, build.commit) }

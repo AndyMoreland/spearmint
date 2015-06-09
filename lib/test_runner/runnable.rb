@@ -3,12 +3,12 @@ require 'fileutils'
 module TestRunner
   module Runnable
 
-    def project_directory_path
-      Rails.root.join('clients', project.full_name)
+    def project_directory_path(*args)
+      Rails.root.join('clients', project.full_name, *args)
     end
 
-    def build_directory_path
-      Rails.root.join('clients', project.full_name, commit)
+    def build_directory_path(*args)
+      Rails.root.join('clients', project.full_name, commit, *args)
     end
 
     def build_tarball_path
@@ -16,7 +16,7 @@ module TestRunner
     end
 
     def build_image_name
-      "#{project.full_name.downcase.gsub('/','-')}-#{commit}"
+      "#{project.full_name.downcase.gsub('/','-')}-#{commit}-#{number}"
     end
 
     def fetch!
@@ -36,7 +36,7 @@ module TestRunner
             ].map { |c| "(#{c})" }.join(' && ')
 
       Docker.image(cmd, self)
-      @build_ready = true
+      @files_ready = true
     end
 
     def rm_ignored!
@@ -64,23 +64,30 @@ module TestRunner
       `rm -rf #{build_directory_path} #{build_tarball_path}`
     end
 
-    def execute!(jobs)
-      raise 'Build not yet fetched' unless @build_ready
-      @jobs = jobs
-
+    def build!
+      raise 'Files not yet present' unless @files_ready
       build_cmd = self.project.setting.build_command
       if build_cmd
         results = Docker.image build_cmd, self, base: self.build_image_name, verbose: true
         self.build_script_output = results[:output]
-        return self.status = :build_script_failed if results[:error] != 0
+        self.status = :build_script_failed if results[:error] != 0
       end
+      @build_ready = true
+    end
 
+    def test!
+      raise 'Build not yet compiled' unless @build_ready
       test_cmd = self.project.setting.test_command
       if test_cmd
         results = Docker.run test_cmd, self, verbose: true
         self.unit_tests_output = results[:output]
         self.unit_tests_failed = (results[:error] != 0)
       end
+    end
+
+    def execute!(jobs)
+      raise 'Build not yet compiled' unless @build_ready
+      @jobs = jobs
 
       @jobs.each { |job| job.execute!(self) }
     end

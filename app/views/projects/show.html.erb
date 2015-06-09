@@ -1,10 +1,10 @@
 <div class="row">
-    <div class="col-md-8"><h1><%= @project.name %> <small>[<%= link_to 'reports', project_reports_path(@project) %>]</small></h1></div>
-  <div class="col-md-1 col-md-offset-3">
-  <%= form_for [@project, Build.new], :html => {:class => 'run-btn form-inline pull-right'} do |f| %>
+    <div class="col-sm-10"><h1><%= @project.name %>
+    <small>[<%= link_to 'reports', project_reports_path(@project) %> | <%= link_to 'settings', project_settings_path(@project) %>]</small></h1></div>
+  <div class="col-sm-2">
+  <%= form_for [@project, Build.new], :html => {:class => 'run-btn form-inline pull-right center-block'} do |f| %>
     <%= f.submit 'Run Tests', :class => 'btn' %>
   <% end %>
-  <div><%= link_to 'Settings', project_settings_path(@project) %></div>
   </div>
 </div>
 
@@ -29,7 +29,7 @@
       <td><%= b.author %></td>
       <td><%= b.message %></td>
       <td><%= localize(b.updated_at, format: :long) %></td>
-      <td><%= b.status %></td>
+      <td><%= b.status == 'success' ? '&check;' : 'test' %></td>
       <td><%= link_to "Details", project_build_path(@project, b) %>
     </tr>
   <% end %>

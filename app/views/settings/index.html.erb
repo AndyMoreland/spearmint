@@ -42,9 +42,9 @@
   <div class='form-group'>
     <div class='row'>
       <%= f.label :ignored_files, 'Ignored files', class: 'col-sm-2 control-label' %>
-      <span class='help-block col-sm-10'>Newline or comma-separated list of files to ignore</span>
+      <span class='help-block col-sm-10'>Newline separated list of files to ignore</span>
     </div>
-    <%= f.text_area :ignored_files, class: 'form-control' %>
+    <%= f.text_area :ignored_files, class: 'form-control', :value => @project_ignored_files_text %>
   </div>
 
   <div class='form-group'>
