@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150609001330) do
+ActiveRecord::Schema.define(version: 20150609004738) do
 
   create_table "builds", force: :cascade do |t|
     t.string   "title"
@@ -63,14 +63,14 @@ ActiveRecord::Schema.define(version: 20150609001330) do
   add_index "projects_users", ["user_id"], name: "index_projects_users_on_user_id"
 
   create_table "settings", force: :cascade do |t|
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",                                                    null: false
+    t.datetime "updated_at",                                                    null: false
     t.integer  "project_id"
-    t.integer  "user_with_token",             null: false
+    t.integer  "user_with_token",                                               null: false
     t.string   "build_command"
     t.string   "test_command"
-    t.integer  "concurrent_jobs", default: 2, null: false
-    t.text     "ignored_files"
+    t.integer  "concurrent_jobs", default: 2,                                   null: false
+    t.text     "ignored_files",   default: "[\"node_modules\",\"jquery*.js\"]"
   end
 
   add_index "settings", ["project_id"], name: "index_settings_on_project_id"
