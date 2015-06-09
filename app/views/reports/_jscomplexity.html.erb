@@ -1,105 +1,91 @@
-<%
-# FIXME very error prone and nonrobust querie(s)
-# most recent build
-@build = @project.builds.order(:created_at).includes(:stats).last
-@js_stats = @build.stats.where(source: 'JSComplexity').take unless @build.nil?
-%>
-<% unless @js_stats.nil? %>
-    <div class="row">
-        <h2>
-            JSComplexity
-            <small>[last analysis on build <%= link_to @build.number, project_build_path(@project, @build) %>, revision <%= link_to_revision(@project, @build) %>]</small>
-        </h2>
-    </div>
-    <div class="row">
-        <% if @js_stats.data.has_key? 'error' %>
-            <div>JavaScript parsing error on last build:</div>
-            <div class="alert alert-danger"><samp><%= @js_stats.data['error'] %></samp></div>
-        <% else %>
-            <div class="row">
-                <div class="col-md-4">
-                    <!-- TODO add info about which build/commit this is from -->
-                    <h3>Project Averages</h3>
-                    <div class="panel panel-default stat-panel">
-                        <div class="panel-heading">
-                            cyclomatic complexity
-                        </div>
-                        <div class="panel-body">
-                            <span class="stat"><%= '%.2f' % @js_stats.data['cyclomatic'] %></span>
-                        </div>
+<div class="row">
+    <% if @js_stats.data.has_key? 'error' %>
+        <div>JavaScript parsing error on last build:</div>
+        <div class="alert alert-danger"><samp><%= @js_stats.data['error'] %></samp></div>
+    <% else %>
+        <div class="row">
+            <div class="col-md-4">
+                <!-- TODO add info about which build/commit this is from -->
+                <h3>Project Averages</h3>
+                <div class="panel panel-default stat-panel">
+                    <div class="panel-heading">
+                        cyclomatic complexity
                     </div>
-                    <div class="panel panel-default stat-panel">
-                        <div class="panel-heading">
-                            maintainability
-                        </div>
-                        <div class="panel-body">
-                            <span class="stat"><%= '%.2f' % @js_stats.data['maintainability'] %>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="panel panel-default stat-panel">
-                        <div class="panel-heading">
-                            parameter count
-                        </div>
-                        <div class="panel-body">
-                            <span class="stat"><%= '%.2f' % @js_stats.data['params'] %>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="panel panel-default stat-panel">
-                        <div class="panel-heading">
-                            logical lines of code per function
-                        </div>
-                        <div class="panel-body">
-                            <span class="stat"><%= '%.2f' % @js_stats.data['loc'] %>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="panel panel-default stat-panel">
-                        <div class="panel-heading">
-                            Halstead effort <small>[<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">?</a>]</small>
-                        </div>
-                        <div class="panel-body">
-                            <span class="stat"><%= '%.2f' % @js_stats.data['effort'] %>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="panel panel-default stat-panel">
-                        <div class="panel-heading">
-                            change cost
-                        </div>
-                        <div class="panel-body">
-                            <span class="stat"><%= @js_stats.data['changeCost'].round(2) %>%</span>
-                        </div>
+                    <div class="panel-body">
+                        <span class="stat"><%= '%.2f' % @js_stats.data['cyclomatic'] %></span>
                     </div>
                 </div>
-                <div class="col-md-8">
-                    <table class="sortable-theme-bootstrap reports-table" data-sortable>
-                        <thead>
-                            <tr>
-                                <th data-sorted="true" data-sorted-direction="descending" style="width: 35%">File</th>
-                                <th>Maintainability</th>
-                                <th>Cyclomatic Complexity</th>
-                                <th>Parameter Count</th>
-                                <th>Logical LOC</th>
-                                <th>Halstead Effort</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% @js_stats.data['reports'].each do |report| %>
-                                <tr>
-                                    <td><div class="collapsible"><span><%= report['path'] %></span></div></td>
-                                    <td><%= report['maintainability'].round(2) %></td>
-                                    <td><%= report['cyclomatic'].round(2) %></td>
-                                    <td><%= report['params'].round(2) %></td>
-                                    <td><%= report['loc'].round(2) %></td>
-                                    <td><%= report['effort'].round(2) %></td>
-                                </tr>
-                            <% end %>
-                        </tbody>
-                    </table>
+                <div class="panel panel-default stat-panel">
+                    <div class="panel-heading">
+                        maintainability
+                    </div>
+                    <div class="panel-body">
+                        <span class="stat"><%= '%.2f' % @js_stats.data['maintainability'] %>
+                        </span>
+                    </div>
+                </div>
+                <div class="panel panel-default stat-panel">
+                    <div class="panel-heading">
+                        parameter count
+                    </div>
+                    <div class="panel-body">
+                        <span class="stat"><%= '%.2f' % @js_stats.data['params'] %>
+                        </span>
+                    </div>
+                </div>
+                <div class="panel panel-default stat-panel">
+                    <div class="panel-heading">
+                        logical lines of code per function
+                    </div>
+                    <div class="panel-body">
+                        <span class="stat"><%= '%.2f' % @js_stats.data['loc'] %>
+                        </span>
+                    </div>
+                </div>
+                <div class="panel panel-default stat-panel">
+                    <div class="panel-heading">
+                        Halstead effort <small>[<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">?</a>]</small>
+                    </div>
+                    <div class="panel-body">
+                        <span class="stat"><%= '%.2f' % @js_stats.data['effort'] %>
+                        </span>
+                    </div>
+                </div>
+                <div class="panel panel-default stat-panel">
+                    <div class="panel-heading">
+                        change cost
+                    </div>
+                    <div class="panel-body">
+                        <span class="stat"><%= @js_stats.data['changeCost'].round(2) %>%</span>
+                    </div>
                 </div>
             </div>
-        <% end %>
-    </div>
-<% end %>
+            <div class="col-md-8">
+                <table class="sortable-theme-bootstrap reports-table" data-sortable>
+                    <thead>
+                        <tr>
+                            <th data-sorted="true" data-sorted-direction="descending" style="width: 35%">File</th>
+                            <th>Maintainability</th>
+                            <th>Cyclomatic Complexity</th>
+                            <th>Parameter Count</th>
+                            <th>Logical LOC</th>
+                            <th>Halstead Effort</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @js_stats.data['reports'].each do |report| %>
+                            <tr>
+                                <td><div class="collapsible"><span><%= report['path'] %></span></div></td>
+                                <td><%= report['maintainability'].round(2) %></td>
+                                <td><%= report['cyclomatic'].round(2) %></td>
+                                <td><%= report['params'].round(2) %></td>
+                                <td><%= report['loc'].round(2) %></td>
+                                <td><%= report['effort'].round(2) %></td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    <% end %>
+</div>

@@ -11,7 +11,7 @@ Rails.application.routes.draw do
 
   resources :projects do
     resources :builds, param: :number
-    resources :reports
+    resources :reports, param: :source
     resources :settings
   end
 
