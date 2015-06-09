@@ -3,7 +3,6 @@ module TestRunner
     class << self
       def run(cmd, build, verbose: false)
         if ENV['SPEARMINT_DISABLE_DOCKER']
-          puts "Docker is DISABLED. Running command locally..."
           out = `#{cmd}`
         else
           dir = build.build_directory_path
@@ -16,7 +15,6 @@ module TestRunner
 
       def image(cmd, build, base: :spearmint, verbose: false)
         if ENV['SPEARMINT_DISABLE_DOCKER']
-          puts "Docker is DISABLED. Running command locally..."
           out = `#{cmd}`
           retcode = $?.to_i
         else
