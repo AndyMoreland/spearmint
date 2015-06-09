@@ -12,6 +12,11 @@
     </ul>
 </div>
 
+<% content_for :head do %>
+    <%= javascript_include_tag "parallax" %>
+    <%= javascript_include_tag "jquery.parallax" %>
+<% end %>
+
 <script>
  console.log("initiating parallax");
  $("#scene").parallax();
