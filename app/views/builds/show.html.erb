@@ -1,4 +1,4 @@
-<h1><%= @build.project.name %> - build #<%= @build.id %></h1>
+<h1><%= @build.project.name %> - build #<%= @build.number %></h1>
 <input type="checkbox" <%= @should_dedupe_issues ? "checked" : '' %> id="dedupe" onclick="toggleIssueDedupe(this)"> <label for="dedupe">Show only first issue of each kind</label>
 
 <% issues_seen = {} %>
@@ -6,7 +6,7 @@
   <% @all_issues.each do |tests, files| %>
     <% files.each do |file_name, issues_by_line| %>
       <% if issues_by_line.any? %>
-        <h4><code><span><%= file_name %></span></code></h4> 
+        <h4><code><span><%= file_name %></span></code></h4>
         <table class="table table-hover">
           <% issues_by_line.each do |line_number, issues| %>
             <% dedupe_issues!(issues, issues_seen) if @should_dedupe_issues %>
