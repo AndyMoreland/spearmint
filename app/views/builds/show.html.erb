@@ -1,4 +1,9 @@
 <h1><%= @build.project.name %> - build #<%= @build.number %></h1>
+<div>
+<% if @build.pull_id %>
+    View pull request on <%= link_to "GitHub", "https://www.github.com/#{@build.project.full_name}/pulls/#{@build.pull_id}" %>.
+<% end %>
+</div>
 <input type="checkbox" <%= @should_dedupe_issues ? "checked" : '' %> id="dedupe" onclick="toggleIssueDedupe(this)"> <label for="dedupe">Show only first issue of each kind</label>
 
 <% issues_seen = {} %>
