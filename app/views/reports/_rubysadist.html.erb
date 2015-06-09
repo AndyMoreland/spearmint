@@ -1,88 +1,72 @@
-<%
-# FIXME very error prone and nonrobust querie(s)
-# most recent build
-@build = @project.builds.order(:created_at).includes(:stats).last
-@flay_report = @build.stats.where(source: 'RubyFlay').take unless @build.nil?
-@flog_report = @build.stats.where(source: 'RubyFlog').take unless @build.nil?
-%>
-<% unless @flay_report.nil? or @flog_report.nil? %>
-    <div class="row">
-        <h2>
-            Ruby Sadist
-            <small>[last analysis on build <%= link_to @build.number, project_build_path(@project, @build) %>, revision <%= link_to_revision(@project, @build) %>]</small>
-        </h2>
-    </div>
-
-    <div class="row">
-        <h3>Project Totals</h3>
-        <div class="panel panel-default stat-panel">
-            <div class="panel-heading">
-                flog score
-            </div>
-            <div class="panel-body">
-                <span class="stat"><%= '%.1f' % @flog_report.data['total'] %></span>
-            </div>
+<div class="row">
+    <h3>Project Totals</h3>
+    <div class="panel panel-default stat-panel">
+        <div class="panel-heading">
+            flog score
         </div>
-        <div class="panel panel-default stat-panel">
-            <div class="panel-heading">
-                flog method average
-            </div>
-            <div class="panel-body">
-                <span class="stat"><%= '%.1f' % @flog_report.data['average'] %></span>
-            </div>
-        </div>
-        <div class="panel panel-default stat-panel">
-            <div class="panel-heading">
-                flay score
-            </div>
-            <div class="panel-body">
-                <span class="stat"><%= '%.1f' % @flay_report.data['total'] %></span>
-            </div>
+        <div class="panel-body">
+            <span class="stat"><%= '%.1f' % @flog_report.data['total'] %></span>
         </div>
     </div>
-    <div class="row">
-        <h3>Flog Rankings</h3>
-        <table class="sortable-theme-bootstrap reports-table" data-sortable>
-            <thead>
+    <div class="panel panel-default stat-panel">
+        <div class="panel-heading">
+            flog method average
+        </div>
+        <div class="panel-body">
+            <span class="stat"><%= '%.1f' % @flog_report.data['average'] %></span>
+        </div>
+    </div>
+    <div class="panel panel-default stat-panel">
+        <div class="panel-heading">
+            flay score
+        </div>
+        <div class="panel-body">
+            <span class="stat"><%= '%.1f' % @flay_report.data['total'] %></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <h3>Flog Rankings</h3>
+    <table class="sortable-theme-bootstrap reports-table" data-sortable>
+        <thead>
+            <tr>
+                <th>Location</th>
+                <th>Method</th>
+                <th data-sorted="true" data-sorted-direction="descending" style="width: 10%">Flog Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @flog_report.data['entries'].each do |entry| %>
                 <tr>
-                    <th>Location</th>
-                    <th>Method</th>
-                    <th data-sorted="true" data-sorted-direction="descending" style="width: 10%">Flog Score</th>
+                    <td><div class="collapsible"><span><%= entry['path'] %></span></div></td>
+                    <td><%= entry['method'] %></td>
+                    <td><%= entry['flog'] %></td>
                 </tr>
-            </thead>
-            <tbody>
-                <% @flog_report.data['entries'].each do |entry| %>
-                    <tr>
-                        <td><div class="collapsible"><span><%= entry['path'] %></span></div></td>
-                        <td><%= entry['method'] %></td>
-                        <td><%= entry['flog'] %></td>
-                    </tr>
-                <% end %>
-            </tbody>
-        </table>
-    </div>
-    <div class="row">
-        <h3>Flay Matches</h3>
-        <table class="sortable-theme-bootstrap reports-tab;e" data-sortable>
-            <thead>
+            <% end %>
+        </tbody>
+    </table>
+</div>
+<div class="row">
+    <h3>Flay Matches</h3>
+    <table class="sortable-theme-bootstrap reports-table" data-sortable>
+        <thead>
+            <tr>
+                <th>Locations</th>
+                <th data-sorted="true" data-sorted-direction="descending" style="width: 10%">Code Mass</th>
+                <th style="width: 10%">Match Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @flay_report.data['entries'].each do |entry| %>
                 <tr>
-                    <th>Locations</th>
-                    <th data-sorted="true" data-sorted-direction="descending" style="width: 10%">Code Mass</th>
-                    <th style="width: 10%">Match Type</th>
+                    <td>
+                        <div class="collapsible"><span><%= "#{entry['first']['path']}: #{entry['first']['line']}" %></span></div>
+                        <div class="collapsible""><span><%= "#{entry['second']['path']}: #{entry['second']['line']}" %></span></div>
+                    </td>
+                    <td><%= entry['mass'] %></td>
+                    <td><%= entry['match_type'] %></td>
                 </tr>
-            </thead>
-            <tbody>
-                <% @flay_report.data['entries'].each do |entry| %>
-                    <tr>
-                        <td>
-                            <div class="collapsible"><span><%= "#{entry['first']['path']}: #{entry['first']['line']}" %></span></div>
-                            <div class="collapsible""><span><%= "#{entry['second']['path']}: #{entry['second']['line']}" %></span></div>
-                        </td>
-                        <td><%= entry['mass'] %></td>
-                        <td><%= entry['match_type'] %></td>
-                    </tr>
-                <% end %>
-            </tbody>
-        </table>
-    </div>
-<% end %>
+            <% end %>
+        </tbody>
+    </table>
+</div>
