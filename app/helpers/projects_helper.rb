@@ -7,7 +7,7 @@ module ProjectsHelper
     end
   end
 
-  def link_to_pull_request_or_beranch(text, project, build)
+  def link_to_pull_request_or_branch(text, project, build)
     if build.pull_id
       link_to text, "https://www.github.com/#{project.full_name}/pull/#{build.pull_id}"
     else
