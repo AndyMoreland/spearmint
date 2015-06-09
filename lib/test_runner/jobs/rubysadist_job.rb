@@ -1,5 +1,5 @@
 module TestRunner
-    class JSComplexityJob < Job::Default
+    class RubySadistJob < Job::Default
 
         def execute!(build)
             self.issues = []
