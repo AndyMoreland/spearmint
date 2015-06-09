@@ -52,7 +52,7 @@ namespace :docker do
   end
 
   desc "Enable docker!"
-  task enable: :enivornment do
+  task enable: :environment do
     `unset SPEARMINT_DISABLE_DOCKER`
   end
 
