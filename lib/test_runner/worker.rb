@@ -11,6 +11,7 @@ module TestRunner
         project = build.project
         client = project.github_client
         build.fetch!
+        build.rm_ignored!
 
         if false
         # TODO check for and execute custom jobs
