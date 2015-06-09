@@ -1,6 +1,54 @@
 <h1>Settings - <%= @project.name %></h1>
-<h3>GitHub</h3>
-<input type="checkbox">Show comments on GitHub</input>
-<h3>Tests</h3>
-<input type="checkbox">JSLint</input>
-<input type="checkbox">RuboCop</input>
+
+
+<%= form_for [@project, @project.setting], method: 'patch' do |f| %>
+  <div class='form-group row'>
+    <div class='col-sm-2'>
+      <%= f.label :user_with_token, 'GitHub token to use', class: 'control-label' %>
+    </div>
+    <div class='col-sm-3'>
+      <%= f.select :user_with_token, @project_watchers,
+                   {}, { class: 'form-control' } %>
+    </div>
+  </div>
+
+  <div class='form-group row'>
+    <div class='col-sm-2'>
+      <%= f.label :concurrent_jobs, 'Concurrent jobs', class: 'control-label' %>
+    </div>
+    <div class='col-sm-3'>
+      <%= f.select :concurrent_jobs,
+                   (1..5).map {|i| [i.to_s, i] }, 
+                   {}, { class: 'form-control' } %>
+    </div>
+  </div>
+
+  <div class='form-group'>
+    <div class='row'>
+      <%= f.label :build_command, 'Build command', class: 'col-sm-2 control-label' %>
+      <span class='col-sm-10 help-block'>Shell command to run your build script</span>
+    </div>
+    <%= f.text_field :build_command, class: 'form-control' %>
+  </div>
+
+  <div class='form-group'>
+    <div class='row'>
+      <%= f.label :test_command, 'Test command', class: 'col-sm-2 control-label' %>
+      <span class='help-block col-sm-10'>Shell command to run your tests</span>
+    </div>
+    <%= f.text_field :test_command, class: 'form-control' %>
+  </div>
+
+  <div class='form-group'>
+    <div class='row'>
+      <%= f.label :ignored_files, 'Ignored files', class: 'col-sm-2 control-label' %>
+      <span class='help-block col-sm-10'>Newline or comma-separated list of files to ignore</span>
+    </div>
+    <%= f.text_area :ignored_files, class: 'form-control' %>
+  </div>
+
+  <div class='form-group'>
+      <%= f.submit 'Update Settings', class: ['btn', 'btn-default'] %>
+  </div>
+
+<% end %>
