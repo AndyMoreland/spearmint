@@ -66,7 +66,7 @@
                   </ul>
                 </li>
               <% else %>
-                <li><a href="/users/auth/github">Log in with Github</a></li>
+                <li><a href="/users/auth/github">Sign Up</a></li>
               <% end %>
           </ul>
         </div><!-- /.navbar-collapse -->
@@ -77,8 +77,7 @@
   <div class="jumbotron" style="margin-top: -20px;">
     <div class="container">
       <h1>Welcome to Spearmint!</h1>
-      <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-      <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+      <p><a class="btn btn-primary btn-lg" href="/users/auth/github" role="button">Sign Up</a></p>
     </div> <!-- /container -->
   </div><!-- /jumbotron -->
   <% end %>
@@ -89,15 +88,17 @@
         <%= bootstrap_flash %>
         <%= yield %>
         <% if !user_signed_in? %>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent accumsan auctor porttitor. In hac habitasse platea dictumst. Mauris at venenatis velit. Phasellus at auctor diam. Cras a libero vestibulum, aliquet turpis et, tempus ante. Proin dolor massa, cursus quis lacinia ac, porta sit amet ex. Aliquam pretium lacus eget turpis luctus, ornare molestie sem pharetra.</p>
-
-            <p>Nulla quam est, porta in est ac, rhoncus commodo risus. Proin rutrum orci ex, quis porta lectus hendrerit quis. Sed ut consectetur diam, non euismod ex. Pellentesque non eros vitae dolor porttitor maximus et nec ante. Sed rhoncus, arcu quis eleifend finibus, orci velit suscipit eros, eu auctor nisl est ut felis. Morbi id mollis tortor. Suspendisse potenti. Aliquam hendrerit pulvinar nibh, ac posuere tortor congue nec. Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque quam nisl, auctor ultricies mi in, vehicula congue augue. Cras ligula erat, semper quis eleifend id, fringilla nec felis. Cras non tristique sapien, a consequat ipsum. Curabitur mattis tincidunt arcu, quis lobortis augue ornare eu. Cras iaculis gravida lacus a suscipit.</p>
-
-            <p>Aliquam erat volutpat. Nulla dignissim eu odio vitae placerat. Nulla arcu enim, ullamcorper nec gravida id, malesuada sed libero. Morbi rutrum orci eu mi commodo ornare. Nam rutrum mauris eu suscipit ornare. Aenean urna mauris, aliquam eu porta ac, semper eget mi. Ut eget euismod urna. Vivamus felis justo, dignissim ut diam quis, tincidunt malesuada nibh. Fusce sit amet aliquet lectus. Vestibulum vestibulum velit non purus varius suscipit.</p>
-
-            <p>Vestibulum ullamcorper imperdiet lorem accumsan molestie. Proin nulla nisi, pellentesque et semper non, consequat volutpat ante. Integer efficitur imperdiet sodales. Duis id massa nec dui efficitur semper. In hac habitasse platea dictumst. Donec dignissim massa ut tortor suscipit consequat. Nam molestie auctor metus. Nunc id ipsum nisl. Duis egestas purus ac ante suscipit, in varius sem posuere. Nulla mollis, leo nec suscipit porta, diam libero scelerisque quam, vitae porta sapien leo in felis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut ullamcorper massa. Ut sit amet vehicula diam. Etiam facilisis odio ac diam aliquet, id vehicula purus aliquet. Maecenas in purus nec augue aliquet auctor.</p>
-
-            <p>Sed id aliquet mi, a accumsan erat. Duis congue fringilla vulputate. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nunc feugiat vestibulum dui sit amet viverra. Maecenas feugiat fringilla erat et vehicula. Etiam viverra posuere sem, ut varius urna volutpat at. Vivamus at tellus nec massa pulvinar fringilla sed non purus. Nulla semper luctus lorem et dignissim. Cras a augue dignissim, placerat tortor ac, tempus ipsum. Mauris diam urna, consequat in pulvinar at, interdum et massa. Pellentesque quis eros pharetra, semper ante ut, volutpat magna. Nulla eget nisl faucibus, ullamcorper justo porttitor, dapibus metus. Integer non est velit. Phasellus aliquet eros urna, et aliquam velit pulvinar sed. Donec vitae rutrum nisl, dictum commodo magna.</p>
+          <p>Spearmint is a GitHub-integrated code quality service. Coding
+          standards are important, but no one reads style guides--and linters
+          are a pain to configure and easy to forget about. Enter Spearmint:
+          just sign up with GitHub and choose projects to watch. Spearmint will
+          automatically run code quality checks on every pull request inside a
+          secure, private virtual machine and display the results directly on
+          the GitHub pull request page, no interaction needed. For developers
+          looking to go the extra mile, Spearmint also provides a web
+          application that allows users to tweak settings, see more detailed
+          failure reports, and keep an eye on code quality statistics like
+          cyclomatic complexity.</p>
         <% end %>
       </div>
     </div><!-- /row -->
