@@ -1,11 +1,12 @@
 <div class="row">
-    <div class="col-sm-10"><h1><%= @project.name %>
-    <small>[<%= link_to 'reports', project_reports_path(@project) %> | <%= link_to 'settings', project_settings_path(@project) %>]</small></h1></div>
-  <div class="col-sm-2">
-  <%= form_for [@project, Build.new], :html => {:class => 'run-btn form-inline pull-right center-block'} do |f| %>
-    <%= f.submit 'Run Tests', :class => 'btn' %>
-  <% end %>
-  </div>
+    <h1><%= @project.name %>
+        <small>
+            [<%= link_to 'reports', project_reports_path(@project) %> | <%= link_to 'settings', project_settings_path(@project) %>]
+        </small>
+    </h1>
+    <%= form_for [@project, Build.new], :html => {:class => 'run-btn form-inline pull-right center-block'} do |f| %>
+        <%= f.submit 'Run Tests', :class => 'btn' %>
+    <% end %>
 </div>
 
 <table class="table table-striped">
