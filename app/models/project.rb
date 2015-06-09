@@ -4,7 +4,6 @@ class Project < ActiveRecord::Base
   has_one :setting
 
   after_create :create_settings
-  after_create :add_webhook!
 
   def github_url
     "https://github.com/#{full_name}"
