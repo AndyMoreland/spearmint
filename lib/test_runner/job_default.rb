@@ -6,24 +6,7 @@ module TestRunner
     class Default < Job
 
       def sources(project, commit, extension)
-        begin
-          ignored = JSON.parse(project.setting.ignored_files || "[]").reject { |p| p.empty? }
-        rescue JSON::ParserError
-          ignored = []
-        else
-          ignored = [] unless ignored.is_a? Array
-        end
-        relatives = ignored.select { |p| p[0] == '/' }
-        globals = ignored - relatives
-
-        ignore_globs = (globals.map { |p| "./**/#{p}" }.concat relatives.map { |p| ".#{p}" }).map do |glob|
-          Rails.root.join 'clients', project.full_name, commit, glob
-        end
-
-        all_files = Dir[Rails.root.join 'clients', project.full_name, commit, '**', "*.#{extension}"]
-        ignored_files = ignore_globs.flat_map { |g| Dir[g] }
-
-        all_files - ignored_files
+        Dir[Rails.root.join 'clients', project.full_name, commit, '**', "*.#{extension}"]
       end
 
       class << self
