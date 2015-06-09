@@ -8,6 +8,12 @@ namespace :docker do
     # `export DOCKER_TLS_VERIFY=1`
   # end
 
+  desc "Destroy all docker stuff"
+  task destroy: :environment do
+    puts `docker ps -a | sed '1d' | awk '{ print $1 }' | xargs docker rm -f` # delete all containers
+    puts `docker images | awk '{ print $3 }' | xargs docker rmi -f` # delete all images
+  end
+
   desc "Set up docker stuff, probably"
   task init: :environment do
     puts `docker pull phusion/passenger-ruby22:latest`
