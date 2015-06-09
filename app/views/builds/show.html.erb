@@ -86,6 +86,6 @@
 
 <% if @build.in_progress? %>
     <script>
-     window.startPollingForFinishedBuild(<%= @build.project.id %>, <%= @build.id %>, window.reloadPage);
+     window.startPollingForFinishedBuild(<%= @build.project.id %>, <%= @build.number %>, window.reloadPage);
     </script>
 <% end %>
