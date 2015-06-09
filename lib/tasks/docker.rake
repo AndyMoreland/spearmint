@@ -12,14 +12,14 @@ namespace :docker do
   task init: :environment do
     puts `docker pull phusion/passenger-ruby22:latest`
     puts `docker tag phusion/passenger-ruby22:latest base:ruby22`
-    puts `docker build -t spearmint #{Rails.root.join('lib', 'tasks')}`
+    puts `docker build --no-cache -t spearmint #{Rails.root.join('lib', 'tasks')}`
     puts `docker images`
   end
 
   desc "Update docker image to latest Spearmint build"
   task refresh: :environment do
     puts `docker rmi -f spearmint`
-    puts `docker build -t spearmint #{Rails.root.join('lib', 'tasks')}`
+    puts `docker build --no-cache -t spearmint #{Rails.root.join('lib', 'tasks')}`
     puts `docker images`
   end
 
