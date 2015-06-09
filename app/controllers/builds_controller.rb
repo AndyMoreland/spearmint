@@ -43,26 +43,8 @@ class BuildsController < ApplicationController
     respond_to do |f|
       f.html do 
         redirect_to(request.path, params: params, flash: { query: request.query_parameters } ) unless request.query_parameters.empty?
-        
         @should_dedupe_issues = flash[:query] and flash[:query]['dedupe']
-
-        # example format
-        # --------------
-        # {
-        #   'jslint' =>
-        #     { 'file.js' => [{ 1 => [issue1, issue2] },
-        #                     { 8 => [issue3, issue4] }].
-        #       'otherfile.js' => [{ 3 => [issue5, issue6] }] },
-        #   'rubocop' =>
-        #     { 'file.rb' => [{ 1 => [issue7] }] }
-        # }
-        @all_issues = @build.issues.group_by(&:source).map do |test_name, issues|
-          { test_name => issues.group_by(&:file).map { |file_name, issues|
-              { file_name => issues.group_by(&:line) } }.reduce(:merge)
-          }
-        end
-        
-        @all_issues = @all_issues.reduce(:merge)
+        @all_issues = group_issues(@build.issues)
       end
       f.json { render json: @build.to_json }
     end
@@ -74,5 +56,25 @@ class BuildsController < ApplicationController
     @project = Project.find(params[:project_id])
 
     render error: "can't find project" unless @project
+  end
+
+  # example format
+  # --------------
+  # {
+  #   'jslint' =>
+  #     { 'file.js' => [{ 1 => [issue1, issue2] },
+  #                     { 8 => [issue3, issue4] }].
+  #       'otherfile.js' => [{ 3 => [issue5, issue6] }] },
+  #   'rubocop' =>
+  #     { 'file.rb' => [{ 1 => [issue7] }] }
+  # }
+  def group_issues(issues)
+    grouped_issues = issues.group_by(&:source).map do |test_name, issues|
+      { test_name => issues.group_by(&:file).map { |file_name, issues|
+          { file_name => issues.group_by(&:line) } }.reduce(:merge)
+      }
+    end
+    
+    grouped_issues.reduce(:merge)    
   end
 end
