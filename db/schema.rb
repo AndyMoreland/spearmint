@@ -25,6 +25,9 @@ ActiveRecord::Schema.define(version: 20150609004738) do
     t.text     "unit_tests_output"
     t.boolean  "unit_tests_failed"
     t.integer  "number",              null: false
+    t.string   "author"
+    t.text     "message"
+    t.string   "branch"
   end
 
   add_index "builds", ["project_id", "number"], name: "index_builds_on_project_id_and_number", unique: true
