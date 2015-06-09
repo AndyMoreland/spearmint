@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150608032038) do
+ActiveRecord::Schema.define(version: 20150609001330) do
 
   create_table "builds", force: :cascade do |t|
     t.string   "title"
@@ -24,8 +24,10 @@ ActiveRecord::Schema.define(version: 20150608032038) do
     t.text     "build_script_output"
     t.text     "unit_tests_output"
     t.boolean  "unit_tests_failed"
+    t.integer  "number",              null: false
   end
 
+  add_index "builds", ["project_id", "number"], name: "index_builds_on_project_id_and_number", unique: true
   add_index "builds", ["project_id"], name: "index_builds_on_project_id"
 
   create_table "issues", force: :cascade do |t|

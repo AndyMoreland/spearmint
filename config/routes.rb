@@ -4,13 +4,13 @@ Rails.application.routes.draw do
   root 'pages#index'
 
   resources :projects do
-    resources :builds
+    resources :builds, param: :number
     resources :reports
   resources :settings
   end
 
   post '/hooks/:project_id', to: 'builds#create'
-  
+
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
   devise_scope :user do

@@ -23,7 +23,7 @@
   <% @project.builds.reverse.each do |b| %>
     <% commit = get_commit(b) %>
     <tr>
-      <td><%= link_to b.id, project_build_path(@project, b) %></td>
+      <td><%= link_to b.number, project_build_path(@project, b) %></td>
       <td><%= commit.sha[0..7] %></td>
       <td></td>
       <td><%= if commit.author.nil? then 'none' else commit.author.login end %></td>
