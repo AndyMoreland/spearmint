@@ -44,7 +44,7 @@ module TestRunner
             tokens = output.lines.map { |line| line.split }
             {
                 "total" => parse_flog(tokens[0][0]),
-                "average" => parse_flog(tokens[0][0]),
+                "average" => parse_flog(tokens[1][0]),
                 "entries" => tokens.drop(3).map do |row|
                     {
                         "flog" => parse_flog(row[0]),
