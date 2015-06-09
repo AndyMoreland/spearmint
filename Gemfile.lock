@@ -68,6 +68,12 @@ GEM
     execjs (2.5.2)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
+    flay (2.6.1)
+      ruby_parser (~> 3.0)
+      sexp_processor (~> 4.0)
+    flog (4.3.2)
+      ruby_parser (~> 3.1, > 3.1.0)
+      sexp_processor (~> 4.4)
     git_diff_parser (2.1.2)
     globalid (0.3.5)
       activesupport (>= 4.1.0)
@@ -174,6 +180,8 @@ GEM
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.4)
     ruby-progressbar (1.7.5)
+    ruby_parser (3.7.0)
+      sexp_processor (~> 4.1)
     sass (3.4.13)
     sass-rails (5.0.3)
       railties (>= 4.0.0, < 5.0)
@@ -187,6 +195,7 @@ GEM
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    sexp_processor (4.6.0)
     slop (3.6.0)
     spring (1.3.4)
     sprockets (3.0.2)
@@ -230,6 +239,8 @@ DEPENDENCIES
   byebug
   coffee-rails (~> 4.1.0)
   devise
+  flay
+  flog
   git_diff_parser
   jbuilder (~> 2.0)
   jquery-rails
