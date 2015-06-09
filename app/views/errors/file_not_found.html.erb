@@ -1,2 +1,18 @@
-<h1>404</h1>
-<p>This is not the web page you are looking for.</p>
+
+<div id="scene-404">
+    <ul id="scene">
+        <li class="layer" data-depth="0.05"><%= image_tag "waves_1" %></li>
+        <li class="layer" data-depth="0.15"><%= image_tag "waves_4" %></li>
+        <li class="layer" data-depth="0.25"><%= image_tag "waves_2" %></li>
+        <li class="layer" data-depth="0.40"><%= image_tag "waves_3" %></li>
+        <li class="layer" id="whale" data-depth="0.50"><div id="whale-wrapper"><%= image_tag "whale" %></div></li>
+        <li class="layer" id="leaf" data-depth="0.70"><div id="leaf-wrapper"><%= image_tag "leaf" %></div></li>
+        <li class="layer" id="text" data-depth="1.00"><div id="text-wrapper">404</div></li>
+        <li class="layer" id="text-2" data-depth="1.00"><div id="text-wrapper-2">This is not the page you are looking for</div></li>
+    </ul>
+</div>
+
+<script>
+ console.log("initiating parallax");
+ $("#scene").parallax();
+</script>
