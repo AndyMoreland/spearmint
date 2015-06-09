@@ -18,8 +18,11 @@ module TestRunner
                 stat_report = Stat.new
                 stat_report.source = 'RubyFlog'
                 stat_report.build_id = build.id
-                stat_report.data = parse_flog_output(flog_result)
-
+                stat_report.data = parse_flog_output(flog_result).tap do |flog_report|
+                    flog_report['entries'].each do |entry|
+                        entry['path'] = entry['path'][rel_path_offset..-1]
+                    end
+                end
                 self.stats << stat_report
             end
 
@@ -28,8 +31,12 @@ module TestRunner
                 stat_report = Stat.new
                 stat_report.source = 'RubyFlay'
                 stat_report.build_id = build.id
-                stat_report.data = parse_flay_output(flay_result)
-
+                stat_report.data = parse_flay_output(flay_result).tap do |flay_report|
+                    flay_report['entries'].each do |entry|
+                        entry['first']['path'] = entry['first']['path'][rel_path_offset..-1]
+                        entry['second']['path'] = entry['second']['path'][rel_path_offset..-1]
+                    end
+                end
                 self.stats << stat_report
             end
 

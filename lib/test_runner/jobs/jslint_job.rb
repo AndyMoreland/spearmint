@@ -6,7 +6,9 @@ module TestRunner
       self.stats = []
 
       sources(build, 'js').each do |src|
-        result = Docker.run("node #{Rails.root.join('node_modules', 'jslint', 'bin', 'jslint.js')} --json #{src}", build)
+        result = Docker.run("node #{
+                              Rails.root.join('node_modules', 'jslint', 'bin', 'jslint.js')
+                            } --config #{Rails.root.join('jslintrc')} --json #{src}", build)
         next if result.empty?
 
         _, raw_issues = JSON.parse(result)
