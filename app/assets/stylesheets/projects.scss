@@ -3,5 +3,11 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .run-btn {
-  vertical-align: bottom;
+    position: absolute;
+    //display: block;
+    right: 0px;
+    top: 0px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    margin-right: 10px;
 }
