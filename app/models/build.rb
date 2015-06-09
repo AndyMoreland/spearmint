@@ -40,6 +40,9 @@ class Build < ActiveRecord::Base
                          description: self.get_status_description)
   end
 
+  def in_progress?
+    self.status == 'waiting' || self.status == 'queued'
+  end
 
   protected
   def get_github_status
