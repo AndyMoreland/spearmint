@@ -1,3 +1,67 @@
 // Place all the styles related to the Errors controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#scene-404 {
+  margin: auto;
+  overflow: hidden;
+  width: 1000px;
+  height: 1000px
+}
+
+img.errors {
+  margin-left: -100px;
+}
+
+#leaf {
+  width:1000px;
+  height:1000px;
+}
+
+#leaf-wrapper {
+  width: 300px;
+  height: 300px;
+  margin: auto;
+}
+
+#whale {
+  width: 1000px;
+  height: 1000px;
+}
+
+#whale-wrapper {
+  width: 300px;
+  height: 300px;
+  margin: auto;
+  position: relative;
+  left: 100px;
+}
+
+
+#text {
+  font-size: 48pt;
+  width: 1000px;
+  height: 1000px;
+}
+
+#text-wrapper {
+  width: 150px;
+  height: 300px;
+  position: relative;
+  top: 200px;
+  margin: auto;
+}
+
+#text-2 {
+  font-size: 36pt;
+  width: 1000px;
+  height: 1000px;
+}
+
+#text-wrapper-2 {
+  width: 900px;
+  height: 300px;
+  position: relative;
+  top: 300px;
+  margin: auto;
+}

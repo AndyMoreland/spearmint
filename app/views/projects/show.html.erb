@@ -1,7 +1,7 @@
 <div class="row">
     <h1><%= @project.name %>
         <small>
-            [<%= link_to 'reports', project_reports_path(@project) %> | <%= link_to 'settings', project_settings_path(@project) %>]
+            [<%= link_to 'reports', project_reports_path(@project) %> | <%= link_to 'settings', project_settings_path(@project) %> | <%= link_to_github "GitHub", @project %>]
         </small>
     </h1>
     <%= form_for [@project, Build.new], :html => {:class => 'run-btn form-inline pull-right center-block'} do |f| %>
@@ -38,5 +38,10 @@
       <td><%= b.status %></td>
       <td><%= link_to "Details", project_build_path(@project, b) %>
     </tr>
+    <% if b.in_progress? %>
+      <script>
+       window.startPollingForFinishedBuild(<%= b.project.id %>, <%= b.id %>, window.reloadPage);
+      </script>
+    <% end %>
   <% end %>
 </table>

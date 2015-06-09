@@ -18,8 +18,9 @@ class BuildsController < ApplicationController
         branch: params[:pull_request][:head][:ref]
       )
     else
-      @build = @project.builds.build(params[:build].try(:permit, :title, :commit, :author, :message))
-      commit = @project.github_client.commits(@project.full_name).first
+      @build = @project.builds.build(params[:build].try(:permit, :title, :commit, :author, :message, :branch))
+      commit = @project.github_client.commits(@project.full_name, params[:branch] || "master").first
+      @build.branch ||= "master"
       @build.commit ||= commit.sha
       @build.author ||= commit.author.try :login
       @build.message ||= commit.commit.message
@@ -37,27 +38,34 @@ class BuildsController < ApplicationController
   end
 
   def show
-    redirect_to(request.path, params: params, flash: { query: request.query_parameters } ) unless request.query_parameters.empty?
-    @project_name = @project.name
     @build = @project.builds.find_by_number(params[:number])
-    @should_dedupe_issues = flash[:query] and flash[:query]['dedupe']
 
-    # example format
-    # --------------
-    # {
-    #   'jslint' =>
-    #     { 'file.js' => [{ 1 => [issue1, issue2] },
-    #                     { 8 => [issue3, issue4] }].
-    #       'otherfile.js' => [{ 3 => [issue5, issue6] }] },
-    #   'rubocop' =>
-    #     { 'file.rb' => [{ 1 => [issue7] }] }
-    # }
-    @all_issues = @build.issues.group_by(&:source).map do |test_name, issues|
-      { test_name => issues.group_by(&:file).map { |file_name, issues|
-         { file_name => issues.group_by(&:line) } }.reduce(:merge)
-      }
+    respond_to do |f|
+      f.html do 
+        redirect_to(request.path, params: params, flash: { query: request.query_parameters } ) unless request.query_parameters.empty?
+        
+        @should_dedupe_issues = flash[:query] and flash[:query]['dedupe']
+
+        # example format
+        # --------------
+        # {
+        #   'jslint' =>
+        #     { 'file.js' => [{ 1 => [issue1, issue2] },
+        #                     { 8 => [issue3, issue4] }].
+        #       'otherfile.js' => [{ 3 => [issue5, issue6] }] },
+        #   'rubocop' =>
+        #     { 'file.rb' => [{ 1 => [issue7] }] }
+        # }
+        @all_issues = @build.issues.group_by(&:source).map do |test_name, issues|
+          { test_name => issues.group_by(&:file).map { |file_name, issues|
+              { file_name => issues.group_by(&:line) } }.reduce(:merge)
+          }
+        end
+        
+        @all_issues = @all_issues.reduce(:merge)
+      end
+      f.json { render json: @build.to_json }
     end
-    @all_issues = @all_issues.reduce :merge
   end
 
   protected

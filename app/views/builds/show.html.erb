@@ -81,8 +81,14 @@
   </div>
 </div>
   <% end %> <!-- all issues -->
-<% elsif @build.status == 'waiting' || @build.status == 'queued' %>
+<% elsif @build.in_progress? %>
   <p class='text-warning'>Build is in progress!</p>
 <% else %>
   <p>No issues found! Have a great day!</p>
 <% end%>
+
+<% if @build.in_progress? %>
+    <script>
+     window.startPollingForFinishedBuild(<%= @build.project.id %>, <%= @build.id %>, window.reloadPage);
+    </script>
+<% end %>

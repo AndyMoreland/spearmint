@@ -10,4 +10,8 @@ module ProjectsHelper
   def link_to_pull_request(text, project, pull_id)
     link_to text, "https://www.github.com/#{project.full_name}/pull/#{pull_id}"
   end
+
+  def link_to_github(text, project)
+    link_to text, "https://www.github.com/#{project.full_name}"
+  end
 end
