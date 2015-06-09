@@ -1,12 +1,12 @@
 
 namespace :docker do
 
-  desc "Set environment variables needed by docker"
-  task set_env: :environment do
+  # desc "Set environment variables needed by docker"
+  # task set_env: :environment do
     #`export DOCKER_HOST=TODO`
     #`export DOCKER_CERT_PATH=TODO`
-    `export DOCKER_TLS_VERIFY=1`
-  end
+    # `export DOCKER_TLS_VERIFY=1`
+  # end
 
   desc "Set up docker stuff, probably"
   task init: :environment do
