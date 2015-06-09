@@ -4,6 +4,7 @@ class Project < ActiveRecord::Base
   has_one :setting
 
   after_create :create_settings
+  after_create :add_webhook!
 
   def github_url
     "https://github.com/#{full_name}"
@@ -17,7 +18,7 @@ class Project < ActiveRecord::Base
   def add_webhook!
     github_client.create_hook(self.full_name,
                               'web',
-                              { url: "http://spearmint.ngrok.io/hooks/#{self.id}", content_type: 'json' },
+                              { url: "http://spearmint.com/hooks/#{self.id}", content_type: 'json' },
                               {
                                events: ['pull_request'],
                                active: true
