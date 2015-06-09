@@ -12,6 +12,7 @@ module TestRunner
             puts "find #{project_dir} -name \\*.rb | xargs bundle exec flay -\\#"
             puts flay_result
 
+            # TODO fix paths
             rel_path_offset = Docker.mount_paths(project_dir).length + 1
 
             # will be empty if no ruby files in directory
