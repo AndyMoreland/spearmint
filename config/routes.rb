@@ -4,14 +4,16 @@ Rails.application.routes.draw do
   get 'errors/unprocessable'
 
   get 'errors/internal_server_error'
-
+  
   get 'reports/index'
 
-  root 'pages#index'
+  get '/projects_list', to: 'pages#index', as: 'projects_list'
+
+  root 'pages#landing'
 
   resources :projects do
     resources :builds, param: :number
-    resources :reports
+    resources :reports, param: :source
     resources :settings
   end
 
