@@ -12,11 +12,17 @@ class BuildsController < ApplicationController
       @build = @project.builds.build(
         title: params[:pull_request][:title],
         commit: params[:pull_request][:head][:sha],
-        pull_id: params[:pull_request][:number]
+        pull_id: params[:pull_request][:number],
+        author: params[:pull_request][:user][:login],
+        message: params[:pull_request][:body],
+        branch: params[:pull_request][:head][:ref]
       )
     else
-      @build = @project.builds.build(params[:build].try(:permit, :title, :commit))
-      @build.commit = @project.github_client.repo(@project.full_name).rels[:commits].get.data.first.sha
+      @build = @project.builds.build(params[:build].try(:permit, :title, :commit, :author, :message))
+      commit = @project.github_client.commits(@project.full_name).first
+      @build.commit ||= commit.sha
+      @build.author ||= commit.author.login
+      @build.message ||= commit.commit.message
     end
 
     unless @build.save

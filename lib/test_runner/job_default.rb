@@ -1,9 +1,10 @@
+require 'json'
 require_relative 'job'
 
 module TestRunner
   class Job
     class Default < Job
-      
+
       def sources(project, commit, extension)
         Dir[Rails.root.join 'clients', project.full_name, commit, '**', "*.#{extension}"]
       end
@@ -19,7 +20,7 @@ module TestRunner
           ObjectSpace.each_object(self.singleton_class).to_a.reject { |k| k == Default }
         end
       end
-      
+
     end
   end
 end

@@ -10,7 +10,6 @@ class ApplicationController < ActionController::Base
 
   def github_client
     @client ||= current_user.github_client
-    @client.login
     
     @client
   end
