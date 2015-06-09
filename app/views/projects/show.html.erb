@@ -31,7 +31,7 @@
       <% end %>
       <td><%= link_to b.number, project_build_path(@project, b) %></td>
       <td><%= link_to_revision(@project, b) %></td>
-      <td><%= link_to_pull_request(b.branch, @project, b.pull_id) if b.pull_id %></td>
+      <td><%= link_to_pull_request_or_branch(b.branch, @project, b) if (b.pull_id || b.branch) %></td>
       <td><%= b.author %></td>
       <td><%= b.message %></td>
       <td><%= localize(b.updated_at, format: :long) %></td>

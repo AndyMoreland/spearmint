@@ -1,4 +1,4 @@
-<h1>Settings - <%= @project.name %></h1>
+<h1>Settings - <%= link_to @project.name, @project %></h1>
 
 
 <%= form_for [@project, @project.setting], method: 'patch' do |f| %>

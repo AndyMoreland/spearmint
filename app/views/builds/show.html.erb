@@ -1,15 +1,58 @@
-<h1><%= @build.project.name %> - build #<%= @build.number %></h1>
+<h1><%= link_to @project.name, project_path(@project) %> - build #<%= @build.number %></h1>
 <div>
 <% if @build.pull_id %>
     View pull request on <%= link_to "GitHub", "https://www.github.com/#{@build.project.full_name}/pulls/#{@build.pull_id}" %>.
 <% end %>
 </div>
-<input type="checkbox" <%= @should_dedupe_issues ? "checked" : '' %> id="dedupe" onclick="toggleIssueDedupe(this)"> <label for="dedupe">Show only first issue of each kind</label>
-
 <% issues_seen = {} %>
 <% if @build.issues.any? %>
+<input type="checkbox" <%= @should_dedupe_issues ? "checked" : '' %> id="dedupe" onclick="toggleIssueDedupe(this)"> <label for="dedupe">Show only first issue of each kind</label>
+
+  <div class='row col-lg-12'>
+    <a class='collapse-link' data-toggle="collapse" href="#buildScriptCollapse" aria-expanded="false" aria-controls="buildScriptCollapse">
+      Build Script
+    </a>
+   
+    <div class="collapse" id="buildScriptCollapse">
+      <% if @project.setting.build_command && !@project.setting.build_command.empty? %>
+        <p>Command: <code><%= @project.setting.build_command %></code></p>
+        <h4>Build Script Output</h4>
+        <textarea class='form-control' rows='5' readonly><%= @build.build_script_output %></textarea>
+      <% else %>
+        <p>Configure your project settings first.</p>
+      <% end %>
+    </div>
+  </div>
+
+
+  <div class='row col-lg-12'>
+    <a class='collapse-link' data-toggle="collapse" href="#unitTestCollapse" aria-expanded="false" aria-controls="unitTestCollapse">
+      Unit Tests
+    </a>
+      <div class="collapse" id="unitTestCollapse">
+    <% if @project.setting.test_command && !@project.setting.test_command.empty? %>
+      <p>Command: <code><%= @project.setting.test_command %></code></p>
+        <h4>Unit Test Script Output
+          <small>
+            <% if @build.unit_tests_failed %>
+              <%= @build.unit_tests_failed %> passed
+            <% end %>
+          </small>
+        </h4>
+        <textarea class='form-control' rows='5' readonly><%= @build.unit_tests_output %></textarea>
+    <% else %>
+      <p>Configure your project settings first.</p>
+    <% end %>
+  </div>
+</div>
+
   <% @all_issues.each do |test_name, files| %>
-    <h3><%= test_name %></h3>
+  <% collapseId = "#{test_name}Collapse" %>
+<div class='row col-lg-12'>
+  <a class='collapse-link' data-toggle="collapse" href="#<%= collapseId %>" aria-expanded="false" aria-controls='<%= collapseId%>'>
+    <%= test_name %>
+  </a>
+  <div class='collapse in' id="<%= collapseId %>">
     <% files.each do |file_name, issues_by_line| %>
       <% if issues_by_line.any? %>
         <h4><code><span><%= file_name %></span></code></h4>
@@ -35,6 +78,8 @@
         </table>
       <% end %> <!-- issues_by_line.any? -->
     <% end %> <!-- files -->
+  </div>
+</div>
   <% end %> <!-- all issues -->
 <% elsif @build.in_progress? %>
   <p class='text-warning'>Build is in progress!</p>
