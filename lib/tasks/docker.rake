@@ -40,6 +40,21 @@ namespace :docker do
     puts `docker images | grep -e "<none> " | awk '{ print $3 }' | xargs docker rmi -f` # delete all intermediate/aborted images
   end
 
+  desc "Disable docker!"
+  task disable: :environment do
+    `export SPEARMINT_DISABLE_DOCKER=1`
+  end
+
+  desc "Enable docker!"
+  task enable: :enivornment do
+    `unset SPEARMINT_DISABLE_DOCKER`
+  end
+
+  desc "Check if docker enabled"
+  task is_enabled: :environment do
+    puts "maybe"
+  end
+
   # TODO task init: :set_env
 
 end
