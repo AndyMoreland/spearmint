@@ -3,10 +3,10 @@
         <small>
             [<%= link_to 'reports', project_reports_path(@project) %> | <%= link_to 'settings', project_settings_path(@project) %> | <%= link_to_github "GitHub", @project %>]
         </small>
+        <%= form_for [@project, Build.new], :html => {:class => 'run-btn form-inline pull-right center-block'} do |f| %>
+            <%= f.submit 'Run Tests', :class => 'btn' %>
+        <% end %>
     </h1>
-    <%= form_for [@project, Build.new], :html => {:class => 'run-btn form-inline pull-right center-block'} do |f| %>
-        <%= f.submit 'Run Tests', :class => 'btn' %>
-    <% end %>
 </div>
 
 <table class="table table-striped">

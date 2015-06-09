@@ -25,4 +25,8 @@ class ApplicationController < ActionController::Base
   def github_username
     return github_user.login
   end
+
+  def after_sign_in_path_for(resource)
+    projects_list_path
+  end
 end
