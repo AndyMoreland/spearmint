@@ -8,8 +8,7 @@ Rails.application.routes.draw do
   get 'reports/index'
 
   get '/projects_list', to: 'pages#index', as: 'projects_list'
-
-  root 'pages#landing'
+  
 
   resources :projects do
     resources :builds, param: :number
@@ -29,4 +28,12 @@ Rails.application.routes.draw do
   match '/404', to: 'errors#file_not_found', via: :all
   match '/422', to: 'errors#unprocessable', via: :all
   match '/500', to: 'errors#internal_server_error', via: :all
+
+  authenticated :user do
+    root to: 'pages#index', :constraints => lambda { |r| r.env["warden"].authenticate? }
+  end
+
+  unauthenticated :user do
+    get '/', to: 'pages#landing'
+  end
 end
