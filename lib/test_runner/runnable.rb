@@ -62,7 +62,7 @@ module TestRunner
 
     def build!
       raise 'Files not yet present' unless @files_ready
-      build_cmd = self.project.setting.build_command
+      build_cmd = "cd #{build_directory_path}; #{self.project.setting.build_command}"
       if build_cmd
         results = Docker.image build_cmd, self, base: self.build_image_name, verbose: true
         self.build_script_output = results[:output]
@@ -73,7 +73,7 @@ module TestRunner
 
     def test!
       raise 'Build not yet compiled' unless @build_ready
-      test_cmd = self.project.setting.test_command
+      test_cmd = "cd #{build_directory_path}; #{self.project.setting.test_command}"
       if test_cmd
         results = Docker.run test_cmd, self, verbose: true
         self.unit_tests_output = results[:output]
