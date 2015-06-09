@@ -6,10 +6,10 @@
   dedupe = element.checked
   window.location = window.location.pathname + (if dedupe then '?dedupe=1' else '')
 
-@startPollingForFinishedBuild = (project_id, build_id, callback) ->
+@startPollingForFinishedBuild = (project_id, build_number, callback) ->
   timerCallback = () ->
-    $.get "/projects/#{project_id}/builds/#{build_id}.json", (data) ->
-      if data.status != "queued" && data.status != "waiting"
+    $.get "/projects/#{project_id}/builds/#{build_number}.json", (data) ->
+      if data? && data.status != "queued" && data.status != "waiting"
         callback(data)
     
   window.setInterval timerCallback, 1000

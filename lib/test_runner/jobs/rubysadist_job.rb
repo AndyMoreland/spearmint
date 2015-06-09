@@ -7,18 +7,17 @@ module TestRunner
 
             # given more time we would allow user to configure options here
             project_dir = build.build_directory_path
-            flog_result = Docker.run("find #{project_dir} -name \\*.rb | xargs bundle exec flog --all --continue --quiet --methods-only", build)
-            flay_result = Docker.run("find #{project_dir} -name \\*.rb | xargs bundle exec flay -\\#", build)
+            flog_report = parse_flog_output(Docker.run("find #{project_dir} -name \\*.rb | xargs bundle exec flog --all --continue --quiet --methods-only", build))
+            flay_report = parse_flay_output(Docker.run("find #{project_dir} -name \\*.rb | xargs bundle exec flay -\\#", build))
 
-            # TODO fix paths
             rel_path_offset = Docker.mount_paths(project_dir).length + 1
 
             # will be empty if no ruby files in directory
-            unless flog_result.empty?
+            unless flog_report['entries'].nil? or flog_report['entries'].empty?
                 stat_report = Stat.new
                 stat_report.source = 'RubyFlog'
                 stat_report.build_id = build.id
-                stat_report.data = parse_flog_output(flog_result).tap do |flog_report|
+                stat_report.data = flog_report.tap do |flog_report|
                     flog_report['entries'].each do |entry|
                         entry['path'] = entry['path'][rel_path_offset..-1]
                     end
@@ -27,11 +26,11 @@ module TestRunner
             end
 
             # will be empty if no ruby files in directory
-            unless flay_result.empty?
+            unless flay_report['entries'].nil? or flay_report['entries'].empty?
                 stat_report = Stat.new
                 stat_report.source = 'RubyFlay'
                 stat_report.build_id = build.id
-                stat_report.data = parse_flay_output(flay_result).tap do |flay_report|
+                stat_report.data = flay_report.tap do |flay_report|
                     flay_report['entries'].each do |entry|
                         entry['first']['path'] = entry['first']['path'][rel_path_offset..-1]
                         entry['second']['path'] = entry['second']['path'][rel_path_offset..-1]

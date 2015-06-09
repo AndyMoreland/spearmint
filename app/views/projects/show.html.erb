@@ -40,7 +40,7 @@
     </tr>
     <% if b.in_progress? %>
       <script>
-       window.startPollingForFinishedBuild(<%= b.project.id %>, <%= b.id %>, window.reloadPage);
+       window.startPollingForFinishedBuild(<%= b.project.id %>, <%= b.number %>, window.reloadPage);
       </script>
     <% end %>
   <% end %>

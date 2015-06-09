@@ -51,7 +51,6 @@ class BuildsController < ApplicationController
   end
 
   protected
-
   def load_project
     @project = Project.find(params[:project_id])
 

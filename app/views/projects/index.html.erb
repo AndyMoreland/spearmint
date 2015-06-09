@@ -8,7 +8,7 @@
                 <% end %>
             </td>
             <td>
-                <% project.builds.reverse.each do |b| %>
+                <% project.builds.reverse[0..4].each do |b| %>
                     <%= link_to localize(b.updated_at, format: :long), project_build_path(project, b) %><br>
                 <% end %>
             </td>

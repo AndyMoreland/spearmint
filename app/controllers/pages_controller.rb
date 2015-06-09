@@ -7,6 +7,9 @@ class PagesController < ApplicationController
     end
   end
 
+  def landing
+  end
+
   def stop_watching_project
 
   end
