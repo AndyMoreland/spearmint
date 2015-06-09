@@ -18,8 +18,9 @@ class BuildsController < ApplicationController
         branch: params[:pull_request][:head][:ref]
       )
     else
-      @build = @project.builds.build(params[:build].try(:permit, :title, :commit, :author, :message))
-      commit = @project.github_client.commits(@project.full_name).first
+      @build = @project.builds.build(params[:build].try(:permit, :title, :commit, :author, :message, :branch))
+      commit = @project.github_client.commits(@project.full_name, params[:branch] || "master").first
+      @build.branch ||= "master"
       @build.commit ||= commit.sha
       @build.author ||= commit.author.try :login
       @build.message ||= commit.commit.message

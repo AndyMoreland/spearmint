@@ -12,5 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require parallax
+//= require jquery.parallax
 //= require twitter/bootstrap
 //= require_tree .
