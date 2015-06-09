@@ -2,14 +2,9 @@ class ReportsController < ApplicationController
     before_filter :authenticate_user!
 
     def index
-        show
-        # bad un-ruby-like paradigm sorry
-        @has_report.each do |source, has_report|
-            if has_report
-                redirect_to project_report_path(@project, source)
-                break
-            end
-        end
+        show # FIXME NO
+        source, _ = @has_report.detect { |source, has_report| has_report }
+        redirect_to project_report_path(@project, source)
     end
 
     def show
@@ -29,7 +24,7 @@ class ReportsController < ApplicationController
         @js_stats = @build.stats.where(source: 'JSComplexity').take unless @build.nil?
 
         @has_report = {
-            "rubysadist" => (!@flay_report.nil? and !@flog_report.nil?),
+            "rubysadist" => (!@flay_report.nil? && !@flog_report.nil?),
             "jscomplexity" => !@js_stats.nil?
         }
     end

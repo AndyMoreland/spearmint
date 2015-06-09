@@ -1,4 +1,9 @@
-<h1><%= link_to @project.name, project_path(@project) %> - build #<%= @build.number %></h1>
+<h1>
+    <%= link_to @project.name, project_path(@project) %> - build #<%= @build.number %>
+    <small>
+        <%= render partial: 'shared/build_navigation', locals: { project: @build.project, build: @build }%>
+    </small>
+</h1>
 
 <div>
 
@@ -9,7 +14,6 @@
 </div>
 
 <% unless @build.in_progress? %>
-
     <div class='row col-lg-12'>
         <% if @project.setting.build_command && !@project.setting.build_command.empty? %>
             <a class='collapse-link' data-toggle="collapse" href="#buildScriptCollapse" aria-expanded="false" aria-controls="buildScriptCollapse">
@@ -44,8 +48,7 @@
 
             <div class="collapse" id="unitTestCollapse">
                 <p>Command: <code><%= @project.setting.test_command %></code></p>
-                <h4>Unit Test Script Output
-                </h4>
+                <h4>Unit Test Script Output </h4>
                 <textarea class='form-control' rows='5' readonly><%= @build.unit_tests_output %></textarea>
 
             </div>
@@ -56,12 +59,13 @@
 <% end %>
 
 <% if @build.issues.any? %>
-    <br>
-    <input type="checkbox" <%= @should_dedupe_issues ? "checked" : '' %> id="dedupe" onclick="toggleIssueDedupe(this)"> <label for="dedupe">Show only first issue of each kind</label>
+    <div class='row col-lg-12'>
+        <input type="checkbox" <%= @should_dedupe_issues ? "checked" : '' %> id="dedupe" onclick="toggleIssueDedupe(this)">
+        <label for="dedupe">Show only first issue of each kind</label>
+    </div>
     <% issues_seen = {} %>
     <% @all_issues.each do |test_name, files| %>
         <% collapseId = "#{test_name}Collapse" %>
-
         <div class='row col-lg-12'>
             <a class='collapse-link' data-toggle="collapse" href="#<%= collapseId %>" aria-expanded="false" aria-controls='<%= collapseId%>'>
                 <%= test_name %>
