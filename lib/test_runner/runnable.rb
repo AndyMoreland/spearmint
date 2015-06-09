@@ -52,7 +52,7 @@ module TestRunner
       globals = ignored - relatives
 
       ignore_globs = (globals.map { |p| "./**/#{p}" }.concat relatives.map { |p| ".#{p}" }).map do |glob|
-        Rails.root.join 'clients', project.full_name, commit, glob
+        build_directory_path(glob)
       end
 
       ignored_files = ignore_globs.flat_map { |g| Dir[g] }.join ' '
