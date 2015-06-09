@@ -7,8 +7,7 @@
             <h4>
 
               <% if is_watching(r) %>
-                <% project = Project.find_by_github_id(r.id) %>
-                <%= link_to r.name, project %>
+                <%= link_to r.name, Project.find_by_github_id(r.id) %>
               <% else %>
                 <%= r.name %>
               <% end %>
@@ -16,19 +15,14 @@
         </td>
         <td class="watch-row">
             <% if is_watching(r) %>
-              <%= form_tag({ controller: :projects,
-                             action: :destroy,
-                             id: project.id },
-                            method: :delete) do %>
-                 <%= submit_tag 'Stop Watching', :class => ['btn', 'btn-danger']  %>
-              <% end %>
+                <button class="watch-btn btn btn-danger" disabled='disabled'>Stop Watching</button>
             <% else %>
-              <%= form_for Project.new do |f| %>
-                <%= f.hidden_field :name, value: r.name %>
-                <%= f.hidden_field :full_name, value: r.full_name %>
-                <%= f.hidden_field :github_id, value: r.id %>
-                <%= f.submit "Watch", :class => ['watch-btn', 'btn', 'btn-success'] %>
-              <% end %>
+                <%= form_for Project.new do |f| %>
+                    <%= f.hidden_field :name, value: r.name %>
+                    <%= f.hidden_field :full_name, value: r.full_name %>
+                    <%= f.hidden_field :github_id, value: r.id %>
+                    <%= f.submit "Watch", :class => ['watch-btn', 'btn', 'btn-success'] %>
+                <% end %>
             <% end %>
         </td>
       </tr>
