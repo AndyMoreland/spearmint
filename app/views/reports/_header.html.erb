@@ -1,6 +1,8 @@
 <div class="row">
-    <h1><%= link_to @project.name, @project %> reports</h1>
-    <small>
-        <%= render partial: 'shared/build_navigation', locals: { project: @project, build: nil }%>
-    </small>
+    <h1>
+        <%= link_to @project.name, @project %> reports
+        <small>
+            <%= render partial: 'shared/build_navigation', locals: { project: @project, build: nil }%>
+        </small>
+    </h1>
 </div>
