@@ -24,7 +24,8 @@ module TestRunner
           when 'fatal'
             issue = Issue::Abort.new # TODO might need to rejigger this mapping a bit
           else
-            raise '[RubyCopJob] unknown severity level'
+            # raise '[RubyCopJob] unknown severity level'
+            next
           end
 
           issue.source = 'RuboCop'

@@ -14,7 +14,7 @@ module TestRunner
         _, raw_issues = JSON.parse(result)
         contents = File.readlines src
         filename = Job.relative_filename(build, src)
-        parsed_issues = raw_issues.reject { |i| i.nil? }.map { |issue| parse_issue(build, filename, contents, issue) }
+        parsed_issues = raw_issues.reject { |i| i.nil? }.map { |issue| parse_issue(build, filename, contents, issue) }.reject { |i| i.nil? }
 
         self.issues.concat parsed_issues
       end
@@ -36,10 +36,12 @@ module TestRunner
         when 'warning'
           issue = Issue::Warning.new
         else
-          raise '[JSLintJob::parse_issue] unknown issue type'
+          # raise '[JSLintJob::parse_issue] unknown issue type'
+          return nil
         end
       else
-        raise '[JSLintJob::parse_issue] unknown issue type'
+        # raise '[JSLintJob::parse_issue] unknown issue type'
+        return nil
       end
 
       issue.source = 'JSLint'

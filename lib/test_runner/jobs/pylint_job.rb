@@ -12,7 +12,7 @@ module TestRunner
         raw_issues = JSON.parse(result)
         contents = File.readlines src
         filename = Job.relative_filename(build, src)
-        parsed_issues = raw_issues.reject { |i| i.nil? }.map { |issue| parse_issue(build, filename, contents, issue) }
+        parsed_issues = raw_issues.reject { |i| i.nil? }.map { |issue| parse_issue(build, filename, contents, issue) }.reject { |i| i.nil? }
 
         self.issues.concat parsed_issues
       end
@@ -31,7 +31,8 @@ module TestRunner
       when 'fatal'
         issue = Issue::Abort.new
       else
-        raise '[PylintJob::parse_issue] unknown issue type'
+        # raise '[PylintJob::parse_issue] unknown issue type'
+        return nil
       end
 
       issue.source = 'Pylint'
