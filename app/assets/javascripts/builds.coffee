@@ -9,7 +9,7 @@
 @startPollingForFinishedBuild = (project_id, build_id, callback) ->
   timerCallback = () ->
     $.get "/projects/#{project_id}/builds/#{build_id}.json", (data) ->
-      if data.status != "queued" && data.status != "waiting"
+      if data? && data.status != "queued" && data.status != "waiting"
         callback(data)
     
   window.setInterval timerCallback, 1000
