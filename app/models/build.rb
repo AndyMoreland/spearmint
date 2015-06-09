@@ -19,7 +19,7 @@ class Build < ActiveRecord::Base
 
   # Only works on builds associated with pull requests
   def get_changed_filenames!
-    get_changed_filesnames!.map(&:filename)
+    get_changed_files!.map(&:filename)
   end
 
   # Only works on builds associated with pull requests

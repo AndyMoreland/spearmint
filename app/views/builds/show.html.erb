@@ -1,7 +1,7 @@
 <h1><%= link_to @project.name, project_path(@project) %> - build #<%= @build.number %></h1>
 <div>
 <% if @build.pull_id %>
-    View pull request on <%= link_to "GitHub", "https://www.github.com/#{@build.project.full_name}/pulls/#{@build.pull_id}" %>.
+    View pull request on <%= link_to "GitHub", "https://www.github.com/#{@build.project.full_name}/pull/#{@build.pull_id}" %>.
 <% end %>
 </div>
 <% issues_seen = {} %>
