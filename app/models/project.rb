@@ -14,7 +14,7 @@ class Project < ActiveRecord::Base
     Octokit::Client.new access_token: self.setting.user_with_token.client_token
   end
 
-  def add_webhook
+  def add_webhook!
     github_client.create_hook(self.full_name,
                               'web',
                               { url: "http://spearmint.ngrok.io/hooks/#{self.id}", content_type: 'json' },
