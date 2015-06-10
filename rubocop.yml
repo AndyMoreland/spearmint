@@ -5,58 +5,10 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 1
-# Configuration parameters: AllowSafeAssignment.
-Lint/AssignmentInCondition:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Lint/BlockAlignment:
-  Enabled: false
-
-# Offense count: 2
-Lint/HandleExceptions:
-  Enabled: false
-
-# Offense count: 1
-Lint/LiteralInCondition:
-  Enabled: false
-
-# Offense count: 1
-Lint/RescueException:
-  Enabled: false
-
-# Offense count: 1
-Lint/ShadowingOuterLocalVariable:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Lint/UnusedBlockArgument:
-  Enabled: false
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Lint/UnusedMethodArgument:
-  Enabled: false
-
-# Offense count: 1
-Lint/UselessAssignment:
-  Enabled: false
-
-# Offense count: 20
-Metrics/AbcSize:
-  Max: 55
-
-# Offense count: 3
-Metrics/CyclomaticComplexity:
-  Max: 9
-
 # Offense count: 131
 # Configuration parameters: AllowURI, URISchemes.
 Metrics/LineLength:
-  Max: 166
+  Enabled: false
 
 # Offense count: 17
 # Configuration parameters: CountComments.
@@ -65,7 +17,7 @@ Metrics/MethodLength:
 
 # Offense count: 2
 Metrics/PerceivedComplexity:
-  Max: 11
+  Enabled: false
 
 # Offense count: 5
 Style/AccessorMethodName:
@@ -75,24 +27,24 @@ Style/AccessorMethodName:
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 Style/AndOr:
-  Enabled: false
+  Enabled: true
 
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, ProceduralMethods, FunctionalMethods, IgnoredMethods.
 Style/BlockDelimiters:
-  Enabled: false
+  Enabled: true
 
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/BlockEndNewline:
-  Enabled: false
+  Enabled: true
 
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 Style/BracesAroundHashParameters:
-  Enabled: false
+  Enabled: true
 
 # Offense count: 5
 # Configuration parameters: IndentWhenRelativeTo, SupportedStyles, IndentOneStep.
@@ -119,20 +71,6 @@ Style/CommentIndentation:
 Style/Documentation:
   Enabled: false
 
-# Offense count: 1
-Style/EachWithObject:
-  Enabled: false
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/EmptyLines:
-  Enabled: false
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/EmptyLinesAroundAccessModifier:
-  Enabled: false
-
 # Offense count: 6
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
@@ -154,11 +92,6 @@ Style/EmptyLinesAroundMethodBody:
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 Style/EmptyLinesAroundModuleBody:
-  Enabled: false
-
-# Offense count: 1
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/For:
   Enabled: false
 
 # Offense count: 3
@@ -237,11 +170,6 @@ Style/SingleLineMethods:
 # Offense count: 49
 # Cop supports --auto-correct.
 Style/SingleSpaceBeforeFirstArg:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/SpaceAfterComma:
   Enabled: false
 
 # Offense count: 2
