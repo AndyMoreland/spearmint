@@ -58,7 +58,12 @@ class Build < ActiveRecord::Base
   end
 
   def get_status_description
-    return "Spearmint tests failed. Check details for more information."
+    status = self.get_github_status
+    if status == "failure" || status == "error" || status == "shutdown" || status == "build_script_failed"
+      "Spearmint tests failed. Check details for more information."
+    else
+      "Spearmint tests succeeded."
+    end
   end
 
   def set_waiting
