@@ -12,8 +12,6 @@ module TestRunner
 
             return if result.empty? # will be empty if file is not valid JS
 
-            rel_path_offset = Docker.mount_paths(project_dir).length + 1
-
             stat_report = Stat.new
             stat_report.source = 'JSComplexity'
             stat_report.build_id = build.id
@@ -24,7 +22,7 @@ module TestRunner
                         report.delete 'aggregate'
                         report.delete 'functions'
                         report.delete 'dependencies'
-                        report['path'] = report['path'][rel_path_offset..-1]
+                        report['path'] = Job.relative_filename build, report['path']
                     end
                     raw_stats['num_files'] = raw_stats['reports'].length
                     raw_stats.delete 'visibilityMatrix'

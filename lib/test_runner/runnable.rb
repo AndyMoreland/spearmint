@@ -66,7 +66,10 @@ module TestRunner
       if build_cmd
         results = Docker.image build_cmd, self, base: self.build_image_name, verbose: true
         self.build_script_output = results[:output]
-        self.status = :build_script_failed if results[:error] != 0
+        if results[:error] != 0
+          self.status = :build_script_failed
+          return
+        end
       end
       @build_ready = true
     end

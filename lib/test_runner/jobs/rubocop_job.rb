@@ -32,7 +32,7 @@ module TestRunner
           issue.build_id = build.id
           issue.file = filename
           issue.line = offense['location']['line']
-          issue.line_contents = contents[issue.line]
+          issue.line_contents = contents[issue.line - 1] # ugh indexing
           issue.character = offense['location']['column']
           # TODO do something with offense['location']['length'] for fancy highlights
           issue.message = offense['message']

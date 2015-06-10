@@ -10,8 +10,6 @@ module TestRunner
             flog_report = parse_flog_output(Docker.run("find #{project_dir} -name \\*.rb | xargs bundle exec flog --all --continue --quiet --methods-only", build))
             flay_report = parse_flay_output(Docker.run("find #{project_dir} -name \\*.rb | xargs bundle exec flay -\\#", build))
 
-            rel_path_offset = Docker.mount_paths(project_dir).length + 1
-
             # will be empty if no ruby files in directory
             unless flog_report['entries'].nil? or flog_report['entries'].empty?
                 stat_report = Stat.new
@@ -19,7 +17,7 @@ module TestRunner
                 stat_report.build_id = build.id
                 stat_report.data = flog_report.tap do |flog_report|
                     flog_report['entries'].each do |entry|
-                        entry['path'] = entry['path'][rel_path_offset..-1]
+                        entry['path'] = Job.relative_filename build, entry['path']
                     end
                 end
                 self.stats << stat_report
@@ -32,8 +30,8 @@ module TestRunner
                 stat_report.build_id = build.id
                 stat_report.data = flay_report.tap do |flay_report|
                     flay_report['entries'].each do |entry|
-                        entry['first']['path'] = entry['first']['path'][rel_path_offset..-1]
-                        entry['second']['path'] = entry['second']['path'][rel_path_offset..-1]
+                        entry['first']['path'] = Job.relative_filename build, entry['first']['path']
+                        entry['second']['path'] = Job.relative_filename build, entry['second']['path']
                     end
                 end
                 self.stats << stat_report

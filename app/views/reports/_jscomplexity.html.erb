@@ -8,7 +8,8 @@
             <h3>Project Averages</h3>
             <div class="panel panel-default stat-panel">
                 <div class="panel-heading">
-                    cyclomatic complexity
+                  cyclomatic complexity
+                  <br><small>(lower is better)</small>
                 </div>
                 <div class="panel-body">
                     <span class="stat"><%= '%.2f' % @js_stats.data['cyclomatic'] %></span>
@@ -16,7 +17,8 @@
             </div>
             <div class="panel panel-default stat-panel">
                 <div class="panel-heading">
-                    maintainability
+                  maintainability
+                  <br><small>(higher is better)</small>
                 </div>
                 <div class="panel-body">
                     <span class="stat"><%= '%.2f' % @js_stats.data['maintainability'] %>
@@ -25,7 +27,7 @@
             </div>
             <div class="panel panel-default stat-panel">
                 <div class="panel-heading">
-                    parameter count
+                  parameter count
                 </div>
                 <div class="panel-body">
                     <span class="stat"><%= '%.2f' % @js_stats.data['params'] %>
@@ -43,7 +45,8 @@
             </div>
             <div class="panel panel-default stat-panel">
                 <div class="panel-heading">
-                    Halstead effort <small>[<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">?</a>]</small>
+                  Halstead effort <small>[<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">?</a>]</small>
+                  <br><small>(lower is better)</small>
                 </div>
                 <div class="panel-body">
                     <span class="stat"><%= '%.2f' % @js_stats.data['effort'] %>
@@ -52,7 +55,8 @@
             </div>
             <div class="panel panel-default stat-panel">
                 <div class="panel-heading">
-                    change cost
+                  change cost
+                  <br><small>(lower is better)</small>
                 </div>
                 <div class="panel-body">
                     <span class="stat"><%= @js_stats.data['changeCost'].round(2) %>%</span>

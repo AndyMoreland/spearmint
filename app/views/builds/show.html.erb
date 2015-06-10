@@ -1,114 +1,117 @@
 <h1>
-    <%= link_to @project.name, project_path(@project) %> - build #<%= @build.number %>
-    <small>
-        <%= render partial: 'shared/build_navigation', locals: { project: @build.project, build: @build }%>
-    </small>
+  <%= link_to @project.name, project_path(@project) %> - build #<%= @build.number %>
+  <small>
+    <%= render partial: 'shared/build_navigation', locals: { project: @build.project, build: @build }%>
+  </small>
 </h1>
 
 <div>
 
-    <% if @build.pull_id %>
-        View pull request on <%= link_to "GitHub", "https://www.github.com/#{@build.project.full_name}/pull/#{@build.pull_id}" %>.
-    <% end %>
+  <% if @build.pull_id %>
+  View pull request on <%= link_to "GitHub", "https://www.github.com/#{@build.project.full_name}/pull/#{@build.pull_id}" %>.
+  <% end %>
 
 </div>
 
 <% unless @build.in_progress? %>
-    <div class='row col-lg-12'>
-        <% if @project.setting.build_command && !@project.setting.build_command.empty? %>
-            <a class='collapse-link' data-toggle="collapse" href="#buildScriptCollapse" aria-expanded="false" aria-controls="buildScriptCollapse">
-                Build Script
-                <% if @build.status != :build_script_failed %>
-                    <span class='text-success'>(passed)</span>
-                <% else %>
-                    <span class='text-danger'>(failed)</span>
-                <% end %>
-            </a>
+<div class='row col-lg-12'>
+  <% if @project.setting.build_command && !@project.setting.build_command.empty? %>
+  <a class='collapse-link' data-toggle="collapse" href="#buildScriptCollapse" aria-expanded="false" aria-controls="buildScriptCollapse">
+    Build Script
+    <% if @build.status != 'build_script_failed' %>
+    <span class='text-success'>(passed)</span>
+    <% else %>
+    <span class='text-danger'>(failed)</span>
+    <% end %>
+  </a>
 
-            <div class="collapse" id="buildScriptCollapse">
-                <p>Command: <code><%= @project.setting.build_command %></code></p>
-                <h4>Build Script Output</h4>
-                <textarea class='form-control' rows='5' readonly><%= @build.build_script_output %></textarea>
+  <div class="collapse" id="buildScriptCollapse">
+    <p>Command: <code><%= @project.setting.build_command %></code></p>
+    <h4>Build Script Output</h4>
+    <textarea class='form-control' rows='5' readonly><%= @build.build_script_output %></textarea>
 
-            </div>
-        <% else %>
-            <strong>No build script configured.</strong>
-        <% end %>
-    </div>
+  </div>
+  <% else %>
+  <strong>No build script configured.</strong>
+  <% end %>
+</div>
+<% if @build.status != 'build_script_failed' %>
+<div class='row col-lg-12'>
+  <% if @project.setting.test_command && !@project.setting.test_command.empty? %>
+  <a class='collapse-link' data-toggle="collapse" href="#unitTestCollapse" aria-expanded="false" aria-controls="unitTestCollapse">Unit Tests
+    <% unless @build.unit_tests_failed %>
+    <span class='text-success'>(passed)</span>
+    <% else %>
+    <span class='text-danger'>(failed)</span>
+    <% end %>
+  </a>
 
-    <div class='row col-lg-12'>
-        <% if @project.setting.test_command && !@project.setting.test_command.empty? %>
-            <a class='collapse-link' data-toggle="collapse" href="#unitTestCollapse" aria-expanded="false" aria-controls="unitTestCollapse">Unit Tests
-                <% if @build.unit_tests_failed %>
-                    <span class='text-success'>(passed)</span>
-                <% else %>
-                    <span class='text-danger'>(failed)</span>
-                <% end %>
-            </a>
+  <div class="collapse" id="unitTestCollapse">
+    <p>Command: <code><%= @project.setting.test_command %></code></p>
+    <h4>Unit Test Script Output </h4>
+    <textarea class='form-control' rows='5' readonly><%= @build.unit_tests_output %></textarea>
 
-            <div class="collapse" id="unitTestCollapse">
-                <p>Command: <code><%= @project.setting.test_command %></code></p>
-                <h4>Unit Test Script Output </h4>
-                <textarea class='form-control' rows='5' readonly><%= @build.unit_tests_output %></textarea>
-
-            </div>
-        <% else %>
-            <strong>No unit tests configured.</strong>
-        <% end %>
-    </div>
+  </div>
+  <% else %>
+  <strong>No unit tests configured.</strong>
+  <% end %>
+</div>
+<% else %>
+<p>Aborted.</p>
+<% end %>
 <% end %>
 
 <% if @build.issues.any? %>
-    <div class='row col-lg-12'>
-        <input type="checkbox" <%= @should_dedupe_issues ? "checked" : '' %> id="dedupe" onclick="toggleIssueDedupe(this)">
-        <label for="dedupe">Show only first issue of each kind</label>
-    </div>
-    <% issues_seen = {} %>
-    <% @all_issues.each do |test_name, files| %>
-        <% collapseId = "#{test_name}Collapse" %>
-        <div class='row col-lg-12'>
-            <a class='collapse-link' data-toggle="collapse" href="#<%= collapseId %>" aria-expanded="false" aria-controls='<%= collapseId%>'>
-                <%= test_name %>
-            </a>
-            <div class='collapse in' id="<%= collapseId %>">
-                <% files.each do |file_name, issues_by_line| %>
-                    <% if issues_by_line.any? %>
-                        <h4><code><span><%= file_name %></span></code></h4>
-                        <table class="table table-hover">
-                            <% issues_by_line.each do |line_number, issues| %>
-                                <% dedupe_issues!(issues, issues_seen) if @should_dedupe_issues %>
-                                <% if issues.any? %>
-                                    <tr>
-                                        <td class="col-md-10">
-                                            <ul class="list-unstyled">
-                                                <% issues.each do |issue| %>
-                                                    <li><%= issue.message %> <span class="text-danger">(<%= issue.character %>)</span></li>
-                                                <% end %>
-                                            </ul>
-                                            <pre style="margin: 10px"><code class="language-javascript"><%= issues[0].line_contents[0..100] %><%= '...' if issues[0].line_contents.length > 100 %></code></pre>
-                                        </td>
-                                        <td class="col-md-2">
-                                            line <%= line_number %>
-                                        </td>
-                                    </tr>
-                                <% end %> <!-- issues.any? -->
-                            <% end %> <!-- issues_by_line.each -->
-                        </table>
-                    <% end %> <!-- issues_by_line.any? -->
-                <% end %> <!-- files -->
-            </div>
-        </div>
-    <% end %> <!-- all issues -->
+<div class='row col-lg-12'>
+  <input type="checkbox" <%= @should_dedupe_issues ? "checked" : '' %> id="dedupe" onclick="toggleIssueDedupe(this)">
+  <label for="dedupe">Show only first issue of each kind</label>
+</div>
+<% issues_seen = {} %>
+<% @all_issues.each do |test_name, files| %>
+<% collapseId = "#{test_name}Collapse" %>
+<div class='row col-lg-12'>
+  <a class='collapse-link' data-toggle="collapse" href="#<%= collapseId %>" aria-expanded="false" aria-controls='<%= collapseId%>'>
+    <%= tool_to_language test_name %>
+  </a>
+  <div class='collapse in' id="<%= collapseId %>">
+    <% files.each do |file_name, issues_by_line| %>
+    <% if issues_by_line.any? %>
+    <h4><code><span><%= file_name %></span></code></h4>
+    <table class="table table-hover">
+      <% issues_by_line.each do |line_number, issues| %>
+      <% dedupe_issues!(issues, issues_seen) if @should_dedupe_issues %>
+      <% if issues.any? %>
+      <tr>
+        <td class="col-md-10">
+          <ul class="list-unstyled">
+            <% issues.each do |issue| %>
+            <li><%= issue.message %> <span class="text-danger">(<%= issue.character %>)</span></li>
+            <% end %>
+          </ul>
+          <pre style="margin: 10px"><code class="language-javascript"><%= issues[0].line_contents[0..100] %><%= '...' if issues[0].line_contents.length > 100 %></code></pre>
+        </td>
+        <td class="col-md-2">
+          line <%= line_number %>
+        </td>
+      </tr>
+      <% end %> <!-- issues.any? -->
+      <% end %> <!-- issues_by_line.each -->
+    </table>
+    <% end %> <!-- issues_by_line.any? -->
+    <% end %> <!-- files -->
+  </div>
+</div>
+<% end %> <!-- all issues -->
 <% elsif @build.in_progress? %>
-    <p class='text-warning'>Build is in progress!</p>
-<% else %>
-    <p>No issues found! Have a great day!</p>
+<p class='text-warning'>Build is in progress!</p>
+<% elsif @build.status != 'build_script_failed' %>
+<p>No issues found! Have a great day!</p>
 <% end%>
 
 <% if @build.in_progress? %>
 
-    <script>
-     window.startPollingForFinishedBuild(<%= @build.project.id %>, <%= @build.number %>, window.reloadPage);
-    </script>
+<script>
+  window.startPollingForFinishedBuild(<%= @build.project.id %>, <%= @build.number %>, window.reloadPage);
+</script>
 
 <% end %>
