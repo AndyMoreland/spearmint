@@ -7,7 +7,7 @@ class Build < ActiveRecord::Base
 
   ## self.status is in {:waiting, :shutdown, :passed, :failed, :build_script_failed, :queued }
 
-  scope :finished, where.not(status: [:queued, :waiting])
+  scope :finished, -> { where.not(status: [:queued, :waiting]) }
 
   def to_param
     self.number.to_s
