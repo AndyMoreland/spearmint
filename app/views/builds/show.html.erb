@@ -76,7 +76,7 @@
   <div class='collapse in' id="<%= collapseId %>">
     <% files.each do |file_name, issues_by_line| %>
     <% if issues_by_line.any? %>
-    <h4><code><span><%= file_name %></span></code></h4>
+    <h4><code><span><%= link_to_file(file_name, @build, file_name) %></span></code></h4>
     <table class="table table-hover">
       <% issues_by_line.each do |line_number, issues| %>
       <% dedupe_issues!(issues, issues_seen) if @should_dedupe_issues %>
@@ -91,7 +91,7 @@
           <pre style="margin: 10px"><code class="language-javascript"><%= issues[0].line_contents[0..100] %><%= '...' if issues[0].line_contents.length > 100 %></code></pre>
         </td>
         <td class="col-md-2">
-          line <%= line_number %>
+          <%= link_to_file("line #{line_number}", @build, file_name, line_number: line_number) %>
         </td>
       </tr>
       <% end %> <!-- issues.any? -->
