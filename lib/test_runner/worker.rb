@@ -3,6 +3,7 @@ require 'pry'
 
 module TestRunner
   class Worker
+
     def run(queue)
       loop do
         build = queue.pop
@@ -32,12 +33,18 @@ module TestRunner
           end
         end
 
-        begin
+        ignore_list = IgnoredIssueType.where(project_id: build.project.id).map(&:generic_message)
 
+        issues = build.issues.select do |issue|
+          generic_msg = issue.message.gsub(/[0-9]+/, '*').strip
+          !ignore_list.include?(generic_msg)
+        end
+
+        begin
           build.transaction do
             build.save!
             unless aborted
-              build.issues.each { |issue| issue.save! }
+              issues.each { |issue| issue.save! }
               build.stats.each { |stat| stat.save! }
             end
 
@@ -48,7 +55,7 @@ module TestRunner
 
               unless aborted
                 client = project.github_client
-                build.issues
+                issues
                   .select { |i| i.changed_in_build?(changed_files, changed_lines_by_file) }
                   .each { |issue| issue.add_to_github!(client, project.full_name, build.pull_id, build.commit) }
               end

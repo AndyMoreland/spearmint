@@ -41,7 +41,7 @@ class BuildsController < ApplicationController
     @build = @project.builds.find_by_number(params[:number])
 
     respond_to do |f|
-      f.html do 
+      f.html do
         redirect_to(request.path, params: params, flash: { query: request.query_parameters } ) unless request.query_parameters.empty?
         @should_dedupe_issues = flash[:query] and flash[:query]['dedupe']
         @all_issues = group_issues(@build.issues)
@@ -73,7 +73,7 @@ class BuildsController < ApplicationController
           { file_name => issues.group_by(&:line) } }.reduce(:merge)
       }
     end
-    
-    grouped_issues.reduce(:merge)    
+
+    grouped_issues.reduce(:merge)
   end
 end
