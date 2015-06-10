@@ -3,91 +3,87 @@
         <div>JavaScript parsing error on last build:</div>
         <div class="alert alert-danger"><samp><%= @report.data['error'] %></samp></div>
     <% else %>
-        <div class="row">
-            <!-- TODO add info about which build/commit this is from -->
-            <h3>Project Averages</h3>
-            <div class="panel panel-default stat-panel">
-                <div class="panel-heading">
-                  cyclomatic complexity
-                  <br><small>(lower is better)</small>
-                </div>
-                <div class="panel-body">
-                    <span class="stat"><%= '%.2f' % @report.data['cyclomatic'] %></span>
-                </div>
+        <!-- TODO add info about which build/commit this is from -->
+        <h3>Project Averages</h3>
+        <div class="panel panel-default stat-panel">
+            <div class="panel-heading">
+                cyclomatic complexity
+                <br><small>(lower is better)</small>
             </div>
-            <div class="panel panel-default stat-panel">
-                <div class="panel-heading">
-                  maintainability
-                  <br><small>(higher is better)</small>
-                </div>
-                <div class="panel-body">
-                    <span class="stat"><%= '%.2f' % @report.data['maintainability'] %>
-                    </span>
-                </div>
-            </div>
-            <div class="panel panel-default stat-panel">
-                <div class="panel-heading">
-                  parameter count
-                </div>
-                <div class="panel-body">
-                    <span class="stat"><%= '%.2f' % @report.data['params'] %>
-                    </span>
-                </div>
-            </div>
-            <div class="panel panel-default stat-panel">
-                <div class="panel-heading">
-                    logical lines of code per function
-                </div>
-                <div class="panel-body">
-                    <span class="stat"><%= '%.2f' % @report.data['loc'] %>
-                    </span>
-                </div>
-            </div>
-            <div class="panel panel-default stat-panel">
-                <div class="panel-heading">
-                  Halstead effort <small>[<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">?</a>]</small>
-                  <br><small>(lower is better)</small>
-                </div>
-                <div class="panel-body">
-                    <span class="stat"><%= '%.2f' % @report.data['effort'] %>
-                    </span>
-                </div>
-            </div>
-            <div class="panel panel-default stat-panel">
-                <div class="panel-heading">
-                  change cost
-                  <br><small>(lower is better)</small>
-                </div>
-                <div class="panel-body">
-                    <span class="stat"><%= @report.data['changeCost'].round(2) %>%</span>
-                </div>
+            <div class="panel-body">
+                <span class="stat"><%= '%.2f' % @report.data['cyclomatic'] %></span>
             </div>
         </div>
-        <div class="row">
-            <table class="sortable-theme-bootstrap reports-table" data-sortable>
-                <thead>
+        <div class="panel panel-default stat-panel">
+            <div class="panel-heading">
+                maintainability
+                <br><small>(higher is better)</small>
+            </div>
+            <div class="panel-body">
+                <span class="stat"><%= '%.2f' % @report.data['maintainability'] %>
+                </span>
+            </div>
+        </div>
+        <div class="panel panel-default stat-panel">
+            <div class="panel-heading">
+                parameter count
+            </div>
+            <div class="panel-body">
+                <span class="stat"><%= '%.2f' % @report.data['params'] %>
+                </span>
+            </div>
+        </div>
+        <div class="panel panel-default stat-panel">
+            <div class="panel-heading">
+                logical lines of code per function
+            </div>
+            <div class="panel-body">
+                <span class="stat"><%= '%.2f' % @report.data['loc'] %>
+                </span>
+            </div>
+        </div>
+        <div class="panel panel-default stat-panel">
+            <div class="panel-heading">
+                Halstead effort <small>[<a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures">?</a>]</small>
+                <br><small>(lower is better)</small>
+            </div>
+            <div class="panel-body">
+                <span class="stat"><%= '%.2f' % @report.data['effort'] %>
+                </span>
+            </div>
+        </div>
+        <div class="panel panel-default stat-panel">
+            <div class="panel-heading">
+                change cost
+                <br><small>(lower is better)</small>
+            </div>
+            <div class="panel-body">
+                <span class="stat"><%= @report.data['changeCost'].round(2) %>%</span>
+            </div>
+        </div>
+        <table class="sortable-theme-bootstrap reports-table" data-sortable>
+            <thead>
+                <tr>
+                    <th style="width: 50%">File</th>
+                    <th>Maintainability</th>
+                    <th>Cyclomatic Complexity</th>
+                    <th>Parameter Count</th>
+                    <th>Logical LOC</th>
+                    <th>Halstead Effort</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% @report.data['reports'].each do |report| %>
                     <tr>
-                        <th style="width: 50%">File</th>
-                        <th>Maintainability</th>
-                        <th>Cyclomatic Complexity</th>
-                        <th>Parameter Count</th>
-                        <th>Logical LOC</th>
-                        <th>Halstead Effort</th>
+                        <td><div class="collapsible"><span><%= report['path'] %></span></div></td>
+                        <td><%= report['maintainability'].round(2) %></td>
+                        <td><%= report['cyclomatic'].round(2) %></td>
+                        <td><%= report['params'].round(2) %></td>
+                        <td><%= report['loc'].round(2) %></td>
+                        <td><%= report['effort'].round(2) %></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <% @report.data['reports'].each do |report| %>
-                        <tr>
-                            <td><div class="collapsible"><span><%= report['path'] %></span></div></td>
-                            <td><%= report['maintainability'].round(2) %></td>
-                            <td><%= report['cyclomatic'].round(2) %></td>
-                            <td><%= report['params'].round(2) %></td>
-                            <td><%= report['loc'].round(2) %></td>
-                            <td><%= report['effort'].round(2) %></td>
-                        </tr>
-                    <% end %>
-                </tbody>
-            </table>
-        </div>
+                <% end %>
+            </tbody>
+        </table>
     <% end %>
 </div>
