@@ -4,6 +4,7 @@ class Project < ActiveRecord::Base
   has_one :setting
 
   after_create :create_settings
+  after_create :add_webhook!
 
   def github_url
     "https://github.com/#{full_name}"
@@ -14,7 +15,12 @@ class Project < ActiveRecord::Base
     Octokit::Client.new access_token: self.setting.user_with_token.client_token
   end
 
+  def allowed_to_webhook?
+  end
+
   def add_webhook!
+    return unless allowed_to_webhook?
+    
     github_client.create_hook(self.full_name,
                               'web',
                               { url: "http://spearmint.com/hooks/#{self.id}", content_type: 'json' },

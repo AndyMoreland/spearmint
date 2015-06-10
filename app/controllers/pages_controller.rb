@@ -2,9 +2,11 @@ class PagesController < ApplicationController
   helper_method :is_watching
 
   def index
+    Octokit.auto_paginate = true
     if user_signed_in?
       @repos = github_client.repos
     end
+    Octokit.auto_paginate = false
   end
 
   def landing
