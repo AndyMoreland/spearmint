@@ -68,7 +68,7 @@
         <% collapseId = "#{test_name}Collapse" %>
         <div class='row col-lg-12'>
             <a class='collapse-link' data-toggle="collapse" href="#<%= collapseId %>" aria-expanded="false" aria-controls='<%= collapseId%>'>
-                <%= test_name %>
+                <%= tool_to_language test_name %>
             </a>
             <div class='collapse in' id="<%= collapseId %>">
                 <% files.each do |file_name, issues_by_line| %>

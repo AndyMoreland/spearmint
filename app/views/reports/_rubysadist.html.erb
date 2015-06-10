@@ -1,8 +1,12 @@
 <div class="row">
-    <h3>Project Totals</h3>
+  <h3>
+    Project Totals
+
+  </h3>
     <div class="panel panel-default stat-panel">
         <div class="panel-heading">
-            flog score
+          total complexity score
+          <br><small>(lower is better)</small>
         </div>
         <div class="panel-body">
             <span class="stat"><%= '%.1f' % @flog_report.data['total'] %></span>
@@ -10,7 +14,8 @@
     </div>
     <div class="panel panel-default stat-panel">
         <div class="panel-heading">
-            flog method average
+          average method complexity
+          <br><small>(lower is better)</small>
         </div>
         <div class="panel-body">
             <span class="stat"><%= '%.1f' % @flog_report.data['average'] %></span>
@@ -18,7 +23,8 @@
     </div>
     <div class="panel panel-default stat-panel">
         <div class="panel-heading">
-            flay score
+          code duplication score
+          <br><small>(lower is better)</small>
         </div>
         <div class="panel-body">
             <span class="stat"><%= '%.1f' % @flay_report.data['total'] %></span>
@@ -26,13 +32,13 @@
     </div>
 </div>
 <div class="row">
-    <h3>Flog Rankings</h3>
+    <h3>Methods by Complexity</h3>
     <table class="sortable-theme-bootstrap reports-table" data-sortable>
         <thead>
             <tr>
                 <th>Location</th>
                 <th>Method</th>
-                <th data-sorted="true" data-sorted-direction="descending" style="width: 10%">Flog Score</th>
+                <th data-sorted="true" data-sorted-direction="descending" style="width: 10%">Complexity</th>
             </tr>
         </thead>
         <tbody>
@@ -47,7 +53,7 @@
     </table>
 </div>
 <div class="row">
-    <h3>Flay Matches</h3>
+    <h3>Code Duplication Matches</h3>
     <table class="sortable-theme-bootstrap reports-table" data-sortable>
         <thead>
             <tr>

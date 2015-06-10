@@ -4,7 +4,7 @@
         <ul class="nav nav-tabs">
             <% @has_report.each do |source, has_report| %>
                 <% if has_report %>
-                    <li role="presentation" class="<%= (source == @source) ? "active" : "" %>"><%= link_to @source_full_name[source], project_report_path(@project, source) %></li>
+                    <li role="presentation" class="<%= (source == @source) ? "active" : "" %>"><%= link_to tool_to_language(@source_full_name[source]), project_report_path(@project, source) %></li>
                 <% end %>
             <% end %>
             <div class="reports-build-info">last analysis on build <%= link_to @build.number, project_build_path(@project, @build) %>, revision <%= link_to_revision(@project, @build) %></div>
