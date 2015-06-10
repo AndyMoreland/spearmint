@@ -42,7 +42,7 @@ class Project < ActiveRecord::Base
   end
 
   def remove_webhook!
-    github_client.remove_hook(self.full_name, self.webhook_id)
+    github_client.remove_hook(self.full_name, self.webhook_id) if self.webhook_id
   end
 
   private
