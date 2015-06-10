@@ -85,7 +85,14 @@
         <td class="col-md-10">
           <ul class="list-unstyled">
             <% issues.each do |issue| %>
-            <li><%= issue.message %> <span class="text-danger">(<%= issue.character %>)</span></li>
+            <li><%= issue.message %> <span class="text-danger">(<%= issue.character %>)</span>&nbsp;&nbsp;&nbsp;
+              <%= form_for IgnoredIssueType.new, as: :post, method: :post, url: project_ignored_issue_types_path(@project), html: { class: 'issue-ignore-form' } do |iform| %>
+              <input type="hidden" name="issue[message]" value="<%= h issue.message %>">
+              <%= iform.submit 'Suppress', class: 'btn btn-xs ignore-issue' %>
+              <% end %>
+              <!--<button onclick="ignoreIssue(this); return false" class="btn btn-xs ignore-issue"><%= image_tag "glyphicons/png/glyphicons-193-circle-remove.png", class: "ignore-issue-img", width: 20, height: 20 %></button>-->
+              <!-- '<%= image_tag "glyphicons/png/glyphicons-193-circle-remove.png", width: 20, height: 20 %>' -->
+            </li>
             <% end %>
           </ul>
           <pre style="margin: 10px"><code class="language-javascript"><%= issues[0].line_contents[0..100] %><%= '...' if issues[0].line_contents.length > 100 %></code></pre>

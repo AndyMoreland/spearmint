@@ -1,59 +1,79 @@
 <h1>
-    <%= link_to @project.name, @project %> Settings
-    <small>
-        <%= render partial: 'shared/build_navigation', locals: { project: @project, page: :settings } %>
-    </small>
+  <%= link_to @project.name, @project %> Settings
+  <small>
+    <%= render partial: 'shared/build_navigation', locals: { project: @project, page: :settings } %>
+  </small>
 </h1>
 
 
 <%= form_for [@project, @project.setting], method: 'patch' do |f| %>
-  <div class='form-group row'>
-    <div class='col-sm-2'>
-      <%= f.label :user_with_token, 'GitHub token to use', class: 'control-label' %>
-    </div>
-    <div class='col-sm-3'>
-      <%= f.select :user_with_token, @project_watchers,
-                   {}, { class: 'form-control' } %>
-    </div>
+<div class='form-group row'>
+  <div class='col-sm-2'>
+    <%= f.label :user_with_token, 'GitHub token to use', class: 'control-label' %>
   </div>
+  <div class='col-sm-3'>
+    <%= f.select :user_with_token, @project_watchers,
+        {}, { class: 'form-control' } %>
+  </div>
+</div>
 
-  <div class='form-group row'>
-    <div class='col-sm-2'>
-      <%= f.label :concurrent_jobs, 'Concurrent jobs', class: 'control-label' %>
-    </div>
-    <div class='col-sm-3'>
-      <%= f.select :concurrent_jobs,
-                   (1..5).map {|i| [i.to_s, i] }, 
-                   {}, { class: 'form-control' } %>
-    </div>
+<div class='form-group row'>
+  <div class='col-sm-2'>
+    <%= f.label :concurrent_jobs, 'Concurrent jobs', class: 'control-label' %>
   </div>
+  <div class='col-sm-3'>
+    <%= f.select :concurrent_jobs,
+        (1..5).map {|i| [i.to_s, i] },
+        {}, { class: 'form-control' } %>
+  </div>
+</div>
 
-  <div class='form-group'>
-    <div class='row'>
-      <%= f.label :build_command, 'Build command', class: 'col-sm-2 control-label' %>
-      <span class='col-sm-10 help-block'>Shell command to run your build script</span>
-    </div>
-    <%= f.text_field :build_command, class: 'form-control' %>
+<div class='form-group'>
+  <div class='row'>
+    <%= f.label :build_command, 'Build command', class: 'col-sm-2 control-label' %>
+    <span class='col-sm-10 help-block'>Shell command to run your build script</span>
   </div>
+  <%= f.text_field :build_command, class: 'form-control' %>
+</div>
 
-  <div class='form-group'>
-    <div class='row'>
-      <%= f.label :test_command, 'Test command', class: 'col-sm-2 control-label' %>
-      <span class='help-block col-sm-10'>Shell command to run your tests</span>
-    </div>
-    <%= f.text_field :test_command, class: 'form-control' %>
+<div class='form-group'>
+  <div class='row'>
+    <%= f.label :test_command, 'Test command', class: 'col-sm-2 control-label' %>
+    <span class='help-block col-sm-10'>Shell command to run your tests</span>
   </div>
+  <%= f.text_field :test_command, class: 'form-control' %>
+</div>
 
-  <div class='form-group'>
-    <div class='row'>
-      <%= f.label :ignored_files, 'Ignored files', class: 'col-sm-2 control-label' %>
-      <span class='help-block col-sm-10'>Newline separated list of files to ignore</span>
-    </div>
-    <%= f.text_area :ignored_files, class: 'form-control', :value => @project_ignored_files_text %>
+<div class='form-group'>
+  <div class='row'>
+    <%= f.label :ignored_files, 'Ignored files', class: 'col-sm-2 control-label' %>
+    <span class='help-block col-sm-10'>Newline separated list of files to ignore</span>
   </div>
+  <%= f.text_area :ignored_files, class: 'form-control', :value => @project_ignored_files_text %>
+</div>
 
-  <div class='form-group'>
-      <%= f.submit 'Update Settings', class: ['btn', 'btn-default'] %>
+<% unless @project_suppressed_issue_types.empty? %>
+<div class='form-group'>
+  <div class='row'>
+    <%= f.label :suppressed_issues, 'Suppressed Issue Types', class: 'col-sm-2 control-label' %>
+    <span class='help-block col-sm-10'>Issue types to skip. Add issues to ignore from the Build Details page.</span>
   </div>
+  <hr>
+  <div class='row'>
+    <%= f.label :suppress_all_issues, 'Check all', class: 'col-sm-2 control-label' %>
+    <span class='help-block col-sm-10'><input type="checkbox" id="suppress_all_issues" onclick="checkAll(this)"></span>
+  </div>
+  <% @project_suppressed_issue_types.each do |ignored| %>
+  <div class='row'>
+    <%= f.label :"reenable-#{ignored.id}", 'Reenable?', class: 'col-sm-2 control-label' %>
+    <span class='help-block col-sm-10'><input type="checkbox" name="reenable[<%= ignored.id %>]" class="reenable-ignored" id="reenable-<%= ignored.id %>"> <%= ignored.generic_message %></span>
+  </div>
+  <% end %>
+</div>
+<% end %>
+
+<div class='form-group'>
+  <%= f.submit 'Update Settings', class: ['btn', 'btn-default'] %>
+</div>
 
 <% end %>
