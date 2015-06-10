@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150610100323) do
+ActiveRecord::Schema.define(version: 20150610212929) do
 
   create_table "builds", force: :cascade do |t|
     t.string   "title"
@@ -32,6 +32,13 @@ ActiveRecord::Schema.define(version: 20150610100323) do
 
   add_index "builds", ["project_id", "number"], name: "index_builds_on_project_id_and_number", unique: true
   add_index "builds", ["project_id"], name: "index_builds_on_project_id"
+
+  create_table "ignored_issue_types", force: :cascade do |t|
+    t.integer "project_id"
+    t.string  "generic_message"
+  end
+
+  add_index "ignored_issue_types", ["project_id"], name: "index_ignored_issue_types_on_project_id"
 
   create_table "issues", force: :cascade do |t|
     t.string   "file"
