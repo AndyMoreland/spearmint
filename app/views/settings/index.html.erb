@@ -1,4 +1,9 @@
-<h1>Settings - <%= link_to @project.name, @project %></h1>
+<h1>
+    <%= link_to @project.name, @project %> Settings
+    <small>
+        <%= render partial: 'shared/build_navigation', locals: { project: @project, page: :settings } %>
+    </small>
+</h1>
 
 
 <%= form_for [@project, @project.setting], method: 'patch' do |f| %>

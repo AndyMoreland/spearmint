@@ -2,7 +2,7 @@
     <h1>
         <%= link_to @project.name, @project %> reports
         <small>
-            <%= render partial: 'shared/build_navigation', locals: { project: @project, build: nil }%>
+            <%= render partial: 'shared/build_navigation', locals: { project: @project, page: :reports }%>
         </small>
     </h1>
 </div>
