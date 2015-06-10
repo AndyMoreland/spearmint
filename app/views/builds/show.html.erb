@@ -8,64 +8,79 @@
 <div>
 
     <% if @build.pull_id %>
-   View pull request on <%= link_to "GitHub", "https://www.github.com/#{@build.project.full_name}/pull/#{@build.pull_id}" %>.
+        View pull request on <%= link_to "GitHub", "https://www.github.com/#{@build.project.full_name}/pull/#{@build.pull_id}" %>.
     <% end %>
 
 </div>
 
-<% unless @build.in_progress? %>
+<div role="tabpanel">
+    <% unless @build.in_progress? %>
 
-    <%= render "build_script_output" %>
-    <%= render "test_script_output" %>
 
-<% end %>
+    <% end %>
 
-<% if @build.issues.any? %>
-    <div class='row col-lg-12'>
-        <input type="checkbox" <%= @should_dedupe_issues ? "checked" : '' %> id="dedupe" onclick="toggleIssueDedupe(this)">
-        <label for="dedupe">Show only first issue of each kind</label>
-    </div>
-    <% issues_seen = {} %>
-    <% @all_issues.each do |test_name, files| %>
-    <% collapseId = "#{test_name}Collapse" %>
-    <div class='row col-lg-12'>
-        <a class='collapse-link' data-toggle="collapse" href="#<%= collapseId %>" aria-expanded="false" aria-controls='<%= collapseId%>'>
-            <%= tool_to_language test_name %>
-        </a>
-        <div class='collapse in' id="<%= collapseId %>">
-            <% files.each do |file_name, issues_by_line| %>
-                <% if issues_by_line.any? %>
-                    <h4><code><span><%= link_to_file(file_name, @build, file_name) %></span></code></h4>
-                    <table class="table table-hover">
-                        <% issues_by_line.each do |line_number, issues| %>
-                            <% issues = dedupe_issues(issues, issues_seen) if @should_dedupe_issues %>
-                            <% if issues.any? %>
-                                <tr>
-                                    <td class="col-md-10">
-                                        <ul class="list-unstyled">
-                                            <% issues.each do |issue| %>
-                                                <li><%= issue.message %> <span class="text-danger">(<%= issue.character %>)</span></li>
-                                            <% end %>
-                                        </ul>
-                                        <pre style="margin: 10px"><code class="language-javascript"><%= issues[0].line_contents[0..100] %><%= '...' if issues[0].line_contents.length > 100 %></code></pre>
-                                    </td>
-                                    <td class="col-md-2">
-                                        <%= link_to_file("line #{line_number}", @build, file_name, line_number: line_number) %>
-                                    </td>
-                                </tr>
-                            <% end %> <!-- issues.any? -->
-                        <% end %> <!-- issues_by_line.each -->
-                    </table>
-                <% end %> <!-- issues_by_line.any? -->
-            <% end %> <!-- files -->
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#overview-tab" role="tab" data-toggle="tab">Overview</a></li>
+        <li role="presentation"><a href="#build-tab" role="tab" data-toggle="tab">
+            Build Script
+            <% if @build.status != 'build_script_failed' %>
+                <span class='text-success'>(passed)</span>
+            <% else %>
+                <span class='text-danger'>(failed)</span>
+            <% end %>
+        </a></li>
+        <li role="presentation"><a href="#tests-tab" role="tab" data-toggle="tab">
+            Tests
+            <% unless @build.unit_tests_failed %>
+                <span class='text-success'>(passed)</span>
+            <% else %>
+                <span class='text-danger'>(failed)</span>
+            <% end %>
+        </a></li>
+        <% if @build.issues.any? %>
+            <% @all_issues.each do |test_name, files| %>
+                <li role="presentation"><a href="#<%= test_name + '-tab' %>" role="tab" data-toggle="tab"><%= tool_to_language test_name %></a></li>
+            <% end %> <!-- all issues -->
+        <% end %>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="overview-tab">
+            <% if @build.status == 'build_script_failed'%>
+                <p>Build script failed</p>
+            <% elsif @build.in_progress? %>
+                <script>
+                    window.startPollingForFinishedBuild(<%= @build.project.id %>, <%= @build.number %>, window.reloadPage);
+                </script>
+                <p class='text-warning'>Build is in progress!</p>
+            <% elsif @build.issues.any? %>
+                <p><%= @build.issues.length %> issues found.</p>
+                <div class='row col-lg-12'>
+                    <input type="checkbox" <%= @should_dedupe_issues ? "checked" : '' %> id="dedupe" onclick="toggleIssueDedupe(this)">
+                    <label for="dedupe">Show only first issue of each kind</label>
+                </div>
+            <% else %>
+                <p>No issues found! Have a great day!</p>
+            <% end %>
         </div>
+
+        <div role="tabpanel" class="tab-pane" id="build-tab">
+            <%= render "build_script_output" %>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="tests-tab">
+            <%= render "test_script_output" %>
+        </div>
+        <% if @build.issues.any? %>
+            <% issues_seen = {} %>
+            <% @all_issues.each do |test_name, files| %>
+                <div role="tabpanel" class="tab-pane" id="<%= test_name + '-tab' %>">
+                    <%= render :partial => "issues", :locals => {:test_name => test_name, :files => files, :issues_seen => issues_seen} %>
+                </div>
+            <% end %> <!-- all issues -->
+        <% end %>
     </div>
-    <% end %> <!-- all issues -->
-<% elsif @build.in_progress? %>
-    <script>
-        window.startPollingForFinishedBuild(<%= @build.project.id %>, <%= @build.number %>, window.reloadPage);
-    </script>
-    <p class='text-warning'>Build is in progress!</p>
-<% elsif @build.status != 'build_script_failed' %>
-    <p>No issues found! Have a great day!</p>
-<% end %>
+
+</div>
+
