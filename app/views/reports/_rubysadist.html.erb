@@ -1,15 +1,16 @@
+<%
+    @flog_report = @report['flog']
+    @flay_report = @report['flay']
+%>
 <div class="row">
-  <h3>
-    Project Totals
-
-  </h3>
+  <h3>Project Totals</h3>
     <div class="panel panel-default stat-panel">
         <div class="panel-heading">
           total complexity score
           <br><small>(lower is better)</small>
         </div>
         <div class="panel-body">
-            <span class="stat"><%= '%.1f' % @flog_report.data['total'] %></span>
+            <span class="stat"><%= @flog_report.nil? ? '--' : '%.1f' % @flog_report.data['total'] %></span>
         </div>
     </div>
     <div class="panel panel-default stat-panel">
@@ -18,7 +19,7 @@
           <br><small>(lower is better)</small>
         </div>
         <div class="panel-body">
-            <span class="stat"><%= '%.1f' % @flog_report.data['average'] %></span>
+            <span class="stat"><%= @flog_report.nil? ? '--' : '%.1f' % @flog_report.data['average'] %></span>
         </div>
     </div>
     <div class="panel panel-default stat-panel">
@@ -27,52 +28,56 @@
           <br><small>(lower is better)</small>
         </div>
         <div class="panel-body">
-            <span class="stat"><%= '%.1f' % @flay_report.data['total'] %></span>
+            <span class="stat"><%= @flay_report.nil? ? '0' : '%.1f' % @flay_report.data['total'] %></span>
         </div>
     </div>
 </div>
-<div class="row">
-    <h3>Methods by Complexity</h3>
-    <table class="sortable-theme-bootstrap reports-table" data-sortable>
-        <thead>
-            <tr>
-                <th>Location</th>
-                <th>Method</th>
-                <th data-sorted="true" data-sorted-direction="descending" style="width: 10%">Complexity</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% @flog_report.data['entries'].each do |entry| %>
+<% unless @flog_report.nil? %>
+    <div class="row">
+        <h3>Methods by Complexity</h3>
+        <table class="sortable-theme-bootstrap reports-table" data-sortable>
+            <thead>
                 <tr>
-                    <td><div class="collapsible"><span><%= entry['path'] %></span></div></td>
-                    <td><%= entry['method'] %></td>
-                    <td><%= entry['flog'] %></td>
+                    <th>Location</th>
+                    <th>Method</th>
+                    <th data-sorted="true" data-sorted-direction="descending" style="width: 10%">Complexity</th>
                 </tr>
-            <% end %>
-        </tbody>
-    </table>
-</div>
-<div class="row">
-    <h3>Code Duplication Matches</h3>
-    <table class="sortable-theme-bootstrap reports-table" data-sortable>
-        <thead>
-            <tr>
-                <th>Locations</th>
-                <th data-sorted="true" data-sorted-direction="descending" style="width: 10%">Code Mass</th>
-                <th style="width: 10%">Match Type</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% @flay_report.data['entries'].each do |entry| %>
+            </thead>
+            <tbody>
+                <% @flog_report.data['entries'].each do |entry| %>
+                    <tr>
+                        <td><div class="collapsible"><span><%= entry['path'] %></span></div></td>
+                        <td><%= entry['method'] %></td>
+                        <td><%= entry['flog'] %></td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+    </div>
+<% end %>
+<% unless @flay_report.nil? %>
+    <div class="row">
+        <h3>Code Duplication Matches</h3>
+        <table class="sortable-theme-bootstrap reports-table" data-sortable>
+            <thead>
                 <tr>
-                    <td>
-                        <div class="collapsible"><span><%= "#{entry['first']['path']}: #{entry['first']['line']}" %></span></div>
-                        <div class="collapsible""><span><%= "#{entry['second']['path']}: #{entry['second']['line']}" %></span></div>
-                    </td>
-                    <td><%= entry['mass'] %></td>
-                    <td><%= entry['match_type'] %></td>
+                    <th>Locations</th>
+                    <th data-sorted="true" data-sorted-direction="descending" style="width: 10%">Code Mass</th>
+                    <th style="width: 10%">Match Type</th>
                 </tr>
-            <% end %>
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                <% @flay_report.data['entries'].each do |entry| %>
+                    <tr>
+                        <td>
+                            <div class="collapsible"><span><%= "#{entry['first']['path']}: #{entry['first']['line']}" %></span></div>
+                            <div class="collapsible""><span><%= "#{entry['second']['path']}: #{entry['second']['line']}" %></span></div>
+                        </td>
+                        <td><%= entry['mass'] %></td>
+                        <td><%= entry['match_type'] %></td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+    </div>
+<% end %>
