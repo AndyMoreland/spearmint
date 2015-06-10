@@ -3,7 +3,7 @@ class ReportsController < ApplicationController
 
     def index
         show # FIXME NO
-        source, _ = @has_report.detect { |source, has_report| has_report }
+        source, _ = @reports.detect { |source, report| !report.nil? }
         unless source.nil?
             redirect_to project_report_path(@project, source)
         end
@@ -12,24 +12,34 @@ class ReportsController < ApplicationController
     def show
         @project = Project.find(params[:project_id])
         @source = params[:source]
-        @source_full_name = {
-            "rubysadist" => "Ruby Sadist",
-            "jscomplexity" => "JSComplexity"
-        };
 
-        # FIXME very error prone and nonrobust querie(s)
+        # FIXME very error prone and nonrobust queries
         # most recent build
         @build = @project.builds.finished.order(:created_at).includes(:stats).last
 
-        @flay_report = @build.stats.where(source: 'RubyFlay').take unless @build.nil?
-        @flog_report = @build.stats.where(source: 'RubyFlog').take unless @build.nil?
-        @js_stats = @build.stats.where(source: 'JSComplexity').take unless @build.nil?
-
-        @has_report = {
-            "rubysadist" => (!@flay_report.nil? || !@flog_report.nil?),
-            "jscomplexity" => !@js_stats.nil?
-        }
+        if @build.nil?
+            @reports = {}
+        else
+            @reports = {
+                "rubysadist" => rubysadist_report,
+                "jscomplexity" => jscomplexity_report
+            }
+        end
+        @report = @reports[@source]
     end
 
+    private
 
+    def jscomplexity_report
+        @build.stats.where(source: 'JSComplexity').take
+    end
+
+    def rubysadist_report
+        flay = @build.stats.where(source: 'RubyFlay').take
+        flog = @build.stats.where(source: 'RubyFlog').take
+        {
+            "flay" => flay,
+            "flog" => flog
+        } if flay || flog
+    end
 end
