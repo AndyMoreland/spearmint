@@ -4,7 +4,9 @@ class ReportsController < ApplicationController
     def index
         show # FIXME NO
         source, _ = @has_report.detect { |source, has_report| has_report }
-        redirect_to project_report_path(@project, source)
+        unless source.nil?
+            redirect_to project_report_path(@project, source)
+        end
     end
 
     def show
@@ -24,8 +26,10 @@ class ReportsController < ApplicationController
         @js_stats = @build.stats.where(source: 'JSComplexity').take unless @build.nil?
 
         @has_report = {
-            "rubysadist" => (!@flay_report.nil? && !@flog_report.nil?),
+            "rubysadist" => (!@flay_report.nil? || !@flog_report.nil?),
             "jscomplexity" => !@js_stats.nil?
         }
     end
+
+
 end
