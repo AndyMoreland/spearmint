@@ -1,6 +1,7 @@
 class Project < ActiveRecord::Base
   has_and_belongs_to_many :users
   has_many :builds
+  has_many :stats, through: :builds
   has_one :setting
 
   after_create :create_settings
@@ -31,7 +32,7 @@ class Project < ActiveRecord::Base
     
     hook = github_client.create_hook(self.full_name,
                                      'web',
-                                     { url: "http://spearmint.com/hooks/#{self.id}", content_type: 'json' },
+                                     { url: "http://getspearmint.com/hooks/#{self.id}", content_type: 'json' },
                                      {
                                       events: ['pull_request'],
                                       active: true
