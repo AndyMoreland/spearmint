@@ -5,7 +5,9 @@ class Build < ActiveRecord::Base
   has_many :issues
   has_many :stats
 
-  ## self.status is in {:waiting, :shutdown, :passed, :failed, :build_script_failed }
+  ## self.status is in {:waiting, :shutdown, :passed, :failed, :build_script_failed, :queued }
+
+  scope :finished, -> { where.not(status: [:queued, :waiting]) }
 
   def to_param
     self.number.to_s
@@ -56,7 +58,12 @@ class Build < ActiveRecord::Base
   end
 
   def get_status_description
-    return "Spearmint tests failed. Check details for more information."
+    status = self.get_github_status
+    if status == "failure" || status == "error" || status == "shutdown" || status == "build_script_failed"
+      "Spearmint tests failed. Check details for more information."
+    else
+      "Spearmint tests succeeded."
+    end
   end
 
   def set_waiting

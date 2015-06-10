@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150609044547) do
+ActiveRecord::Schema.define(version: 20150610100323) do
 
   create_table "builds", force: :cascade do |t|
     t.string   "title"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 20150609044547) do
     t.datetime "updated_at", null: false
     t.string   "full_name"
     t.integer  "github_id"
+    t.integer  "webhook_id"
   end
 
   create_table "projects_users", force: :cascade do |t|

@@ -8,9 +8,9 @@
 
               <% if is_watching(r) %>
                 <% project = Project.find_by_github_id(r.id) %>
-                <%= link_to r.name, project %>
+                <%= link_to disambiguated_name(@repos, r), project %>
               <% else %>
-                <%= r.name %>
+                <%= disambiguated_name(@repos, r) %>
               <% end %>
             </h4>
         </td>

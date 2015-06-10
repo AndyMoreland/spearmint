@@ -17,7 +17,7 @@ class ReportsController < ApplicationController
 
         # FIXME very error prone and nonrobust querie(s)
         # most recent build
-        @build = @project.builds.order(:created_at).includes(:stats).last
+        @build = @project.builds.finished.order(:created_at).includes(:stats).last
 
         @flay_report = @build.stats.where(source: 'RubyFlay').take unless @build.nil?
         @flog_report = @build.stats.where(source: 'RubyFlog').take unless @build.nil?

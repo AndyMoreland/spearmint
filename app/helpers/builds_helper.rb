@@ -17,4 +17,10 @@ module BuildsHelper
   def pretty_print_status(status)
     status.gsub('_', ' ').titleize
   end
+
+  def link_to_file(text, build, file_name, line_number: nil)
+    url = "https://github.com/#{build.project.full_name}/blob/#{build.commit}/#{file_name}"
+    url += "#L#{line_number}" if line_number
+    link_to text, url
+  end
 end

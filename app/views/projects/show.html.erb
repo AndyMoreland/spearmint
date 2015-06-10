@@ -1,7 +1,7 @@
 <div class="row">
     <h1><%= @project.name %>
         <small>
-            <%= render partial: 'shared/build_navigation', locals: { project: @project, build: nil }%>
+            <%= render partial: 'shared/build_navigation', locals: { project: @project, page: nil }%>
         </small>
         <%= form_for [@project, Build.new], :html => {:class => 'run-btn form-inline pull-right center-block'} do |f| %>
             <%= f.submit 'Run Tests', :class => 'btn' %>
