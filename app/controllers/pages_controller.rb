@@ -3,6 +3,7 @@ class PagesController < ApplicationController
 
   def index
     Octokit.auto_paginate = true
+    Octokit.default_media_type = "application/vnd.github.moondragon+json"
     if user_signed_in?
       @repos = github_client.repos
     end
