@@ -43,7 +43,7 @@ module TestRunner
         # execute and catch
         res = nil
         begin
-          out = `#{cmd}`
+          out = `#{cmd} 2>&1`
         rescue
           res = { error: 1, output: "[Failed to execute. Malformed command or file not found.]" }
         else
