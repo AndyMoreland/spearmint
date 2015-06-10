@@ -13,7 +13,7 @@ module TestRunner
         build.fetch!
         build.build! # unfortunate naming, sorry
 
-        aborted = (build.status == :build_script_failed)
+        aborted = (build.status == 'build_script_failed')
 
         unless aborted
           build.test!

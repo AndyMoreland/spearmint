@@ -3,32 +3,30 @@ module TestRunner
     class << self
       def run(cmd, build, verbose: false)
         if ENV['SPEARMINT_DISABLE_DOCKER']
-          out = `#{cmd}`
+          puts cmd
+          res = exec_cmd cmd
         else
           dir = build.build_directory_path
-          out = `docker run --rm -v #{dir}:#{mount_paths dir} #{build.build_image_name} /bin/bash -c "#{mount_paths cmd}"`
+          res = exec_cmd %{docker run --rm -v #{dir}:#{mount_paths dir} #{build.build_image_name} /bin/bash -c "#{mount_paths cmd}"}
         end
-        retcode = $?.to_i
-        return { error: retcode, output: out } if verbose
-        out
+        return res if verbose
+        res[:output]
       end
 
       def image(cmd, build, base: :spearmint, verbose: false)
         if ENV['SPEARMINT_DISABLE_DOCKER']
-          out = `#{cmd}`
-          retcode = $?.to_i
+          res = exec_cmd cmd
         else
           name = build.build_image_name
           dir = build.build_directory_path
 
-          out = `docker run -v #{dir}:#{mount_paths dir} --name #{name}-container #{base} /bin/bash -c "#{mount_paths cmd}"`
-          retcode = $?.to_i
+          res = exec_cmd %{docker run -v #{dir}:#{mount_paths dir} --name #{name}-container #{base} /bin/bash -c "#{mount_paths cmd}"}
           `docker commit #{name}-container #{name}`
           `docker rm -f #{name}-container`
         end
 
-        return { error: retcode, output: out } if verbose
-        out
+        return res if verbose
+        res[:output]
       end
 
       def cleanup(build)
@@ -37,6 +35,21 @@ module TestRunner
 
       def mount_paths(abs_path)
         abs_path.to_s.gsub(Rails.root.to_s, '/spearmint')
+      end
+
+      protected
+
+      def exec_cmd(cmd)
+        # execute and catch
+        res = nil
+        begin
+          out = `#{cmd}`
+        rescue
+          res = { error: 1, output: "[Failed to execute. Malformed command or file not found.]" }
+        else
+          res = { error: $?.to_i, output: out }
+        end
+        res
       end
     end
   end
