@@ -17,7 +17,11 @@ class ProjectsController < ApplicationController
 
     render error: "Failed to add project to watchlist." unless @project.save
 
-    flash[:notice] = "Now watching #{@project.name}"
+    if @project.allowed_to_webhook?
+      flash[:notice] = "Now watching #{@project.name}"
+    else
+      flash[:warn] = "Now watching #{@project.name}, but GitHub integration is disabled due to ownership"
+    end
     redirect_to controller: :pages, action: :index
   end
 

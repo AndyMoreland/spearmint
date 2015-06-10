@@ -86,7 +86,12 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-12">
-        <%= bootstrap_flash %>
+          <%= bootstrap_flash %>
+          <% if flash[:warn] %>
+              <div class ="alert fade in alert-warning">
+                  <%= flash[:warn] %>
+              </div>
+          <% end %>
         <%= yield %>
       </div>
     </div><!-- /row -->
