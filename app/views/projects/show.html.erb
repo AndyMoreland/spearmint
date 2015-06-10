@@ -35,7 +35,7 @@
       <td><%= b.author %></td>
       <td><%= b.message %></td>
       <td><%= localize(b.updated_at, format: :long) %></td>
-      <td><%= b.status %></td>
+      <td><%= pretty_print_status b.status %></td>
       <td><%= link_to "Details", project_build_path(@project, b) %>
     </tr>
     <% if b.in_progress? %>
