@@ -14,52 +14,13 @@
 </div>
 
 <% unless @build.in_progress? %>
-    <div class='row col-lg-12'>
-        <% if @project.setting.build_command && !@project.setting.build_command.empty? %>
-            <a class='collapse-link' data-toggle="collapse" href="#buildScriptCollapse" aria-expanded="false" aria-controls="buildScriptCollapse">
-            Build Script
-            <% if @build.status != 'build_script_failed' %>
-                <span class='text-success'>(passed)</span>
-            <% else %>
-                <span class='text-danger'>(failed)</span>
-            <% end %>
-            </a>
 
-            <div class="collapse" id="buildScriptCollapse">
-                <p>Command: <code><%= @project.setting.build_command %></code></p>
-                <h4>Build Script Output</h4>
-                <textarea class='form-control' rows='5' readonly><%= @build.build_script_output %></textarea>
-            </div>
-        <% else %>
-            <strong>No build script configured.</strong>
-        <% end %>
-    </div>
+    <%= render "build_script_output" %>
+    <%= render "test_script_output" %>
 
-    <% if @build.status != 'build_script_failed' %>
-        <div class='row col-lg-12'>
-            <% if @project.setting.test_command && !@project.setting.test_command.empty? %>
-                <a class='collapse-link' data-toggle="collapse" href="#unitTestCollapse" aria-expanded="false" aria-controls="unitTestCollapse">Unit Tests
-                    <% unless @build.unit_tests_failed %>
-                        <span class='text-success'>(passed)</span>
-                    <% else %>
-                        <span class='text-danger'>(failed)</span>
-                    <% end %>
-                </a>
-                <div class="collapse" id="unitTestCollapse">
-                <p>Command: <code><%= @project.setting.test_command %></code></p>
-                <h4>Unit Test Script Output </h4>
-                <textarea class='form-control' rows='5' readonly><%= @build.unit_tests_output %></textarea>
-                 </div>
-             <% else %>
-                <strong>No unit tests configured.</strong>
-             <% end %>
-         </div>
-         <% else %>
-            <p>Aborted.</p>
-         <% end %>
-    <% end %>
+<% end %>
 
-    <% if @build.issues.any? %>
+<% if @build.issues.any? %>
     <div class='row col-lg-12'>
         <input type="checkbox" <%= @should_dedupe_issues ? "checked" : '' %> id="dedupe" onclick="toggleIssueDedupe(this)">
         <label for="dedupe">Show only first issue of each kind</label>
@@ -107,4 +68,4 @@
     <p class='text-warning'>Build is in progress!</p>
 <% elsif @build.status != 'build_script_failed' %>
     <p>No issues found! Have a great day!</p>
-<% end%>
+<% end %>
