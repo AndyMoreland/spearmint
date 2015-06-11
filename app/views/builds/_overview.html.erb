@@ -1,0 +1,22 @@
+<% if @project.setting.build_command && !@project.setting.build_command.empty? %>
+    <p><strong>No build script configured.</strong></p>
+<% end %>
+
+<% if @project.setting.test_command && !@project.setting.test_command.empty? %>
+    <p><strong>No units tests configured.</strong></p>
+<% end %>
+
+<% if @build.in_progress? %>
+    <script>
+        window.startPollingForFinishedBuild(<%= @build.project.id %>, <%= @build.number %>, window.reloadPage);
+    </script>
+    <p class='text-warning'>Build is in progress!</p>
+<% elsif @build.issues.any? %>
+    <p><strong><%= @build.issues.length %> issues found.</strong></p>
+    <div class='row col-lg-12'>
+        <input type="checkbox" <%= @should_dedupe_issues ? "checked" : '' %> id="dedupe" onclick="toggleIssueDedupe(this)">
+        <label for="dedupe">Show only first issue of each kind</label>
+    </div>
+<% else %>
+    <p>No issues found! Have a great day!</p>
+<% end %>

@@ -1,11 +1,7 @@
 <% if @build.status != 'build_script_failed' %>
-    <% if @project.setting.test_command && !@project.setting.test_command.empty? %>
-        <p>Command: <code><%= @project.setting.test_command %></code></p>
-        <h4>Unit Test Script Output </h4>
-        <textarea class='form-control' rows='5' readonly><%= @build.unit_tests_output %></textarea>
-     <% else %>
-        <strong>No unit tests configured.</strong>
-     <% end %>
+    <p>Command: <code><%= @project.setting.test_command %></code></p>
+    <h4>Unit Test Script Output </h4>
+    <textarea class='form-control' rows='5' readonly><%= @build.unit_tests_output %></textarea>
  <% else %>
     <p>Aborted: build script failed.</p>
  <% end %>

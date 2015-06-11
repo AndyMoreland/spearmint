@@ -22,22 +22,29 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active"><a href="#overview-tab" role="tab" data-toggle="tab">Overview</a></li>
-        <li role="presentation"><a href="#build-tab" role="tab" data-toggle="tab">
-            Build Script
-            <% if @build.status != 'build_script_failed' %>
-                <span class='text-success'>(passed)</span>
-            <% else %>
-                <span class='text-danger'>(failed)</span>
-            <% end %>
-        </a></li>
-        <li role="presentation"><a href="#tests-tab" role="tab" data-toggle="tab">
-            Tests
-            <% unless @build.unit_tests_failed %>
-                <span class='text-success'>(passed)</span>
-            <% else %>
-                <span class='text-danger'>(failed)</span>
-            <% end %>
-        </a></li>
+
+        <% if @project.setting.build_command && !@project.setting.build_command.empty? %>
+            <li role="presentation"><a href="#build-tab" role="tab" data-toggle="tab">
+                Build Script
+                <% if @build.status != 'build_script_failed' %>
+                    <span class='text-success'>(passed)</span>
+                <% else %>
+                    <span class='text-danger'>(failed)</span>
+                <% end %>
+            </a></li>
+        <% end %>
+
+        <% if @project.setting.test_command && !@project.setting.test_command.empty? %>
+            <li role="presentation"><a href="#tests-tab" role="tab" data-toggle="tab">
+                Tests
+                <% unless @build.unit_tests_failed %>
+                    <span class='text-success'>(passed)</span>
+                <% else %>
+                    <span class='text-danger'>(failed)</span>
+                <% end %>
+            </a></li>
+        <% end %>
+
         <% if @build.issues.any? %>
             <% @all_issues.each do |test_name, files| %>
                 <li role="presentation"><a href="#<%= test_name + '-tab' %>" role="tab" data-toggle="tab"><%= tool_to_language test_name %></a></li>
@@ -48,22 +55,7 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="overview-tab">
-            <% if @build.status == 'build_script_failed'%>
-                <p>Build script failed</p>
-            <% elsif @build.in_progress? %>
-                <script>
-                    window.startPollingForFinishedBuild(<%= @build.project.id %>, <%= @build.number %>, window.reloadPage);
-                </script>
-                <p class='text-warning'>Build is in progress!</p>
-            <% elsif @build.issues.any? %>
-                <p><%= @build.issues.length %> issues found.</p>
-                <div class='row col-lg-12'>
-                    <input type="checkbox" <%= @should_dedupe_issues ? "checked" : '' %> id="dedupe" onclick="toggleIssueDedupe(this)">
-                    <label for="dedupe">Show only first issue of each kind</label>
-                </div>
-            <% else %>
-                <p>No issues found! Have a great day!</p>
-            <% end %>
+            <%= render "overview" %>
         </div>
 
         <div role="tabpanel" class="tab-pane" id="build-tab">
@@ -72,8 +64,8 @@
         <div role="tabpanel" class="tab-pane" id="tests-tab">
             <%= render "test_script_output" %>
         </div>
+        <% issues_seen = {} %>
         <% if @build.issues.any? %>
-            <% issues_seen = {} %>
             <% @all_issues.each do |test_name, files| %>
                 <div role="tabpanel" class="tab-pane" id="<%= test_name + '-tab' %>">
                     <%= render :partial => "issues", :locals => {:test_name => test_name, :files => files, :issues_seen => issues_seen} %>
