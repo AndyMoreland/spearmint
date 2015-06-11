@@ -22,3 +22,11 @@
 .collapse-link:hover, .collapse-link:focus {
   text-decoration: none;
 }
+
+input.ignore-issue:hover {
+    background-color: #d9534f;
+}
+
+.issue-ignore-form {
+    display: inline;
+}
