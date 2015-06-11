@@ -60,10 +60,10 @@ class Build < ActiveRecord::Base
 
   def get_status_description
     status = self.get_github_status
-    if status == :error || status == :failure
-      "Spearmint tests failed. Check details for more information."
+    if(status == :error || status == :failure)
+      return "Spearmint tests failed. Check details for more information."
     else
-      "Spearmint tests succeeded."
+      return "Spearmint tests succeeded."
     end
   end
 
