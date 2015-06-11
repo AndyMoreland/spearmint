@@ -9,11 +9,3 @@
 .help-block {
   margin-top: 0;
 }
-
-input.ignore-issue:hover {
-    background-color: #d9534f;
-}
-
-.issue-ignore-form {
-    display: inline;
-}
