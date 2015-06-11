@@ -9,12 +9,28 @@
     text-align: center;
     display: inline-block;
     margin: 5px;
+    &:hover {
+      background-color: #CFCFCF;
+      cursor: pointer;
+    }
+    overflow: hidden;
+    -webkit-user-select: none; /* Chrome/Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ */
+
+    /* Rules below not implemented in browsers yet */
+    -o-user-select: none;
+    user-select: none;
+}
+
+.stat-panel.expanded {
+  width: 340px;
 }
 
 .stat-panel > .panel-heading {
-    background-color: inherit;
-    border: none;
-    font-weight: bold;
+  background-color: inherit;
+  border: none;
+  font-weight: bold;
     padding-top: 20px;
     height: 30%;
 }
@@ -24,6 +40,11 @@
     //padding-top: 0px;
     //padding-bottom: 0px;
     height: 70%;
+}
+
+.graph {
+  display: none;
+  height: 70%;
 }
 
 span.stat {
