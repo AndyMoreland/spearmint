@@ -14,35 +14,33 @@
 </div>
 
 <div role="tabpanel">
-    <% unless @build.in_progress? %>
-
-
-    <% end %>
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active"><a href="#overview-tab" role="tab" data-toggle="tab">Overview</a></li>
 
-        <% if @project.setting.build_command && !@project.setting.build_command.empty? %>
-            <li role="presentation"><a href="#build-tab" role="tab" data-toggle="tab">
-                Build Script
-                <% if @build.status != 'build_script_failed' %>
-                    <span class='text-success'>(passed)</span>
-                <% else %>
-                    <span class='text-danger'>(failed)</span>
-                <% end %>
-            </a></li>
-        <% end %>
+        <% unless @build.in_progress? %>
+            <% if @project.setting.build_command && !@project.setting.build_command.empty? %>
+                <li role="presentation"><a href="#build-tab" role="tab" data-toggle="tab">
+                    Build Script
+                    <% if @build.status != 'build_script_failed' %>
+                        <span class='text-success'>(passed)</span>
+                    <% else %>
+                        <span class='text-danger'>(failed)</span>
+                    <% end %>
+                </a></li>
+            <% end %>
 
-        <% if @project.setting.test_command && !@project.setting.test_command.empty? %>
-            <li role="presentation"><a href="#tests-tab" role="tab" data-toggle="tab">
-                Tests
-                <% unless @build.unit_tests_failed %>
-                    <span class='text-success'>(passed)</span>
-                <% else %>
-                    <span class='text-danger'>(failed)</span>
-                <% end %>
-            </a></li>
+            <% if @project.setting.test_command && !@project.setting.test_command.empty? %>
+                <li role="presentation"><a href="#tests-tab" role="tab" data-toggle="tab">
+                    Tests
+                    <% unless @build.unit_tests_failed %>
+                        <span class='text-success'>(passed)</span>
+                    <% else %>
+                        <span class='text-danger'>(failed)</span>
+                    <% end %>
+                </a></li>
+            <% end %>
         <% end %>
 
         <% if @build.issues.any? %>

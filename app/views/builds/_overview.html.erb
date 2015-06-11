@@ -1,8 +1,8 @@
-<% if @project.setting.build_command && !@project.setting.build_command.empty? %>
+<% unless @project.setting.build_command && !@project.setting.build_command.empty? %>
     <p><strong>No build script configured.</strong></p>
 <% end %>
 
-<% if @project.setting.test_command && !@project.setting.test_command.empty? %>
+<% unless @project.setting.test_command && !@project.setting.test_command.empty? %>
     <p><strong>No units tests configured.</strong></p>
 <% end %>
 
