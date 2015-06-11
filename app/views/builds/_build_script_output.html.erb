@@ -1,7 +1,3 @@
-<% if @project.setting.build_command && !@project.setting.build_command.empty? %>
-    <p>Command: <code><%= @project.setting.build_command %></code></p>
-    <h4>Build Script Output</h4>
-    <textarea class='form-control' rows='5' readonly><%= @build.build_script_output %></textarea>
-<% else %>
-    <strong>No build script configured.</strong>
-<% end %>
+<p>Command: <code><%= @project.setting.build_command %></code></p>
+<h4>Build Script Output</h4>
+<textarea class='form-control' rows='5' readonly><%= @build.build_script_output %></textarea>
