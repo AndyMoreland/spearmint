@@ -8,6 +8,7 @@ class Build < ActiveRecord::Base
   ## self.status is in {:waiting, :shutdown, :passed, :failed, :build_script_failed, :queued }
 
   scope :finished, -> { where.not(status: [:queued, :waiting]) }
+  scope :with_statistics, -> { }
 
   def to_param
     self.number.to_s
@@ -59,10 +60,10 @@ class Build < ActiveRecord::Base
 
   def get_status_description
     status = self.get_github_status
-    if status == "failure" || status == "error" || status == "shutdown" || status == "build_script_failed"
-      "Spearmint tests failed. Check details for more information."
+    if(status == :error || status == :failure)
+      return "Spearmint tests failed. Check details for more information."
     else
-      "Spearmint tests succeeded."
+      return "Spearmint tests succeeded."
     end
   end
 

@@ -4,14 +4,13 @@ Rails.application.routes.draw do
   get 'errors/unprocessable'
 
   get 'errors/internal_server_error'
-
-  get 'reports/index'
-
+  
   get '/projects_list', to: 'pages#index', as: 'projects_list'
 
 
   resources :projects do
     resources :builds, param: :number
+    resources :trends, param: :statistic
     resources :reports, param: :source
     resources :ignored_issue_types, only: [:create, :destroy]
     match 'all_ignored_issue_types', to: 'ignored_issue_types#destroy_all', via: :delete
