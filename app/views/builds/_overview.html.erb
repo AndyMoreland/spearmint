@@ -1,0 +1,14 @@
+<% if @build.in_progress? %>
+    <script>
+        window.startPollingForFinishedBuild(<%= @build.project.id %>, <%= @build.number %>, window.reloadPage);
+    </script>
+    <p class='text-warning'>Build is in progress!</p>
+<% elsif @build.issues.any? %>
+    <p><%= @build.issues.length %> issues found.</p>
+    <div class='row col-lg-12'>
+        <input type="checkbox" <%= @should_dedupe_issues ? "checked" : '' %> id="dedupe" onclick="toggleIssueDedupe(this)">
+        <label for="dedupe">Show only first issue of each kind</label>
+    </div>
+<% else %>
+    <p>No issues found! Have a great day!</p>
+<% end %>
